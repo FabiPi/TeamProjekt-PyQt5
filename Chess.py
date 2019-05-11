@@ -31,11 +31,6 @@ class Chess(QWidget):
 
         step = 125
 
-        
-        col = QColor(0, 0, 0)
-        col.setNamedColor('#d4d4d4')
-        qp.setPen(col)
-
         #each step draws a 2x2 block consisting of 4 "step"-sized blocks
         for X in range(0, 1000, 2*step):
             for Y in range(0, 1000, 2*step):
