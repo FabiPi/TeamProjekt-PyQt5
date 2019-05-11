@@ -91,7 +91,30 @@ with some variations
 
 
 """
+"""
+von Dominik
+
+    def drawBlocks(self, qp):
+
+        step = 125
+        stepB = 1000/(2*step)
+
         
+        col = QColor(0, 0, 0)
+        col.setNamedColor('#d4d4d4')
+        qp.setPen(col)
+
+        for X in range(0, 1000, 2*step):
+            for Y in range(0, 1000, 2*step):
+                qp.setBrush(QColor(255, 255, 255))
+                qp.drawRect(X , Y, step, step)
+                qp.setBrush(QColor(0, 0, 0))
+                qp.drawRect(X+step, Y, step, step)
+                qp.setBrush(QColor(0, 0, 0))
+                qp.drawRect(X , Y+step, step, step)
+                qp.setBrush(QColor(255, 255, 255))
+                qp.drawRect(X+step, Y+step, step, step)
+"""
 
         
 if __name__ == '__main__':
