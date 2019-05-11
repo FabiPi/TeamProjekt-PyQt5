@@ -3,7 +3,7 @@ description: von JangJang3, B-Dome, FabiPi
 ## Index
 
 ## Chess.py
-
+**Full Code:**
 ```
 def drawBlocks(self, qp):
 
@@ -25,5 +25,6 @@ def drawBlocks(self, qp):
             qp.setBrush(QColor(255, 255, 255))
             qp.drawRect(X+step, Y+step, step, step) 
 ```
-
-Dessc
+Zwei for-Schleifen erzeugen das ganze Schachbrett.
+*For X* übernimmt die Horizontalen Steps, *For Y* die Vertikalen.
+Durch Veränderung der Step-Konstane lassen sich verschieden Verteilungen des Schachbretts auf die feste 1000x1000 Fläche zeichnen. (Mit step = 125 für das klassische 8x8 Brett)
