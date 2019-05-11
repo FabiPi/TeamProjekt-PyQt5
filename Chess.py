@@ -64,6 +64,16 @@ class Chess(QWidget):
         qp.setBrush(QColor(0, 0, 0))
         qp.drawRect(0, 900, 100, 100)
         
+"""
+For Loop Idea
+#First Column
+        for X in range(0, 500, 125):
+            qp.setBrush(QColor(255, 255, 255))
+            qp.drawRect(0, X, 125, 125)
+            qp.setBrush(QColor(0, 0, 0))
+            qp.drawRect(0, X+125, 125, 125)
+"""
+        
 
         
 if __name__ == '__main__':
