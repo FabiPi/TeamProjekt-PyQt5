@@ -1,4 +1,7 @@
 ## PyQt5 Project - JDF
 
 
-git chess.py
+$ git branch
+# shows a list of branches for your repository
+> * branch-name
+> * branch-name
