@@ -30,40 +30,27 @@ class Chess(QWidget):
     def drawBlocks(self, qp):
 
         step = 125
-      
+
+        
         col = QColor(0, 0, 0)
         col.setNamedColor('#d4d4d4')
         qp.setPen(col)
 
-#First Column
-        qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 0, step, step)
-
-        qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, step, step, step)
-
-        qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 2*step, step, step)
-
-        qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 3*step, step, step)
-
-        qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 4*step, step, step)
-
-        qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 5*step, step, step)
-
-        qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 6*step, step, step)
-
-        qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 7*step, step, step)
-        
-"""
-        qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 8*step, step, step)
-"""       
+        #each step draws a 2x2 block consisting of 4 "step"-sized blocks
+        for X in range(0, 1000, 2*step):
+            for Y in range(0, 1000, 2*step):
+                #White top left
+                qp.setBrush(QColor(255, 255, 255))
+                qp.drawRect(X , Y, step, step)
+                #Black top right
+                qp.setBrush(QColor(0, 0, 0))
+                qp.drawRect(X+step, Y, step, step)
+                #Black bottom left
+                qp.setBrush(QColor(0, 0, 0))
+                qp.drawRect(X , Y+step, step, step)
+                #White bottom right
+                qp.setBrush(QColor(255, 255, 255))
+                qp.drawRect(X+step, Y+step, step, step)      
         
 """
 Working Loop (All Colums / No Variation inbetween)
@@ -90,34 +77,6 @@ with some variations
 
 
 
-"""
-"""
-von Dominik
-
-    def drawBlocks(self, qp):
-
-        step = 125
-
-        
-        col = QColor(0, 0, 0)
-        col.setNamedColor('#d4d4d4')
-        qp.setPen(col)
-
-        #each step draws a 2x2 block consisting of 4 "step"-sized blocks
-        for X in range(0, 1000, 2*step):
-            for Y in range(0, 1000, 2*step):
-                #White top left
-                qp.setBrush(QColor(255, 255, 255))
-                qp.drawRect(X , Y, step, step)
-                #Black top right
-                qp.setBrush(QColor(0, 0, 0))
-                qp.drawRect(X+step, Y, step, step)
-                #Black bottom left
-                qp.setBrush(QColor(0, 0, 0))
-                qp.drawRect(X , Y+step, step, step)
-                #White bottom right
-                qp.setBrush(QColor(255, 255, 255))
-                qp.drawRect(X+step, Y+step, step, step)
 """
 
         
