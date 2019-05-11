@@ -97,7 +97,6 @@ von Dominik
     def drawBlocks(self, qp):
 
         step = 125
-        stepB = 1000/(2*step)
 
         
         col = QColor(0, 0, 0)
