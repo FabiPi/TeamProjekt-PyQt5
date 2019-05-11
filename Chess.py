@@ -35,6 +35,10 @@ class Chess(QWidget):
         colWhite = QColor(0, 0, 0)
         colWhite.setNamedColor('white')
         
+        qp.setPen(colBlack)
+        qp.setBrush(QColor(100, 0, 0))
+        qp.drawRect(100, 100, 100, 100)
+        
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
