@@ -26,4 +26,9 @@ def drawBlocks(self, qp):
 Zwei for-Schleifen erzeugen das ganze Schachbrett.
 *For-X* übernimmt die Horizontalen Steps, *For-Y* die Vertikalen.
 Durch Veränderung der Step-Konstante lassen sich verschiedene Verteilungen des Schachbretts auf die feste 1000x1000 Fläche zeichnen.
-(Mit step = 125 für das klassische 8x8 Brett)
+
+Mit der Methode setBrush() definieren wir einen pen und eine QColor. Die QColor für unser Schachbrett ist einmal white (255, 255, 255) und black (0, 0, 0). Die Methode drawRect(x, y, width, height) zeichnet uns dann einen Rechteck, in der Farbe von unserer setBrush() Methode.
+
+In Zeile 17 wird der erste weiße Block links oben konstruiert. In Zeile 20 der erste schwarze Block rechts oben. In Zeile 22 erfolgt dann der nächste schwarze Block links unten und daneben in Zeile 26 der nächste weiße Block rechts unten. Es wird somit ein 2x2 Block konstruiert. 
+
+Mit step = 125 wird das klassische 8x8 Schachbrett gezeichnet.
