@@ -4,7 +4,7 @@ description: von JangJang3, B-Dome, FabiPi
 
 ## Chess.py
 **Full Code:**
-```
+```python
 def drawBlocks(self, qp):
 
     step = 125
