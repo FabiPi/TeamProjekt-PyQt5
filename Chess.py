@@ -59,10 +59,11 @@ class Chess(QWidget):
 
         qp.setBrush(QColor(0, 0, 0))
         qp.drawRect(0, 7*step, step, step)
-
+        
+"""
         qp.setBrush(QColor(255, 255, 255))
         qp.drawRect(0, 8*step, step, step)
-        
+"""       
         
 """
 For Loop Idea
