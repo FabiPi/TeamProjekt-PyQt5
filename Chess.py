@@ -66,13 +66,13 @@ class Chess(QWidget):
 """       
         
 """
-For Loop Idea
-#First Column
-        for X in range(0, 500, 125):
-            qp.setBrush(QColor(255, 255, 255))
-            qp.drawRect(0, X, 125, 125)
-            qp.setBrush(QColor(0, 0, 0))
-            qp.drawRect(0, X+125, 125, 125)
+Working Loop (All Colums / No Variation inbetween)
+        for Vertical in range(0, 1000, 250):
+            for Horizontal in range(0, 1000, 125):
+                qp.setBrush(QColor(255, 255, 255))
+                qp.drawRect(Horizontal, Vertical, 125, 125)
+                qp.setBrush(QColor(0, 0, 0))
+                qp.drawRect(Horizontal, Vertical+125, 125, 125)
 """
         
 
