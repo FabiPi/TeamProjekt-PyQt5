@@ -73,6 +73,21 @@ Working Loop (All Colums / No Variation inbetween)
                 qp.drawRect(Horizontal, Vertical, 125, 125)
                 qp.setBrush(QColor(0, 0, 0))
                 qp.drawRect(Horizontal, Vertical+125, 125, 125)
+                
+                
+with some variations 
+          
+        for Vertical in range(0, 1000, 250):
+            for Horizontal in range(0, 1000, 125):
+                if ((Vertical + Horizontal) % 2 != 0):
+                    qp.setBrush(QColor(255, 255, 255))
+                    qp.drawRect(Horizontal, Vertical, 125, 125)
+                else:
+                    qp.setBrush(QColor(0, 0, 0))
+                    qp.drawRect(Horizontal, Vertical + 125, 125, 125)
+
+
+
 """
         
 
