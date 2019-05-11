@@ -28,6 +28,8 @@ class Chess(QWidget):
         qp.end()
 
     def drawBlocks(self, qp):
+
+        step = 125
       
         col = QColor(0, 0, 0)
         col.setNamedColor('#d4d4d4')
@@ -35,34 +37,32 @@ class Chess(QWidget):
 
 #First Column
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 0, 100, 100)
+        qp.drawRect(0, 0, step, step)
 
         qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 100, 100, 100)
+        qp.drawRect(0, step, step, step)
 
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 200, 100, 100)
+        qp.drawRect(0, 2*step, step, step)
 
         qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 300, 100, 100)
+        qp.drawRect(0, 3*step, step, step)
 
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 400, 100, 100)
+        qp.drawRect(0, 4*step, step, step)
 
         qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 500, 100, 100)
+        qp.drawRect(0, 5*step, step, step)
 
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 600, 100, 100)
+        qp.drawRect(0, 6*step, step, step)
 
         qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 700, 100, 100)
+        qp.drawRect(0, 7*step, step, step)
 
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(0, 800, 100, 100)
-
-        qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 900, 100, 100)
+        qp.drawRect(0, 8*step, step, step)
+        
         
 """
 For Loop Idea
