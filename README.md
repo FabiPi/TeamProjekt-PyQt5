@@ -29,6 +29,7 @@ Durch Veränderung der Step-Konstante lassen sich verschiedene Verteilungen des 
 
 Mit der Methode setBrush() definieren wir einen pen und eine QColor. Die QColor für unser Schachbrett ist einmal white (255, 255, 255) und black (0, 0, 0). Die Methode drawRect(x, y, width, height) zeichnet uns dann einen Rechteck, in der Farbe von unserer setBrush() Methode.
 
-In Zeile 17 wird der erste weiße Block links oben konstruiert. In Zeile 20 der erste schwarze Block rechts oben. In Zeile 22 erfolgt dann der nächste schwarze Block links unten und daneben in Zeile 26 der nächste weiße Block rechts unten. Es wird somit ein 2x2 Block konstruiert. 
+In Zeile 17 wird der erste weiße Block links oben konstruiert. In Zeile 20 der erste schwarze Block rechts oben. In Zeile 22 erfolgt dann der nächste schwarze Block links unten und daneben in Zeile 26 der nächste weiße Block rechts unten. Es wird somit immer ein 2x2 Block konstruiert. Dabei wird das Schachbrett abwechselnd immer zuerst vertikal nach unten mit den 2x2 Blöcken gefüllt, dann mit 2x2 Blöcken einmal horizontal, wieder vertikal nach unten und so weiter. 
+
 
 Mit step = 125 wird dann das klassische 8x8 Schachbrett gezeichnet.
