@@ -84,7 +84,7 @@ with some variations
                     qp.drawRect(Horizontal, Vertical, 125, 125)
                 else:
                     qp.setBrush(QColor(0, 0, 0))
-                    qp.drawRect(Horizontal, Vertical + 125, 125, 125)
+                    qp.drawRect(Horizontal, Vertical, 125, 125)
 
 
 
