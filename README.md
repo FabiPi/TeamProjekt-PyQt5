@@ -27,5 +27,5 @@ def drawBlocks(self, qp):
 ```
 Zwei for-Schleifen erzeugen das ganze Schachbrett.
 *For-X* übernimmt die Horizontalen Steps, *For-Y* die Vertikalen.
-Durch Veränderung der Step-Konstane lassen sich verschieden Verteilungen des Schachbretts auf die feste 1000x1000 Fläche zeichnen.
+Durch Veränderung der Step-Konstante lassen sich verschiedene Verteilungen des Schachbretts auf die feste 1000x1000 Fläche zeichnen.
 (Mit step = 125 für das klassische 8x8 Brett)
