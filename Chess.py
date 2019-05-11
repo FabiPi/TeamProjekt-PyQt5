@@ -16,11 +16,11 @@ class Chess(QWidget):
 
     def initUI(self):
 
-        self.setGeometry(300, 300, 1000, 1000)
+        self.setGeometry(0, 0, 1000, 1000)
         self.setWindowTitle('Chess')
         self.show()
 
-    def PaintEvent(self, e):
+    def paintEvent(self, e):
 
         qp = QPainter()
         qp.begin(self)
@@ -28,24 +28,46 @@ class Chess(QWidget):
         qp.end()
 
     def drawBlocks(self, qp):
+      
+        col = QColor(0, 0, 0)
+        col.setNamedColor('#d4d4d4')
+        qp.setPen(col)
 
-        colBlack = QColor(0, 0, 0)
-        colBlack.setNamedColor('black')
+#First Column
+        qp.setBrush(QColor(255, 255, 255))
+        qp.drawRect(0, 0, 100, 100)
 
-        colWhite = QColor(0, 0, 0)
-        colWhite.setNamedColor('white')
-        
-        #qp.setPen(colBlack)
-        #qp.setBrush(QColor(100, 0, 0))
-        #qp.drawRect(100, 100, 100, 100)
-        
         qp.setBrush(QColor(0, 0, 0))
-        qp.drawRect(0, 0, 100, 60)
+        qp.drawRect(0, 100, 100, 100)
 
         qp.setBrush(QColor(255, 255, 255))
-        qp.drawRect(100, 0, 100, 60)
+        qp.drawRect(0, 200, 100, 100)
+
+        qp.setBrush(QColor(0, 0, 0))
+        qp.drawRect(0, 300, 100, 100)
+
+        qp.setBrush(QColor(255, 255, 255))
+        qp.drawRect(0, 400, 100, 100)
+
+        qp.setBrush(QColor(0, 0, 0))
+        qp.drawRect(0, 500, 100, 100)
+
+        qp.setBrush(QColor(255, 255, 255))
+        qp.drawRect(0, 600, 100, 100)
+
+        qp.setBrush(QColor(0, 0, 0))
+        qp.drawRect(0, 700, 100, 100)
+
+        qp.setBrush(QColor(255, 255, 255))
+        qp.drawRect(0, 800, 100, 100)
+
+        qp.setBrush(QColor(0, 0, 0))
+        qp.drawRect(0, 900, 100, 100)
+        
+
         
 if __name__ == '__main__':
+    
     app = QApplication(sys.argv)
     ex = Chess()
     sys.exit(app.exec_())
