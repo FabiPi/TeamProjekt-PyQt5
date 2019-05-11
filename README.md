@@ -1,6 +1,3 @@
-## PyQt5 Project - JDF
+## Chess.py
 
-
-$ git branch
-# shows a list of branches for your repository
-> * master
+git add chess.py
