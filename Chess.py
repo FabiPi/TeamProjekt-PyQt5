@@ -38,5 +38,5 @@ class Chess(QWidget):
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = Chess()
     sys.exit(app.exec_())
