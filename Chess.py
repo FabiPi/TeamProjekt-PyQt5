@@ -34,3 +34,9 @@ class Chess(QWidget):
 
         colWhite = QColor(0, 0, 0)
         colWhite.setNamedColor('white')
+        
+        
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
