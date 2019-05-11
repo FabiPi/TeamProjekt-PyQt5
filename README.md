@@ -31,4 +31,4 @@ Mit der Methode setBrush() definieren wir einen pen und eine QColor. Die QColor 
 
 In Zeile 17 wird der erste weiße Block links oben konstruiert. In Zeile 20 der erste schwarze Block rechts oben. In Zeile 22 erfolgt dann der nächste schwarze Block links unten und daneben in Zeile 26 der nächste weiße Block rechts unten. Es wird somit ein 2x2 Block konstruiert. 
 
-Mit step = 125 wird das klassische 8x8 Schachbrett gezeichnet.
+Mit step = 125 wird dann das klassische 8x8 Schachbrett gezeichnet.
