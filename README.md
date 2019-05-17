@@ -65,4 +65,3 @@ Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschlie
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 ```
-![Spielfeld ohne Hindernisse ](C:\Users\Dome\Desktop\Aufgabe3\00 ohne Wände.jpg)
