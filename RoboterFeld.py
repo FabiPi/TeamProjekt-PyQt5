@@ -13,7 +13,7 @@ class SpielFeld(QWidget):
 
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
 
-    Speed = 500
+    Speed = 200
 
     def __init__(self):
         super().__init__()
@@ -39,7 +39,40 @@ class SpielFeld(QWidget):
 
 
     def timerEvent(self, event):
+        screen = QDesktopWidget().screenGeometry()
 
+        if (BaseRobot.xPosition == (screen.width() - (BaseRobot.radius +10))) or (BaseRobot.yPosition == (screen.height() - (BaseRobot.radius + 10))):
+            self.timer.stop()
+        else:
+            if BaseRobot.alpha == 0:
+                self.moveUp()
+                
+            elif BaseRobot.alpha == 45:
+                self.moveUp()
+                self.moveRight()
+                
+            elif BaseRobot.alpha == 90:
+                self.moveRight()
+                
+            elif BaseRobot.alpha == 135:
+                self.moveDown()
+                self.moveRight()
+
+            elif BaseRobot.alpha == 180:
+                self.moveDown()
+                
+            elif BaseRobot.alpha == 225:
+                self.moveDown()
+                self.moveLeft()
+                
+            elif BaseRobot.alpha == 270:
+                self.moveLeft()
+                
+            elif BaseRobot.alpha == 315:
+                self.moveUp()
+                self.moveLeft()
+        
+        """
         XPos = BaseRobot.xPosition
         YPos = BaseRobot.yPosition
         block = 10
@@ -48,7 +81,7 @@ class SpielFeld(QWidget):
             self.timer.stop()
         else:
             BaseRobot.xPosition += 10
-
+        """
 
     def center(self):
         '''centers the window on the screen'''
@@ -112,7 +145,35 @@ class SpielFeld(QWidget):
         br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
 
         self.update()
+        
+    def keyPressEvent(self, event):
+        '''process key press'''
+        key = event.key()
 
+        if key == Qt.Key_A:
+            BaseRobot.alpha = int(round((BaseRobot.alpha - 45) % 360))
+            return
+
+        elif key == Qt.Key_D:
+            BaseRobot.alpha = int(round((BaseRobot.alpha + 45) %360))
+            return
+
+    def moveUp(self):
+        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][(int(round(BaseRobot.yPosition / 10)))-1] == 0:
+            BaseRobot.yPosition -= 10
+
+    def moveDown(self):
+        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][int(round((BaseRobot.yPosition / 10)))+1] == 0:
+            BaseRobot.yPosition += 10
+
+    def moveLeft(self):
+        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))-1][int(round(BaseRobot.yPosition / 10))] == 0:
+            BaseRobot.xPosition -= 10
+
+    def moveRight(self):
+        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))+1][int(round(BaseRobot.yPosition / 10))] == 0:
+            BaseRobot.xPosition += 10        
+    """
     def keyPressEvent(self, event):
         '''process key press'''
         RobotX = int(round(BaseRobot.xPosition/10))
@@ -139,12 +200,12 @@ class SpielFeld(QWidget):
             if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
                 BaseRobot.xPosition += 10
             return
-
+    """
 
 class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
-    radius = 15
+    radius = 5
     alpha = 45
 
 
