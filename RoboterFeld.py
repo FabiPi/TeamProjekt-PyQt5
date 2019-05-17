@@ -35,6 +35,15 @@ class SpielFeld(QWidget):
         PlayFieldAR = [[0 for x in range(width)] for y in range(height)]
 
         #set Walls, set array value to 1 to place Wall
+        
+        #Draw Wall around the edges
+        for x in range(0,100,1):
+            PlayFieldAR[x][0]= 1
+            PlayFieldAR[x][99]= 1
+        for y in range(1,99,1):
+            PlayFieldAR[0][y]= 1
+            PlayFieldAR[99][y]= 1
+            
         for i in range(0, 25, 1):
             PlayFieldAR[70][i+45] = 1
         
