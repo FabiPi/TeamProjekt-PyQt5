@@ -76,7 +76,7 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
 Placeholder Bild 03
 
 **Entwurf des Roboters**
-Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser mit den x,y Positionen, dem Radius und der Wert Alpha für die Blickrichtung. Der Roboter startet an der Position (20, 30) im Spielfeld.
+Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser Klasse befinden sich folgende Attribute des Roboters: die x,y Positionen, der Radius und der Alpha-Wert für die Blickrichtung. Der Roboter startet an der Position (20, 30) im Spielfeld.
 ```python
 class BaseRobot (QWidget):
     xPosition = 20
