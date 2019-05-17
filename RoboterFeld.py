@@ -6,6 +6,7 @@ von B-Dome, JangJang3, FabiPi
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QColor, QBrush
 import sys
+import time
 
 class SpielFeld(QWidget):
 
@@ -86,7 +87,8 @@ class SpielFeld(QWidget):
         br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
         
         """
-        Trivial Step idea but crash (note: import time)
+        Trivial Step idea but crash
+        
         while True:
             br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
             BaseRobot.xPosition = BaseRobot.xPosition +1
