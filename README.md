@@ -82,7 +82,16 @@ class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
     radius = 15
-alpha = 45
+    alpha = 45
+```
+Um den Robotor ins Spielfeld zu zeichnen, müssen wurde eine drawRobo Methode in der Klasse Spielfeld angefertigt. Damit die Positionsänderungen des Robotors im Spielfeld erkennbar sind, wurde auf die self.update() Methode zurückgegriffen.
+```python
+   def drawRobo(self, br):
+
+        br.setBrush(QColor(255, 0, 0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
+
+        self.update()
 ```
 
 Place for Timer implement.
