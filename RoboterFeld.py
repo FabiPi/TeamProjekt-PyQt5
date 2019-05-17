@@ -88,7 +88,7 @@ class BaseRobot (QWidget):
 
         br = QPainter()
         br.begin(self)
-        self.drawField(qp)
+        self.drawField(e)
         br.end()
 
     def drawField(self, br):
