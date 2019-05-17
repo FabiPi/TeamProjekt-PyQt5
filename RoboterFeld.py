@@ -3,13 +3,14 @@ Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
 
-from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import Qt, QBasicTimer
 import sys
-import time
+
 
 class SpielFeld(QWidget):
+    Speed = 500
 
     def __init__(self):
         super().__init__()
@@ -22,7 +23,10 @@ class SpielFeld(QWidget):
         self.setWindowTitle('PlayField')
         self.center()
         self.timer = QBasicTimer()
+        self.timer.start(SpielFeld.Speed, self)
         self.show()
+
+
 
     def center(self):
         '''centers the window on the screen'''
@@ -32,8 +36,16 @@ class SpielFeld(QWidget):
         self.move((screen.width() - size.width()) / 2,
                   (screen.height() - size.height()) / 2)
 
+    def timerEvent(self, event):
+        screen = QDesktopWidget().screenGeometry()
 
-    def paintEvent(self, qp ):
+        if (BaseRobot.xPosition == (screen.width() - (BaseRobot.radius +10))) or (BaseRobot.yPosition == (screen.height() - (BaseRobot.radius + 10))):
+            self.timer.stop()
+        else:
+            BaseRobot.xPosition += 10
+
+
+    def paintEvent(self, qp):
 
         qp = QPainter()
         qp.begin(self)
@@ -107,7 +119,7 @@ class SpielFeld(QWidget):
         if key == Qt.Key_W:
             BaseRobot.yPosition -= 10
             return
-        
+
         elif key == Qt.Key_S:
             BaseRobot.yPosition += 10
             return
@@ -119,8 +131,6 @@ class SpielFeld(QWidget):
         elif key == Qt.Key_D:
             BaseRobot.xPosition += 10
             return
-
-
 
 
         """
