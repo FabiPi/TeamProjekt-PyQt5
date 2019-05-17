@@ -76,6 +76,14 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
 Placeholder Bild 03
 
 **Entwurf des Roboters**
+Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser mit den x,y Positionen, dem Radius und der Wert Alpha für die Blickrichtung.
+```python
+class BaseRobot (QWidget):
+    xPosition = 20
+    yPosition = 30
+    radius = 5
+    alpha = 45
+```
 
 Place for Timer implement.
 
