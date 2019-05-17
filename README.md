@@ -1,5 +1,35 @@
 ## Index
 
+## Roboter im Spielfeld
+**Erste Entwürfe**
+
+Wir haben uns zuerst einmal damit beschäftigt das 1000x1000 Pixel große Spielfeld zu entwerfen.
+
+```python
+    def drawField(self, qp):
+        
+        #Array construction
+        width = 100
+        height = 100
+        PlayFieldAR = [[0 for x in range(width)] for y in range(height)]
+```
+
+Dafür haben wie einen 2D-Array der Größe 100x100 entworfen, dessen Werte später auf 0 für Ground und 1 für Wall gesetzt werden.
+
+Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschließend in x Richtung alle einzelnen 10x10 große Felder zeichnet.
+```python
+#Draw the PlayField
+        for i in range(0, 100, 1):
+            for j in range(0, 100, 1):
+                    if PlayFieldAR[i][j]==1:
+                        qp.setBrush(QColor(0, 0, 0))
+                        qp.drawRect(i*10, j*10, 10, 10)
+                    else:
+                        qp.setBrush(QColor(150, 150, 150))
+                        qp.drawRect(i*10, j*10, 10, 10)
+```
+
+
 ## Chess.py
 **Full Code:**
 ```python
@@ -35,33 +65,3 @@ In Zeile 17 wird der erste weiße Block links oben konstruiert. In Zeile 20 der 
 
 
 Mit step = 125 wird dann das klassische 8x8 Schachbrett gezeichnet.
-
-
-## Roboter im Spielfeld
-**Erste Entwürfe**
-
-Wir haben uns zuerst einmal damit beschäftigt das 1000x1000 Pixel große Spielfeld zu entwerfen.
-
-```python
-    def drawField(self, qp):
-        
-        #Array construction
-        width = 100
-        height = 100
-        PlayFieldAR = [[0 for x in range(width)] for y in range(height)]
-```
-
-Dafür haben wie einen 2D-Array der Größe 100x100 entworfen, dessen Werte später auf 0 für Ground und 1 für Wall gesetzt werden.
-
-Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschließend in x Richtung alle einzelnen 10x10 große Felder zeichnet.
-```python
-#Draw the PlayField
-        for i in range(0, 100, 1):
-            for j in range(0, 100, 1):
-                    if PlayFieldAR[i][j]==1:
-                        qp.setBrush(QColor(0, 0, 0))
-                        qp.drawRect(i*10, j*10, 10, 10)
-                    else:
-                        qp.setBrush(QColor(150, 150, 150))
-                        qp.drawRect(i*10, j*10, 10, 10)
-```
