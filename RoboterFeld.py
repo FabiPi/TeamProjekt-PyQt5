@@ -37,13 +37,14 @@ class SpielFeld(QWidget):
         self.move((screen.width() - size.width()) / 2,
                   (screen.height() - size.height()) / 2)
 
+
     def timerEvent(self, event):
 
         XPos = BaseRobot.xPosition
         YPos = BaseRobot.yPosition
-        block = BaseRobot.radius
+        block = 10
         # stops if its near the fieldborders, if not moves to the right
-        if (XPos <= block) or (XPos >= 990 ) or (YPos < block) or (YPos >= 990):
+        if (XPos < block) or (XPos > (1000 - block) ) or (YPos < block) or (YPos > (1000- block)):
             self.timer.stop()
         else:
             BaseRobot.xPosition += 10
