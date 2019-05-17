@@ -28,6 +28,52 @@ Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschlie
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 ```
+Placeholder Bild 00
+
+Im nächsten Schritt haben wir begonnen erste Hindernisse zu platzieren.
+
+```python
+    #set Walls, set array value to 1 to place Wall
+    PlayFieldAR[0][0]= 1
+    PlayFieldAR[10][0]= 1
+    PlayFieldAR[0][10]= 1
+    PlayFieldAR[25][20]= 1
+    PlayFieldAR[10][50]= 1
+```
+Placeholder Bild 01
+
+Das Spielfeld mit einer Wand zu umranden,
+
+```python
+        #set Wall around the edges
+        for x in range(0,100,1):
+            PlayFieldAR[x][0]= 1
+            PlayFieldAR[x][99]= 1
+        for y in range(1,99,1):
+            PlayFieldAR[0][y]= 1
+            PlayFieldAR[99][y]= 1
+```
+Placeholder Bild 02
+
+und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
+
+```python
+#set some Obstacle
+        for i in range(0, 25, 1):
+            PlayFieldAR[70][i+45] = 1
+        
+        for i in range(0, 40, 1):
+            PlayFieldAR[i+10][40] = 1
+        for i in range(0, 50, 1):
+            PlayFieldAR[i+30][70] = 1
+        
+        for i in range(0, 30, 1):
+            PlayFieldAR[i+25][20] = 1
+            
+        for i in range(0, 10, 1):
+            PlayFieldAR[10][i+50] = 1
+```
+Placeholder Bild 03
 
 
 ## Chess.py
