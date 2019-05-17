@@ -98,15 +98,27 @@ class SpielFeld(QWidget):
         br.setBrush(QColor(255, 0, 0))
         br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
 
-        run = True
-
-        if run:
-            BaseRobot.xPosition += 10
-
-        br.setBrush(QColor(255, 0, 0))
-        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2 * BaseRobot.radius, 2 * BaseRobot.radius)
-
         self.update()
+
+    def keyPressEvent(self, event):
+        '''process key press'''
+        key = event.key()
+
+        if key == Qt.Key_W:
+            BaseRobot.yPosition -= 10
+            return
+        
+        elif key == Qt.Key_S:
+            BaseRobot.yPosition += 10
+            return
+
+        elif key == Qt.Key_A:
+            BaseRobot.xPosition -= 10
+            return
+
+        elif key == Qt.Key_D:
+            BaseRobot.xPosition += 10
+            return
 
 
 
