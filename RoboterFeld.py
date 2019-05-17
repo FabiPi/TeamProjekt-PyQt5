@@ -78,6 +78,22 @@ class SpielFeld(QWidget):
                     else:
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
+                        
+class BaseRobot (QWidget):
+    Position = [0][0]
+    r = 5
+    alpha = 45
+
+    def paintEvent(self, e):
+
+        br = QPainter()
+        br.begin(self)
+        self.drawField(qp)
+        br.end()
+
+    def drawField(self, br):
+        qp.setBrush(QColor(255, 0, 0))
+        qp.drawEllipse(50, 50, 50 ,50)
         
         
         
