@@ -84,6 +84,15 @@ class SpielFeld(QWidget):
 
         br.setBrush(QColor(255, 0, 0))
         br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
+        
+        """
+        Trivial Step idea but crash (note: import time)
+        while True:
+            br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
+            BaseRobot.xPosition = BaseRobot.xPosition +1
+            time.sleep(1)
+        """
+
 
 
 
