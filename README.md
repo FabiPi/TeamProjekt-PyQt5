@@ -1,7 +1,7 @@
 ## Index
 
 ## Roboter im Spielfeld
-**Erste Entwürfe**
+**Erste Entwürfe des Spielfelds**
 
 Wir haben uns zuerst einmal damit beschäftigt das 1000x1000 Pixel große Spielfeld zu entwerfen.
 
@@ -74,6 +74,8 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
             PlayFieldAR[10][i+50] = 1
 ```
 Placeholder Bild 03
+
+**Entwurf des Roboters**
 
 
 ## Chess.py
