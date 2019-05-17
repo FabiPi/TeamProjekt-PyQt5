@@ -77,6 +77,70 @@ Placeholder Bild 03
 
 **Entwurf des Roboters**
 
+Place for Timer implement.
+
+**Steuerung des Roboters mit WASD**
+Um den Roboter mit der Tastatur zu steuern haben wir das keyPressEvent verwendet.
+Wir wollen mit W nach oben fahren, mit S nach unten, A nach links und mit D nach rechts, d.h wir müssen jeweils die x bzw. y Koordinaten des Roboters anpassen.
+
+```python
+def keyPressEvent(self, event):
+        
+        key = event.key()
+
+        if key == Qt.Key_W:
+            BaseRobot.yPosition -= 10
+            return
+        
+        elif key == Qt.Key_S:
+            BaseRobot.yPosition += 10
+            return
+
+        elif key == Qt.Key_A:
+            BaseRobot.xPosition -= 10
+            return
+
+        elif key == Qt.Key_D:
+            iBaseRobot.xPosition += 10
+            return     
+```
+Um Kollision mit den Wänden einzufügen müssen wir jeweils prüfen ob einer der Blöcke in Fahrtrichtung eine Wand ist.
+Da unser Roboter aus 3x3 Feldern besteht muss man jeweils 3 Blöcke prüfen.
+
+Bild mit Roboter und Grid
+
+
+```python
+def keyPressEvent(self, event):
+        '''process key press'''
+        RobotX = int(round(BaseRobot.xPosition/10))
+        RobotY = int(round(BaseRobot.yPosition/10))
+
+        print(RobotX)
+        
+        key = event.key()
+
+        if key == Qt.Key_W:
+            if SpielFeld.PlayFieldAR[RobotX][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+1][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+2][RobotY-1] == 0:
+                BaseRobot.yPosition -= 10
+            return
+        
+        elif key == Qt.Key_S:
+            if SpielFeld.PlayFieldAR[RobotX][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+1][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+2][RobotY+3] == 0:
+                BaseRobot.yPosition += 10
+            return
+
+        elif key == Qt.Key_A:
+            if SpielFeld.PlayFieldAR[RobotX-1][RobotY] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+1] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+2] == 0:
+                BaseRobot.xPosition -= 10
+            return
+
+        elif key == Qt.Key_D:
+            if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
+                BaseRobot.xPosition += 10
+            return    
+```
+
 
 ## Chess.py
 **Full Code:**
