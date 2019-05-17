@@ -92,8 +92,8 @@ class BaseRobot (QWidget):
         br.end()
 
     def drawField(self, br):
-        qp.setBrush(QColor(255, 0, 0))
-        qp.drawEllipse(50, 50, 50 ,50)
+        br.setBrush(QColor(255, 0, 0))
+        br.drawEllipse(50, 50, 50 ,50)
         
         
         
