@@ -40,7 +40,13 @@ class SpielFeld(QWidget):
         PlayFieldAR[0][10] = 1
         PlayFieldAR[25][20] = 1
         PlayFieldAR[10][50] = 1
-
+        
+        """
+        Randomisierte Verteilung von field oder wall
+        for i in range (0,100,1):
+            for j in range(0,100,1):
+                PlayFieldAR[i][j] = random.randint(0,1)
+        """
         
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
