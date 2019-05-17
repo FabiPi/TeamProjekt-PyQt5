@@ -83,14 +83,14 @@ class SpielFeld(QWidget):
     def drawRobo(self, br):
 
         br.setBrush(QColor(255, 0, 0))
-        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.r, 2*BaseRobot.r)
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
 
 
 
 class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
-    r = 5
+    radius = 5
     alpha = 45
 
 """
