@@ -159,19 +159,27 @@ class SpielFeld(QWidget):
             return
 
     def moveUp(self):
-        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][(int(round(BaseRobot.yPosition / 10)))-1] == 0:
+        RobotX = int(round(BaseRobot.xPosition/10))
+        RobotY = int(round(BaseRobot.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+1][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+2][RobotY-1] == 0:
             BaseRobot.yPosition -= 10
 
     def moveDown(self):
-        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][int(round((BaseRobot.yPosition / 10)))+1] == 0:
+        RobotX = int(round(BaseRobot.xPosition/10))
+        RobotY = int(round(BaseRobot.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+1][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+2][RobotY+3] == 0:
             BaseRobot.yPosition += 10
 
     def moveLeft(self):
-        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))-1][int(round(BaseRobot.yPosition / 10))] == 0:
+        RobotX = int(round(BaseRobot.xPosition/10))
+        RobotY = int(round(BaseRobot.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX-1][RobotY] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+1] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+2] == 0:
             BaseRobot.xPosition -= 10
 
     def moveRight(self):
-        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))+1][int(round(BaseRobot.yPosition / 10))] == 0:
+        RobotX = int(round(BaseRobot.xPosition/10))
+        RobotY = int(round(BaseRobot.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
             BaseRobot.xPosition += 10        
     """
     def keyPressEvent(self, event):
@@ -205,7 +213,7 @@ class SpielFeld(QWidget):
 class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
-    radius = 5
+    radius = 15
     alpha = 45
 
 
