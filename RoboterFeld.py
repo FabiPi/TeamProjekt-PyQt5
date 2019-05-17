@@ -3,8 +3,9 @@ Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
 
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5.QtGui import QPainter, QColor, QBrush
+from PyQt5.QtCore import Qt, QBasicTimer
 import sys
 import time
 
@@ -19,9 +20,20 @@ class SpielFeld(QWidget):
 
         self.setGeometry(0, 0, 1000, 1000)
         self.setWindowTitle('PlayField')
+        self.center()
+        self.timer = QBasicTimer()
         self.show()
 
-    def paintEvent(self, qp):
+    def center(self):
+        '''centers the window on the screen'''
+
+        screen = QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2,
+                  (screen.height() - size.height()) / 2)
+
+
+    def paintEvent(self, qp ):
 
         qp = QPainter()
         qp.begin(self)
@@ -85,7 +97,20 @@ class SpielFeld(QWidget):
 
         br.setBrush(QColor(255, 0, 0))
         br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
-        
+
+        run = True
+
+        if run:
+            BaseRobot.xPosition += 10
+
+        br.setBrush(QColor(255, 0, 0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2 * BaseRobot.radius, 2 * BaseRobot.radius)
+
+        self.update()
+
+
+
+
         """
         Trivial Step idea but crash
         
@@ -98,6 +123,7 @@ class SpielFeld(QWidget):
 
 
 
+
 class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
@@ -105,14 +131,11 @@ class BaseRobot (QWidget):
     alpha = 45
 
 """
-
     def paintEvent(self, e):
-
         br = QPainter()
         br.begin(self)
         self.drawField(e)
         br.end()
-
     def drawField(self, br):
         br.setBrush(QColor(255, 0, 0))
         br.drawEllipse(50, 50, 50 ,50)
