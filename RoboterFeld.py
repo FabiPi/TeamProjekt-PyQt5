@@ -38,13 +38,16 @@ class SpielFeld(QWidget):
                   (screen.height() - size.height()) / 2)
 
     def timerEvent(self, event):
-        screen = QDesktopWidget().screenGeometry()
 
-        if (BaseRobot.xPosition == (screen.width() - (BaseRobot.radius + 10))) or (
-                BaseRobot.yPosition == (screen.height() - (BaseRobot.radius + 10))):
+        XPos = BaseRobot.xPosition
+        YPos = BaseRobot.yPosition
+        block = BaseRobot.radius
+        # stops if its near the fieldborders, if not moves to the right
+        if (XPos <= block) or (XPos >= 990 ) or (YPos < block) or (YPos >= 990):
             self.timer.stop()
         else:
             BaseRobot.xPosition += 10
+
 
     def center(self):
         '''centers the window on the screen'''
