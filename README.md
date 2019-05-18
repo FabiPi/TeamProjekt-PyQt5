@@ -93,8 +93,73 @@ Um den Robotor ins Spielfeld zu zeichnen, müssen wurde eine drawRobo Methode in
 
         self.update()
 ```
+Für die selbständige Bewegung des Roboters im Feld haben wir dazu einen timer genutzt. In timer Event soll sich der Robotor je nach Blickrichtung bzw. Alpha-Wert der Robotor in verschiedenen Richtungen fortbewegen. Bewegt er sich jedoch auserhalb des Spielfeldes soll der timer stoppen.
 
-Place for Timer implement.
+```python
+    def timerEvent(self, event):
+        screen = QDesktopWidget().screenGeometry()
+
+        if (BaseRobot.xPosition == (screen.width() - (BaseRobot.radius +10))) or (BaseRobot.yPosition == (screen.height() -         (BaseRobot.radius + 10))):
+            self.timer.stop()
+        else:
+            if BaseRobot.alpha == 0:
+                self.moveUp()
+
+            elif BaseRobot.alpha == 45:
+                self.moveUp()
+                self.moveRight()
+
+            elif BaseRobot.alpha == 90:
+                self.moveRight()
+
+            elif BaseRobot.alpha == 135:
+                self.moveDown()
+                self.moveRight()
+
+            elif BaseRobot.alpha == 180:
+                self.moveDown()
+
+            elif BaseRobot.alpha == 225:
+                self.moveDown()
+                self.moveLeft()
+
+            elif BaseRobot.alpha == 270:
+                self.moveLeft()
+
+            elif BaseRobot.alpha == 315:
+                self.moveUp()
+                self.moveLeft()
+```
+Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die Tasten A und D führen hierbei Rotationsbewegen aus. Indem sie die Alpha-Werte des Roboters verändern und diese in den folgenden Methoden moveUp(), moveDown(), moveLeft() und moveRight() nutzen, bewegen sie den Robotor abhängig von dem veränderten Alpha-Wert in eine bestimmte Richtung. Dadurch sind dann auch 360° Bewegungen möglich.
+```Python
+ def keyPressEvent(self, event):
+        '''process key press'''
+        key = event.key()
+
+        if key == Qt.Key_A:
+            BaseRobot.alpha = int(round((BaseRobot.alpha - 45) % 360))
+            return
+
+        elif key == Qt.Key_D:
+            BaseRobot.alpha = int(round((BaseRobot.alpha + 45) %360))
+            return
+
+    def moveUp(self):
+        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][(int(round(BaseRobot.yPosition / 10)))-1] == 0:
+            BaseRobot.yPosition -= 10
+
+    def moveDown(self):
+        if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][int(round((BaseRobot.yPosition / 10)))+1] == 0:
+            BaseRobot.yPosition += 10
+
+    def moveLeft(self):
+        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))-1][int(round(BaseRobot.yPosition / 10))] == 0:
+            BaseRobot.xPosition -= 10
+
+    def moveRight(self):
+        if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))+1][int(round(BaseRobot.yPosition / 10))] == 0:
+            BaseRobot.xPosition += 10
+```
 
 **Steuerung des Roboters mit WASD**
 Um den Roboter mit der Tastatur zu steuern haben wir das keyPressEvent verwendet.
