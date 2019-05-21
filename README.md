@@ -132,7 +132,7 @@ Für die selbständige Bewegung des Roboters im Feld haben wir dazu einen timer 
 ```
 Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die Tasten A und D führen hierbei Rotationsbewegen aus. Indem sie die Alpha-Werte des Roboters verändern und diese in den folgenden Methoden moveUp(), moveDown(), moveLeft() und moveRight() nutzen, bewegen sie den Robotor abhängig von dem veränderten Alpha-Wert in eine bestimmte Richtung. Dadurch sind dann auch 360° Bewegungen möglich.
 ```Python
- def keyPressEvent(self, event):
+   def keyPressEvent(self, event):
         '''process key press'''
         key = event.key()
 
