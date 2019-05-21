@@ -28,7 +28,7 @@ Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschlie
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 ```
-![Grid](/BlogIMG/02_Spielfeld_mit_outer_Ring)
+![Grid](/BlogIMG/02_Spielfeld_mit_outer_Ring.png)
 
 Im nächsten Schritt haben wir begonnen erste Hindernisse zu platzieren.
 
@@ -40,7 +40,6 @@ Im nächsten Schritt haben wir begonnen erste Hindernisse zu platzieren.
     PlayFieldAR[25][20]= 1
     PlayFieldAR[10][50]= 1
 ```
-Placeholder Bild 01
 
 Das Spielfeld mit einer Wand zu umranden,
 
@@ -53,7 +52,6 @@ Das Spielfeld mit einer Wand zu umranden,
             PlayFieldAR[0][y]= 1
             PlayFieldAR[99][y]= 1
 ```
-Placeholder Bild 02
 
 und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
 
@@ -73,7 +71,7 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
         for i in range(0, 10, 1):
             PlayFieldAR[10][i+50] = 1
 ```
-Placeholder Bild 03
+![Grid](/BlogIMG/03_Final_Spielfeld.png)
 
 **Entwurf des Roboters**
 Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser Klasse befinden sich folgende Attribute des Roboters: die x,y Positionen, der Radius und der Alpha-Wert für die Blickrichtung. Der Roboter startet an der Position (20, 30) im Spielfeld.
@@ -195,7 +193,7 @@ def keyPressEvent(self, event):
 Um Kollision mit den Wänden einzufügen müssen wir jeweils prüfen ob einer der Blöcke in Fahrtrichtung eine Wand ist.
 Da unser Roboter aus 3x3 Feldern besteht muss man jeweils 3 Blöcke prüfen.
 
-Bild mit Roboter und Grid
+![Grid](/BlogIMG/Roboter_mit_Grid.png)
 
 
 ```python
