@@ -28,7 +28,7 @@ Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschlie
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 ```
-Placeholder Bild 00
+![Grid](/BlogIMG/02_Spielfeld_mit_outer_Ring)
 
 Im nächsten Schritt haben wir begonnen erste Hindernisse zu platzieren.
 
