@@ -71,7 +71,7 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
         for i in range(0, 10, 1):
             PlayFieldAR[10][i+50] = 1
 ```
-![Grid](/BlogIMG/03_Final_Spielfeld.png)
+![Grid2](/BlogIMG/03_Final_Spielfeld.png)
 
 **Entwurf des Roboters**
 Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser Klasse befinden sich folgende Attribute des Roboters: die x,y Positionen, der Radius und der Alpha-Wert für die Blickrichtung. Der Roboter startet an der Position (20, 30) im Spielfeld.
@@ -193,7 +193,7 @@ def keyPressEvent(self, event):
 Um Kollision mit den Wänden einzufügen müssen wir jeweils prüfen ob einer der Blöcke in Fahrtrichtung eine Wand ist.
 Da unser Roboter aus 3x3 Feldern besteht muss man jeweils 3 Blöcke prüfen.
 
-![Grid](/BlogIMG/Roboter_mit_Grid.png)
+![RoboGrid](/BlogIMG/Roboter_mit_Grid.png)
 
 
 ```python
