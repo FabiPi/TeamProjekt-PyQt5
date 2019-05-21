@@ -143,19 +143,25 @@ Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die
         elif key == Qt.Key_D:
             BaseRobot.alpha = int(round((BaseRobot.alpha + 45) %360))
             return
-
+ ```           
+ ```python           
+            
     def moveUp(self):
         if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][(int(round(BaseRobot.yPosition / 10)))-1] == 0:
             BaseRobot.yPosition -= 10
 
+```
+```python
     def moveDown(self):
         if SpielFeld.PlayFieldAR[int(round(BaseRobot.xPosition /10))][int(round((BaseRobot.yPosition / 10)))+1] == 0:
             BaseRobot.yPosition += 10
-
+```
+```python
     def moveLeft(self):
         if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))-1][int(round(BaseRobot.yPosition / 10))] == 0:
             BaseRobot.xPosition -= 10
-
+```
+```python
     def moveRight(self):
         if SpielFeld.PlayFieldAR[(int(round(BaseRobot.xPosition /10)))+1][int(round(BaseRobot.yPosition / 10))] == 0:
             BaseRobot.xPosition += 10
