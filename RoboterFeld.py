@@ -5,8 +5,10 @@ von B-Dome, JangJang3, FabiPi
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import Qt, QBasicTimer
+import math
 import sys
 import time
+import threading
 
 class SpielFeld(QWidget):
 
@@ -44,33 +46,34 @@ class SpielFeld(QWidget):
         if (BaseRobot.xPosition == (screen.width() - (BaseRobot.radius +10))) or (BaseRobot.yPosition == (screen.height() - (BaseRobot.radius + 10))):
             self.timer.stop()
         else:
-            if BaseRobot.alpha == 0:
+            if BaseRobot.alpha == 90:
                 self.moveUp()
-                
+            
             elif BaseRobot.alpha == 45:
                 self.moveUp()
                 self.moveRight()
-                
-            elif BaseRobot.alpha == 90:
+              
+            elif BaseRobot.alpha == 0:
                 self.moveRight()
-                
-            elif BaseRobot.alpha == 135:
+     
+            elif BaseRobot.alpha == 315:
                 self.moveDown()
                 self.moveRight()
 
-            elif BaseRobot.alpha == 180:
+            elif BaseRobot.alpha == 270:
                 self.moveDown()
                 
             elif BaseRobot.alpha == 225:
                 self.moveDown()
                 self.moveLeft()
                 
-            elif BaseRobot.alpha == 270:
+            elif BaseRobot.alpha == 180:
                 self.moveLeft()
                 
-            elif BaseRobot.alpha == 315:
+            elif BaseRobot.alpha == 135:
                 self.moveUp()
                 self.moveLeft()
+
         
         """
         XPos = BaseRobot.xPosition
@@ -142,7 +145,14 @@ class SpielFeld(QWidget):
     def drawRobo(self, br):
 
         br.setBrush(QColor(255, 0, 0))
-        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition, 2* BaseRobot.radius, 2*BaseRobot.radius)
+        br.setPen(QColor(0,0,0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition , 2* BaseRobot.radius, 2*BaseRobot.radius)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+        yPos = math.sin(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+
+        br.drawLine(BaseRobot.xPosition + BaseRobot.radius, BaseRobot.yPosition + BaseRobot.radius, (BaseRobot.xPosition + BaseRobot.radius) + xPos, (BaseRobot.yPosition + BaseRobot.radius) - yPos)
 
         self.update()
         
@@ -186,24 +196,19 @@ class SpielFeld(QWidget):
         '''process key press'''
         RobotX = int(round(BaseRobot.xPosition/10))
         RobotY = int(round(BaseRobot.yPosition/10))
-
         key = event.key()
-
         if key == Qt.Key_W:
             if SpielFeld.PlayFieldAR[RobotX][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+1][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+2][RobotY-1] == 0:
                 BaseRobot.yPosition -= 10
             return
-
         elif key == Qt.Key_S:
             if SpielFeld.PlayFieldAR[RobotX][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+1][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+2][RobotY+3] == 0:
                 BaseRobot.yPosition += 10
             return
-
         elif key == Qt.Key_A:
             if SpielFeld.PlayFieldAR[RobotX-1][RobotY] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+1] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+2] == 0:
                 BaseRobot.xPosition -= 10
             return
-
         elif key == Qt.Key_D:
             if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
                 BaseRobot.xPosition += 10
