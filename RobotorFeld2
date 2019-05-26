@@ -4,7 +4,7 @@ von B-Dome, JangJang3, FabiPi
 """
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
 from PyQt5.QtGui import QPainter, QColor, QBrush
-from PyQt5.QtCore import Qt, QBasicTimer
+from PyQt5.QtCore import Qt, QBasicTimer, QThread
 import math
 import sys
 import time
@@ -25,6 +25,7 @@ class SpielFeld(QWidget):
 
     YELLOW = QColor(255, 255, 0)
 
+
     def __init__(self):
         super().__init__()
 
@@ -37,10 +38,10 @@ class SpielFeld(QWidget):
         self.timer = QBasicTimer()
         self.timer.start(SpielFeld.refreshrate, self)
         # Roboterinstanzen(xPos, yPos, r, alpha)
-        self.Robo1 = BaseRobo(20, 30, 15, 45, SpielFeld.RED)
-        self.Robo2 = BaseRobo(90, 90, 15, 0, SpielFeld.YELLOW)
-        self.Robo3 = BaseRobo(100, 130, 15, 90, SpielFeld.BLUE)
-        self.Robo4 = BaseRobo(200, 200, 15, 225, SpielFeld.GREEN)
+        self.Robo1 = BaseRobo(500, 500, 15, 30, 0, 0, SpielFeld.RED)
+        self.Robo2 = BaseRobo(90, 90, 15, 0, 0, 0, SpielFeld.YELLOW)
+        self.Robo3 = BaseRobo(180, 130, 15, 90, 0, 0, SpielFeld.BLUE)
+        self.Robo4 = BaseRobo(200, 170, 15, 225,0, 0, SpielFeld.GREEN)
 
         self.show()
 
@@ -54,9 +55,14 @@ class SpielFeld(QWidget):
 
     def timerEvent(self, event):
         self.Robo1.MoveRobo()
+        self.moveRoboCircle(self.Robo1)
+        # moves back and forward
         self.Robo2.MoveRobo()
         self.Robo3.MoveRobo()
+        self.moveRoboCircle(self.Robo3)
+        # moves down, up and back/forward
         self.Robo4.MoveRobo()
+
 
         self.update()
 
@@ -121,7 +127,6 @@ class SpielFeld(QWidget):
         alpha4 = self.Robo4.alpha
 
 
-
         if key == Qt.Key_A:
             self.Robo1.alpha = int(round((alpha1 - 45) % 360))
             self.Robo2.alpha = int(round((alpha2 - 45) % 360))
@@ -136,15 +141,49 @@ class SpielFeld(QWidget):
             self.Robo4.alpha = int(round((alpha4 + 45) % 360))
             return
 
+    def moveRoboCircle(self, Robo):
+
+        # berechne neue Lenkrichtung
+        if (Robo.v_alpha + Robo.a_alpha) < BaseRobo.v_alpha_Max:
+            Robo.v_alpha = (Robo.v_alpha + Robo.a_alpha)
+
+        # Neue Richtung
+        Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
+
+        # berechne neue Geschwindigkeit
+        if (Robo.v + Robo.a) < BaseRobo.vMax:
+            Robo.v += Robo.a
+
+        # X-Y Geschwindigkeit
+        GesX = math.cos(math.radians(Robo.alpha)) * Robo.v
+        GesY = -math.sin(math.radians(Robo.alpha)) * Robo.v
+
+        # Neue Positiion
+        Robo.xPosition += GesX
+        Robo.yPosition += GesY
+
 
 
 class BaseRobo(QWidget):
-    def __init__(self, xPos, yPos, r, alpha, col):
+
+    a_alpha_max = 50
+    a_max = 30
+    v = 10
+    v_alpha = 10
+
+    vMax = 15
+
+    v_alpha_Max = 25
+
+    def __init__(self, xPos, yPos, r, alpha,a ,a_alpha, col):
         self.xPosition = xPos
         self.yPosition = yPos
         self.radius = r
         self.alpha = alpha
+        self.a = a
+        self.a_alpha = a_alpha
         self.color = col
+
 
     def drawRobo(self, br):
         xPosition = self.xPosition
@@ -175,6 +214,9 @@ class BaseRobo(QWidget):
 
         if self.yPosition > 900 and self.xPosition < 30 or self.yPosition > 900 :
             self.alpha = 45
+
+        if self.xPosition == 10 and self.alpha == 180:
+            self.alpha = 0
 
         if alpha == 90:
             self.moveUp()
@@ -209,25 +251,28 @@ class BaseRobo(QWidget):
         RobotX = int(round(self.xPosition/10))
         RobotY = int(round(self.yPosition/10))
         if SpielFeld.PlayFieldAR[RobotX][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+1][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+2][RobotY-1] == 0:
-            self.yPosition -= 10
+            self.yPosition -= self.v
 
     def moveDown(self):
         RobotX = int(round(self.xPosition/10))
         RobotY = int(round(self.yPosition/10))
         if SpielFeld.PlayFieldAR[RobotX][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+1][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+2][RobotY+3] == 0:
-           self.yPosition += 10
+           self.yPosition += self.v
 
     def moveLeft(self):
         RobotX = int(round(self.xPosition/10))
         RobotY = int(round(self.yPosition/10))
         if SpielFeld.PlayFieldAR[RobotX-1][RobotY] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+1] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+2] == 0:
-            self.xPosition -= 10
+            self.xPosition -= self.v
 
     def moveRight(self):
         RobotX = int(round(self.xPosition/10))
         RobotY = int(round(self.yPosition/10))
         if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
-            self.xPosition += 10
+            self.xPosition += self.v
+
+
+
 
 
 if __name__ == '__main__':
