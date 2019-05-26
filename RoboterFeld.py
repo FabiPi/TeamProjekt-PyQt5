@@ -265,7 +265,12 @@ class SpielFeld(QWidget):
     threadFirst     = threading.Thread(target=drawFirstRobo)
     threadSecond    = threading.Thread(target=drawSecondRobo)
     threadThird     = threading.Thread(target=drawThirdRobo)
-    threadFourth    = threading.Thread(target=drawFourthRobo)    
+    threadFourth    = threading.Thread(target=drawFourthRobo)   
+    
+    threadFirst.start()
+    threadSecond.start()
+    threadThird.start()
+    threadFourth.start()
 
     
 class BaseRobot (QWidget):
