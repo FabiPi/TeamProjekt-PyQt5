@@ -100,8 +100,9 @@ class SpielFeld(QWidget):
         qp = QPainter()
         qp.begin(self)
         self.drawField(qp)
-        self.drawRobo(qp)
+        self.drawFirstRobo(qp)
         qp.end()
+        
 
     def drawField(self, qp):
 
@@ -142,7 +143,10 @@ class SpielFeld(QWidget):
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 
-    def drawRobo(self, br):
+
+#Robots
+    # RED
+    def drawFirstRobo(self, br):
 
         br.setBrush(QColor(255, 0, 0))
         br.setPen(QColor(0,0,0))
@@ -155,6 +159,56 @@ class SpielFeld(QWidget):
         br.drawLine(BaseRobot.xPosition + BaseRobot.radius, BaseRobot.yPosition + BaseRobot.radius, (BaseRobot.xPosition + BaseRobot.radius) + xPos, (BaseRobot.yPosition + BaseRobot.radius) - yPos)
 
         self.update()
+
+
+    # GREEN
+    def drawSecondRobo(self, br):
+
+        br.setBrush(QColor(0, 255, 0))
+        br.setPen(QColor(0,0,0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition , 2* BaseRobot.radius, 2*BaseRobot.radius)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+        yPos = math.sin(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+
+        br.drawLine(BaseRobot.xPosition + BaseRobot.radius, BaseRobot.yPosition + BaseRobot.radius, (BaseRobot.xPosition + BaseRobot.radius) + xPos, (BaseRobot.yPosition + BaseRobot.radius) - yPos)
+
+        self.update()
+
+    # BLUE
+    def drawThirdRobo(self, br):
+
+        br.setBrush(QColor(0, 255, 0))
+        br.setPen(QColor(0,0,0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition , 2* BaseRobot.radius, 2*BaseRobot.radius)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+        yPos = math.sin(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+
+        br.drawLine(BaseRobot.xPosition + BaseRobot.radius, BaseRobot.yPosition + BaseRobot.radius, (BaseRobot.xPosition + BaseRobot.radius) + xPos, (BaseRobot.yPosition + BaseRobot.radius) - yPos)
+
+        self.update()
+
+    # YELLOW
+    def drawFourthRobo(self, br):
+
+        br.setBrush(QColor(255, 255, 0))
+        br.setPen(QColor(0,0,0))
+        br.drawEllipse(BaseRobot.xPosition, BaseRobot.yPosition , 2* BaseRobot.radius, 2*BaseRobot.radius)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+        yPos = math.sin(math.radians(BaseRobot.alpha)) * BaseRobot.radius
+
+        br.drawLine(BaseRobot.xPosition + BaseRobot.radius, BaseRobot.yPosition + BaseRobot.radius, (BaseRobot.xPosition + BaseRobot.radius) + xPos, (BaseRobot.yPosition + BaseRobot.radius) - yPos)
+
+        self.update()
+
+
+
+
         
     def keyPressEvent(self, event):
         '''process key press'''
@@ -220,6 +274,15 @@ class BaseRobot (QWidget):
     yPosition = 30
     radius = 15
     alpha = 45
+
+    a = 1
+    a_alpha = 1
+
+    a_max = 3
+    a_alpha_max = 3
+
+    #v
+    #v_alpha
 
 
 if __name__ == '__main__':
