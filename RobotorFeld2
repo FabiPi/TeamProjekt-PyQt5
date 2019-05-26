@@ -1,0 +1,236 @@
+"""
+Roboter Feld
+von B-Dome, JangJang3, FabiPi
+"""
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
+from PyQt5.QtGui import QPainter, QColor, QBrush
+from PyQt5.QtCore import Qt, QBasicTimer
+import math
+import sys
+import time
+import threading
+
+class SpielFeld(QWidget):
+
+
+    PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
+
+    refreshrate = 200
+
+    BLUE = QColor(0, 255, 255)
+
+    GREEN = QColor(0, 255, 0)
+
+    RED = QColor(255,0,0)
+
+    YELLOW = QColor(255, 255, 0)
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(0, 0, 1000, 1000)
+        self.setWindowTitle('PlayField')
+        self.center()
+        self.timer = QBasicTimer()
+        self.timer.start(SpielFeld.refreshrate, self)
+        # Roboterinstanzen(xPos, yPos, r, alpha)
+        self.Robo1 = BaseRobo(20, 30, 15, 45, SpielFeld.RED)
+        self.Robo2 = BaseRobo(90, 90, 15, 0, SpielFeld.YELLOW)
+        self.Robo3 = BaseRobo(100, 130, 15, 90, SpielFeld.BLUE)
+        self.Robo4 = BaseRobo(200, 200, 15, 225, SpielFeld.GREEN)
+
+        self.show()
+
+    def center(self):
+        '''centers the window on the screen'''
+
+        screen = QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2,
+                  (screen.height() - size.height()) / 2)
+
+    def timerEvent(self, event):
+        self.Robo1.MoveRobo()
+        self.Robo2.MoveRobo()
+        self.Robo3.MoveRobo()
+        self.Robo4.MoveRobo()
+
+        self.update()
+
+
+    def paintEvent(self, qp ):
+
+        qp = QPainter()
+        qp.begin(self)
+        self.drawField(qp)
+        self.Robo1.drawRobo(qp)
+        self.Robo2.drawRobo(qp)
+        self.Robo3.drawRobo(qp)
+        self.Robo4.drawRobo(qp)
+        qp.end()
+
+    def drawField(self, qp):
+
+        #Array construction
+
+        #set Walls, set array value to 1 to place Wall
+
+        #set Wall around the edges
+        for x in range(0,100,1):
+            SpielFeld.PlayFieldAR[x][0]= 1
+            SpielFeld.PlayFieldAR[x][99]= 1
+        for y in range(1,99,1):
+            SpielFeld.PlayFieldAR[0][y]= 1
+            SpielFeld.PlayFieldAR[99][y]= 1
+
+        #set some Obstacle
+        for i in range(0, 25, 1):
+            SpielFeld.PlayFieldAR[70][i+45] = 1
+
+        for i in range(0, 40, 1):
+            SpielFeld.PlayFieldAR[i+10][40] = 1
+        for i in range(0, 50, 1):
+            SpielFeld.PlayFieldAR[i+30][70] = 1
+
+        for i in range(0, 30, 1):
+            SpielFeld.PlayFieldAR[i+25][20] = 1
+
+        for i in range(0, 10, 1):
+            SpielFeld.PlayFieldAR[10][i+50] = 1
+
+        #Draw the PlayField
+        for i in range(0, 100, 1):
+            for j in range(0, 100, 1):
+                    if SpielFeld.PlayFieldAR[i][j]==1:
+                        qp.setBrush(QColor(0, 0, 0))
+                        qp.drawRect(i*10, j*10, 10, 10)
+                    else:
+                        qp.setBrush(QColor(150, 150, 150))
+                        qp.drawRect(i*10, j*10, 10, 10)
+
+
+    def keyPressEvent(self, event):
+        '''process key press'''
+        key = event.key()
+        alpha1 = self.Robo1.alpha
+        alpha2 = self.Robo2.alpha
+        alpha3 = self.Robo3.alpha
+        alpha4 = self.Robo4.alpha
+
+
+
+        if key == Qt.Key_A:
+            self.Robo1.alpha = int(round((alpha1 - 45) % 360))
+            self.Robo2.alpha = int(round((alpha2 - 45) % 360))
+            self.Robo3.alpha = int(round((alpha3 - 45) % 360))
+            self.Robo4.alpha = int(round((alpha4 - 45) % 360))
+            return
+
+        elif key == Qt.Key_D:
+            self.Robo1.alpha = int(round((alpha1 + 45) %360))
+            self.Robo2.alpha = int(round((alpha2 + 45) % 360))
+            self.Robo3.alpha = int(round((alpha3 + 45) % 360))
+            self.Robo4.alpha = int(round((alpha4 + 45) % 360))
+            return
+
+
+
+class BaseRobo(QWidget):
+    def __init__(self, xPos, yPos, r, alpha, col):
+        self.xPosition = xPos
+        self.yPosition = yPos
+        self.radius = r
+        self.alpha = alpha
+        self.color = col
+
+    def drawRobo(self, br):
+        xPosition = self.xPosition
+        yPosition = self.yPosition
+        r = self.radius
+        alpha = self.alpha
+        color = self.color
+
+        br.setBrush(color)
+        br.setPen(QColor(0, 0, 0))
+        br.drawEllipse(xPosition, yPosition, 2 * r, 2 * r)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(alpha)) * r
+        yPos = math.sin(math.radians(alpha)) * r
+
+        br.drawLine(xPosition + r, yPosition + r,
+                    (xPosition + r) + xPos, (yPosition + r) - yPos)
+
+    def MoveRobo(self):
+        alpha = self.alpha
+
+        if self.xPosition == 950:
+            self.alpha = 180
+
+        if self.yPosition == 10 and self.alpha == 90:
+            self.alpha = 270
+
+        if self.yPosition > 900 and self.xPosition < 30 or self.yPosition > 900 :
+            self.alpha = 45
+
+        if alpha == 90:
+            self.moveUp()
+
+        elif alpha == 45:
+            self.moveUp()
+            self.moveRight()
+
+        elif alpha == 0:
+            self.moveRight()
+
+        elif alpha == 315:
+            self.moveDown()
+            self.moveRight()
+
+        elif alpha == 270:
+            self.moveDown()
+
+        elif alpha == 225:
+            self.moveDown()
+            self.moveLeft()
+
+        elif alpha == 180:
+            self.moveLeft()
+
+        elif alpha == 135:
+            self.moveUp()
+            self.moveLeft()
+
+
+    def moveUp(self):
+        RobotX = int(round(self.xPosition/10))
+        RobotY = int(round(self.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+1][RobotY-1] == SpielFeld.PlayFieldAR[RobotX+2][RobotY-1] == 0:
+            self.yPosition -= 10
+
+    def moveDown(self):
+        RobotX = int(round(self.xPosition/10))
+        RobotY = int(round(self.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+1][RobotY+3] == SpielFeld.PlayFieldAR[RobotX+2][RobotY+3] == 0:
+           self.yPosition += 10
+
+    def moveLeft(self):
+        RobotX = int(round(self.xPosition/10))
+        RobotY = int(round(self.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX-1][RobotY] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+1] == SpielFeld.PlayFieldAR[RobotX-1][RobotY+2] == 0:
+            self.xPosition -= 10
+
+    def moveRight(self):
+        RobotX = int(round(self.xPosition/10))
+        RobotY = int(round(self.yPosition/10))
+        if SpielFeld.PlayFieldAR[RobotX+3][RobotY] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+1] == SpielFeld.PlayFieldAR[RobotX+3][RobotY+2] == 0:
+            self.xPosition += 10
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = SpielFeld()
+    sys.exit(app.exec_())
