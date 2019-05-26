@@ -210,7 +210,14 @@ class SpielFeld(QWidget):
                 BaseRobot.xPosition += 10
             return
     """
+    
+#Thread Event [Idea]
+    threadFirst     = threading.Thread(target=drawFirstRobo)
+    threadSecond    = threading.Thread(target=drawSecondRobo)
+    threadThird     = threading.Thread(target=drawThirdRobo)
+    threadFourth    = threading.Thread(target=drawFourthRobo)    
 
+    
 class BaseRobot (QWidget):
     xPosition = 20
     yPosition = 30
