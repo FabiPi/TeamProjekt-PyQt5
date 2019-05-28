@@ -53,11 +53,11 @@ class BaseRobot(threading.Thread):
 ```
 
 **Roboterbewegung**
-Zuerst werden mit der accelerate Methode die neuen Beschleunigungen der Roboter berechnet:
-Dazu gibt es jeweils 3 Fälle zu prüfen:
-1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt
-2)Beschleunigung befindet sich im gültigen Intervall    -> Beschleunigung wird auf den gegebenen Wert gesetzt
-3)Beschleunigung überschreitet den Maximalwert          -> Beschleunigung wird auf das Maximum gesetzt
+Zuerst werden mit der accelerate Methode die neuen Beschleunigungen der Roboter berechnet:<br/>
+Dazu gibt es jeweils 3 Fälle zu prüfen:<br/>
+1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt<br/>
+2)Beschleunigung befindet sich im gültigen Intervall    -> Beschleunigung wird auf den gegebenen Wert gesetzt<br/>
+3)Beschleunigung überschreitet den Maximalwert          -> Beschleunigung wird auf das Maximum gesetzt<br/>
 ```python
     def accelerate(self, Robo, add_a, add_alpha):
         #neue Beschleunigung
@@ -133,7 +133,7 @@ Anschließend wir das Spielfeld mit den Robotern an ihren neuen Positionen neu g
 ```
 
 **Roboteraktionen**
-Roboter 1:
+Roboter 1:<br/>
 Der Roboter fährt vor und zurück, ohne sich zu drehen
 ```python
 class RoboType1(BaseRobot):
@@ -149,7 +149,7 @@ class RoboType1(BaseRobot):
             time.sleep(0.2)
 ```
 
-Roboter 2:
+Roboter 2:<br/>
 Der Roboter beschleunigt, bremst und fährt anschließend im Kreis
 ```python
 class RoboType2(BaseRobot):
@@ -162,7 +162,7 @@ class RoboType2(BaseRobot):
             SpielFeld.accelerate(self, self, 0, 1)
 ```
 
-Roboter 3:
+Roboter 3:<br/>
 Der Roboter fährt im Kreis, abwechselnd links und rechts
 ```python
 class RoboType3(BaseRobot):
@@ -177,7 +177,7 @@ class RoboType3(BaseRobot):
                 time.sleep(GameStep*0.5)
 ```
 
-Roboter 4:
+Roboter 4:<br/>
 ```python
 
 ```
