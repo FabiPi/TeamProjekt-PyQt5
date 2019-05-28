@@ -52,9 +52,12 @@ class RoboType2(BaseRobot):
 class RoboType3(BaseRobot):
     def run(self):
         while True:
-            #print('hello this is Robo3 \n')
-            
-            time.sleep(1)
+            for i in range(0, 10, 1):
+                SpielFeld.accelerate(self, self, 0, -1)
+                time.sleep(0.5)
+            for i in range(0, 10, 1):
+                SpielFeld.accelerate(self, self, 0, 1)
+                time.sleep(0.5)
 
 class RoboType4(BaseRobot):
     def run(self):
@@ -85,7 +88,7 @@ class SpielFeld(QWidget):
         #                     x    y    r  alph a a+  a_al al+ v v_al col
         self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
         self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 3, 0, 0, QColor(0, 0, 250))
-        self.Robo3 = RoboType3(900, 10, 25, 90, 0, 2, 0, 3, 0, 0, QColor(0, 145, 250))
+        self.Robo3 = RoboType3(800, 100, 25, 270, 0, 2, 0, 3, 2, 0, QColor(0, 145, 250))
         self.Robo4 = RoboType4(900, 900, 30, 225, 0, 2, 0, 4, 0, 0, QColor(245, 120, 0))
 
         self.Robo1.start()
@@ -197,8 +200,12 @@ class SpielFeld(QWidget):
     def moveRobo(self, Robo):
 
         #berechne neue Lenkrichtung
-        if (Robo.v_alpha + Robo.a_alpha) < v_alpha_Max:
+        if (Robo.v_alpha + Robo.a_alpha) < -v_alpha_Max:
+            Robo.v_alpha = -v_alpha_Max
+        elif (Robo.v_alpha + Robo.a_alpha) <= v_alpha_Max:
             Robo.v_alpha = (Robo.v_alpha + Robo.a_alpha)
+        elif (Robo.v_alpha + Robo.a_alpha) >= v_alpha_Max:
+            Robo.v_alpha = v_alpha_Max
 
         #Neue Richtung   
         Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
