@@ -12,8 +12,8 @@ import threading
 import time
 
 GameSpeed = 50
-vMax = 15
-v_alpha_Max = 25
+vMax = 8
+v_alpha_Max = 5
 
 class BaseRobot(threading.Thread):
     
@@ -34,46 +34,37 @@ class BaseRobot(threading.Thread):
 class RoboType1(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo1 \n')
-            
-            time.sleep(1)
+            print('Ges. ', self.v , '\n' , 'a ', self.a)
+            if self.xPosition <= 400:
+                SpielFeld.accelerate(self, self, 0.5, 0)
+            else:
+                SpielFeld.accelerate(self, self, -0.5, 0)
+            time.sleep(0.2)
         
 
 class RoboType2(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo2 \n')
+            #print('hello this is Robo2 \n')
             
             time.sleep(1)
 
 class RoboType3(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo3 \n')
+            #print('hello this is Robo3 \n')
             
             time.sleep(1)
 
 class RoboType4(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo4 \n')
+            #print('hello this is Robo4 \n')
             
             time.sleep(1)
         
 
 class SpielFeld(QWidget):
-    
-    # Roboterinstanzen
-    #                 x    y    r  alph a a+  a_al al+ v v_al col
-    Robo1 = RoboType1(500, 500, 15, 30, 0, 10, 1, 3, 2, 0, QColor(255, 0, 250))
-    Robo2 = RoboType2(500, 500, 20, 0, 0, 10, 0.2, 3, 6, 0, QColor(0, 0, 250))
-    Robo3 = RoboType3(500, 500, 25, 90, 0, 10, 0, 3, 15, 3, QColor(0, 145, 250))
-    Robo4 = RoboType4(500, 500, 30, 225, 0, 10, 0, 4, 9, 2, QColor(245, 120, 0))
-
-    Robo1.start()
-    Robo2.start()
-    Robo3.start()
-    Robo4.start()
     
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
@@ -90,6 +81,18 @@ class SpielFeld(QWidget):
         self.center()
         self.timer = QBasicTimer()
         self.timer.start(GameSpeed, self)
+        # Roboterinstanzen
+        #                     x    y    r  alph a a+  a_al al+ v v_al col
+        self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
+        self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 3, 0, 0, QColor(0, 0, 250))
+        self.Robo3 = RoboType3(900, 10, 25, 90, 0, 2, 0, 3, 0, 0, QColor(0, 145, 250))
+        self.Robo4 = RoboType4(900, 900, 30, 225, 0, 2, 0, 4, 0, 0, QColor(245, 120, 0))
+
+        self.Robo1.start()
+        self.Robo2.start()
+        self.Robo3.start()
+        self.Robo4.start()
+        
         self.show()
 
     def center(self):
@@ -100,15 +103,21 @@ class SpielFeld(QWidget):
         self.move((screen.width() - size.width()) / 2,
                   (screen.height() - size.height()) / 2)
 
+    def timerEvent(self, Event):
+        self.moveRobo(self.Robo1)
+        self.moveRobo(self.Robo2)
+        self.moveRobo(self.Robo3)
+        self.moveRobo(self.Robo4)
+        
     def paintEvent(self, qp):
 
         qp = QPainter()
         qp.begin(self)
         self.drawField(qp)
-        self.drawRobo(SpielFeld.Robo1, qp)
-        self.drawRobo(SpielFeld.Robo2, qp)
-        self.drawRobo(SpielFeld.Robo3, qp)
-        self.drawRobo(SpielFeld.Robo4, qp)
+        self.drawRobo(self.Robo1, qp)
+        self.drawRobo(self.Robo2, qp)
+        self.drawRobo(self.Robo3, qp)
+        self.drawRobo(self.Robo4, qp)
         qp.end()
 
     def drawField(self, qp):
@@ -166,6 +175,25 @@ class SpielFeld(QWidget):
 
         self.update()
 
+    def accelerate(self, Robo, add_a, add_alpha):
+        #neue Beschleunigung
+        if Robo.a + add_a <= -Robo.a_max:
+            Robo.a = -Robo.a_max
+        elif Robo.a + add_a < Robo.a_max:
+            Robo.a += add_a
+        elif Robo.a + add_a >= Robo.a_max:
+            Robo.a = Robo.a_max
+
+
+        #neue Drehbeschleunigung
+        if Robo.a_alpha + add_alpha <= -Robo.a_alpha_max:
+            Robo.a_alpha = -Robo.a_alpha_max
+        elif Robo.a_alpha + add_alpha < Robo.a_alpha_max:
+            Robo.a_alpha += add_alpha
+        elif Robo.a_alpha + add_alpha >= Robo.a_alpha_max:
+            Robo.a_alpha = Robo.a_alpha_max
+
+
     def moveRobo(self, Robo):
 
         #berechne neue Lenkrichtung
@@ -176,8 +204,13 @@ class SpielFeld(QWidget):
         Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
 
         #berechne neue Geschwindigkeit
-        if (Robo.v + Robo.a) < vMax:
+        if (Robo.v + Robo.a) <= -vMax:
+            Robo.v = -vMax
+        elif (Robo.v + Robo.a) < vMax:
             Robo.v += Robo.a
+        elif (Robo.v + Robo.a) >= vMax:
+            Robo.v = vMax
+
 
         #X-Y Geschwindigkeit
         GesX = math.cos(math.radians(Robo.alpha)) * Robo.v
@@ -186,9 +219,7 @@ class SpielFeld(QWidget):
         #Neue Positiion
         Robo.xPosition += GesX 
         Robo.yPosition += GesY
-        
-
-  
+          
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
