@@ -9,6 +9,7 @@ from PyQt5.QtCore import Qt, QBasicTimer
 import sys
 import math
 import threading
+import time
 
 GameSpeed = 50
 vMax = 15
@@ -29,16 +30,50 @@ class BaseRobot(threading.Thread):
         self.v = v
         self.v_alpha = v_alpha
         self.color = color
+
+class RoboType1(BaseRobot):
+    def run(self):
+        while True:
+            print('hello this is Robo1')
+            
+            time.sleep(1)
+        
+
+class RoboType2(BaseRobot):
+    def run(self):
+        while True:
+            print('hello this is Robo2')
+            
+            time.sleep(1)
+
+class RoboType3(BaseRobot):
+    def run(self):
+        while True:
+            print('hello this is Robo3')
+            
+            time.sleep(1)
+
+class RoboType4(BaseRobot):
+    def run(self):
+        while True:
+            print('hello this is Robo4')
+            
+            time.sleep(1)
         
 
 class SpielFeld(QWidget):
     
     # Roboterinstanzen
     #                 x    y    r  alph a a+  a_al al+ v v_al col
-    Robo1 = BaseRobot(500, 500, 15, 30, 0, 10, 1, 3, 2, 0, QColor(255, 0, 250))
-    Robo2 = BaseRobot(500, 500, 20, 0, 0, 10, 0.2, 3, 6, 0, QColor(0, 0, 250))
-    Robo3 = BaseRobot(500, 500, 25, 90, 0, 10, 0, 3, 15, 3, QColor(0, 145, 250))
-    Robo4 = BaseRobot(500, 500, 30, 225, 0, 10, 0, 4, 9, 2, QColor(245, 120, 0))
+    Robo1 = RoboType1(500, 500, 15, 30, 0, 10, 1, 3, 2, 0, QColor(255, 0, 250))
+    Robo2 = RoboType2(500, 500, 20, 0, 0, 10, 0.2, 3, 6, 0, QColor(0, 0, 250))
+    Robo3 = RoboType3(500, 500, 25, 90, 0, 10, 0, 3, 15, 3, QColor(0, 145, 250))
+    Robo4 = RoboType4(500, 500, 30, 225, 0, 10, 0, 4, 9, 2, QColor(245, 120, 0))
+
+    Robo1.start()
+    Robo2.start()
+    Robo3.start()
+    Robo4.start()
     
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
@@ -64,13 +99,6 @@ class SpielFeld(QWidget):
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2,
                   (screen.height() - size.height()) / 2)
-
-    def timerEvent(self, event):
-
-        self.moveRobo(SpielFeld.Robo1)
-        self.moveRobo(SpielFeld.Robo2)
-        self.moveRobo(SpielFeld.Robo3)
-        self.moveRobo(SpielFeld.Robo4)
 
     def paintEvent(self, qp):
 
