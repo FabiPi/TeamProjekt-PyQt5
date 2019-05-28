@@ -70,7 +70,12 @@ class RoboType3(BaseRobot):
 
 class RoboType4(BaseRobot):
     def run(self):
-        print('TODO')
+        while True:
+            #Drehung + Pause
+            SpielFeld.accelerate(self, self, 0, 1)
+            time.sleep(GameStep*2)
+            SpielFeld.accelerate(self, self, 0, -0.5)
+            time.sleep(GameStep*3)
         
 
 class SpielFeld(QWidget):
@@ -95,7 +100,7 @@ class SpielFeld(QWidget):
         self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
         self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 5, 2, 0, QColor(0, 0, 250))
         self.Robo3 = RoboType3(800, 100, 25, 270, 0, 2, 0, 3, 2, 0, QColor(0, 145, 250))
-        self.Robo4 = RoboType4(900, 900, 30, 135, 0, 2, 0, 4, 1, 0, QColor(245, 120, 0))
+        self.Robo4 = RoboType4(500, 500, 30, 135, 0, 2, 0, 4, 1, 0, QColor(245, 120, 0))
 
         self.Robo1.start()
         self.Robo2.start()
