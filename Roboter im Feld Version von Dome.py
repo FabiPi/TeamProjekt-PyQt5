@@ -34,7 +34,7 @@ class BaseRobot(threading.Thread):
 class RoboType1(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo1')
+            print('hello this is Robo1 \n')
             
             time.sleep(1)
         
@@ -42,21 +42,21 @@ class RoboType1(BaseRobot):
 class RoboType2(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo2')
+            print('hello this is Robo2 \n')
             
             time.sleep(1)
 
 class RoboType3(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo3')
+            print('hello this is Robo3 \n')
             
             time.sleep(1)
 
 class RoboType4(BaseRobot):
     def run(self):
         while True:
-            print('hello this is Robo4')
+            print('hello this is Robo4 \n')
             
             time.sleep(1)
         
