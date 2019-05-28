@@ -1,4 +1,4 @@
-## Roboter mithilfe von Threads 
+## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
 Für die spätere Ausführung der Threads in der jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
 
