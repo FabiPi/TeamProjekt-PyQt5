@@ -54,10 +54,10 @@ class BaseRobot(threading.Thread):
 
 **Roboterbewegung**
 Zuerst werden mit der accelerate Methode die neuen Beschleunigungen der Roboter berechnet:
-Dazu gibt es jeweils 3 Fälle zu prüfen:
-1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt
-2)Beschleunigung befindet sich im gültigen Intervall    -> Beschleunigung wird auf den gegebenen Wert gesetzt
-3)Beschleunigung überschreitet den Maximalwert          -> Beschleunigung wird auf das Maximum gesetzt
+Dazu gibt es jeweils 3 Fälle zu prüfen:\\
+1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt\\
+2)Beschleunigung befindet sich im gültigen Intervall    -> Beschleunigung wird auf den gegebenen Wert gesetzt\\
+3)Beschleunigung überschreitet den Maximalwert          -> Beschleunigung wird auf das Maximum gesetzt\\
 ```python
     def accelerate(self, Robo, add_a, add_alpha):
         #neue Beschleunigung
