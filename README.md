@@ -22,6 +22,7 @@ In der Spielfeld Klasse wurden die 4 Roboterinstanzen dann initialisiert.
 
 ```
 Zudem wurden 4 neue Klassen erstellt, die die 4 Roboter mit ihren jeweiligen Aktionen repräsentieren sollen. Die 4 Klassen sind Subklassen der Roboterbasisklasse. Jeder dieser Klassen soll eine run-Funktion enthalten, mit der die Beschleunigung der Roboter geändert wird. Um zu testen wird deren aktuelle Geschwindigkeit, wie Beschleunigung ausgegeben.
+Die einzelnen RoboterTypen erben dabei von der BaseRobot class.
 
 ```python
 class RoboType1(BaseRobot):
