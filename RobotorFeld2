@@ -14,7 +14,7 @@ import threading
 class SpielFeld(QWidget):
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
 
-    refreshrate = 10
+    refreshrate = 100
 
     BLUE = QColor(0, 255, 255)
 
@@ -252,16 +252,20 @@ class Robo1 (BaseRobo):
 
 class Robo2 (BaseRobo):
 
+    def changeSpeedRobo(self):
+        self.moveRoboForwardBackward()
+
+        if self.xPosition >= 500:
+            self.accelateRobo()
+        elif self.xPosition <= 400 and self.alpha == 180:
+            self.brakeRobo()
+
+
     def run(self):
         while True:
-            self.moveRoboForwardBackward()
+            self.changeSpeedRobo()
 
-            if self.xPosition >= 500:
-               self.accelateRobo()
-            elif self.xPosition <= 400 and self.alpha == 180:
-                self.brakeRobo()
-
-            Robo2.msleep(50)
+            Robo2.msleep(40)
 
 
 class Robo3 (BaseRobo):
