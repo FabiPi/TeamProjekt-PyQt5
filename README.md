@@ -6,6 +6,21 @@ Für die spätere Ausführung der Threads in der jeweiligen Robotern, wurde die 
 class BaseRobot(threading.Thread):
 
 ```
+In der Spielfeld Klasse wurden die 4 Roboterinstanzen dann initialisiert.
+```python
+    # Roboterinstanzen
+        #                     x    y    r  alph a a+  a_al al+ v v_al col
+        self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
+        self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 3, 0, 0, QColor(0, 0, 250))
+        self.Robo3 = RoboType3(800, 100, 25, 270, 0, 2, 0, 3, 2, 0, QColor(0, 145, 250))
+        self.Robo4 = RoboType4(900, 900, 30, 225, 0, 2, 0, 4, 0, 0, QColor(245, 120, 0))
+
+        self.Robo1.start()
+        self.Robo2.start()
+        self.Robo3.start()
+        self.Robo4.start()
+
+```
 Zudem wurden 4 neue Klassen erstellt, die die 4 Roboter mit ihren jeweiligen Aktionen repräsentieren sollen. Die 4 Klassen sind Subklassen der Roboterbasisklasse. Jeder dieser Klassen soll eine run-Funktion enthalten, mit der die Beschleunigung der Roboter geändert wird und deren aktuelle Geschwindigkeit, wie Beschleunigung ausgibt.
 
 ```python
