@@ -11,9 +11,10 @@ import math
 import threading
 import time
 
-GameSpeed = 50
+GameSpeed = 100/30
+GameStep = 1 / GameSpeed
 vMax = 8
-v_alpha_Max = 5
+v_alpha_Max = 10
 
 class BaseRobot(threading.Thread):
     
@@ -34,7 +35,9 @@ class BaseRobot(threading.Thread):
 class RoboType1(BaseRobot):
     def run(self):
         while True:
-            print('Ges. ', self.v , '\n' , 'a ', self.a)
+            #als hilfe um a und v zu sehen
+            #print('Ges. ', self.v , '\n' , 'a ', self.a)
+            #fährt vor und zurück(ohne drehen)
             if self.xPosition <= 400:
                 SpielFeld.accelerate(self, self, 0.5, 0)
             else:
@@ -44,27 +47,30 @@ class RoboType1(BaseRobot):
 
 class RoboType2(BaseRobot):
     def run(self):
-        while True:
-            #print('hello this is Robo2 \n')
-            
-            time.sleep(1)
+            time.sleep(4*GameStep)
+            SpielFeld.accelerate(self, self, -0.5, 0)
+            time.sleep(1*GameStep)
+            SpielFeld.accelerate(self, self, 1, 0)
+            time.sleep(2*GameStep)
+            SpielFeld.accelerate(self, self, 0, 1)
+
+
 
 class RoboType3(BaseRobot):
     def run(self):
         while True:
+            #lenkt nach links und rechts
             for i in range(0, 10, 1):
                 SpielFeld.accelerate(self, self, 0, -1)
-                time.sleep(0.5)
+                time.sleep(GameStep*0.5)
             for i in range(0, 10, 1):
-                SpielFeld.accelerate(self, self, 0, 1)
-                time.sleep(0.5)
+                SpielFeld.accelerate(self, self, 0, 2)
+                time.sleep(GameStep*0.5)
+
 
 class RoboType4(BaseRobot):
     def run(self):
-        while True:
-            #print('hello this is Robo4 \n')
-            
-            time.sleep(1)
+        print('TODO')
         
 
 class SpielFeld(QWidget):
@@ -87,9 +93,9 @@ class SpielFeld(QWidget):
         # Roboterinstanzen
         #                     x    y    r  alph a a+  a_al al+ v v_al col
         self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
-        self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 3, 0, 0, QColor(0, 0, 250))
+        self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 5, 2, 0, QColor(0, 0, 250))
         self.Robo3 = RoboType3(800, 100, 25, 270, 0, 2, 0, 3, 2, 0, QColor(0, 145, 250))
-        self.Robo4 = RoboType4(900, 900, 30, 225, 0, 2, 0, 4, 0, 0, QColor(245, 120, 0))
+        self.Robo4 = RoboType4(900, 900, 30, 135, 0, 2, 0, 4, 1, 0, QColor(245, 120, 0))
 
         self.Robo1.start()
         self.Robo2.start()
