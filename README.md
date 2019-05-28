@@ -1,12 +1,12 @@
 ## Roboter mithilfe von Threads 
 **Modifizierung der Roboterbasisklasse**
-Für die spätere Ausführung der Threads in der jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von threading.Threads Klasse umgewandelt. 
+Für die spätere Ausführung der Threads in der jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
 
 ```python
 class BaseRobot(threading.Thread):
 
 ```
-Zudem wurden dann neue 4 Klassen erstellt, die die 4 Roboter mit ihren jeweiligen Aktionen repräsentieren sollen. Die 4 Klassen sind Subklassen der Roboterbasisklasse. Jeder dieser Klassen soll eine run-Funktion enthalten, mit der die Beschleunigung der Roboter geändert wird und deren aktuelle Geschwindigkeit, wie Beschleunigung ausgibt.
+Zudem wurden 4 neue Klassen erstellt, die die 4 Roboter mit ihren jeweiligen Aktionen repräsentieren sollen. Die 4 Klassen sind Subklassen der Roboterbasisklasse. Jeder dieser Klassen soll eine run-Funktion enthalten, mit der die Beschleunigung der Roboter geändert wird und deren aktuelle Geschwindigkeit, wie Beschleunigung ausgibt.
 
 ```python
 class RoboType1(BaseRobot):
