@@ -1,6 +1,6 @@
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
-Für die spätere Ausführung der Threads in der jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
+Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
 
 ```python
 class BaseRobot(threading.Thread):
