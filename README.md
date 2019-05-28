@@ -81,7 +81,8 @@ Dazu gibt es jeweils 3 Fälle zu prüfen:<br/>
 Die Roboter werden mit der moveRobo Methode bewegt.
 Hierzu werden die neue Richtung aus der Drehgeschwindigkeit + Blickrichtung berechnet.
 Für die neue Position des Roboters wird die Geschwindigkeit in eine x- und y-Richtung zerlegt, und aus diesen wird
-dann jeweils die neue x- bzw. y-Position berechnet
+dann jeweils die neue x- bzw. y-Position berechnet. <br/>
+Wände und andere Roboter werden noch nicht als Hindernisse erkann, Roboter fahren also weiter auch wenn sie auf eine Wand treffen.
 
 ```python
 def moveRobo(self, Robo):
@@ -131,6 +132,8 @@ Anschließend wir das Spielfeld mit den Robotern an ihren neuen Positionen neu g
         br.drawLine(Robo.xPosition + Robo.radius, Robo.yPosition + Robo.radius,
                     (Robo.xPosition + Robo.radius) + xPos, (Robo.yPosition + Robo.radius) - yPos)
 ```
+
+Die Move bzw. Draw Methoden werden über einen Timer in regelmäßigen Abständen aufgerufen.
 
 **Roboteraktionen**
 Roboter 1:<br/>
