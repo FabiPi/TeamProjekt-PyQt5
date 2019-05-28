@@ -189,7 +189,7 @@ class SpielFeld(QWidget):
         if Robo.a + add_a <= -Robo.a_max:
             Robo.a = -Robo.a_max
         elif Robo.a + add_a < Robo.a_max:
-            Robo.a += add_a
+            Robo.a = add_a
         elif Robo.a + add_a >= Robo.a_max:
             Robo.a = Robo.a_max
 
@@ -198,7 +198,7 @@ class SpielFeld(QWidget):
         if Robo.a_alpha + add_alpha <= -Robo.a_alpha_max:
             Robo.a_alpha = -Robo.a_alpha_max
         elif Robo.a_alpha + add_alpha < Robo.a_alpha_max:
-            Robo.a_alpha += add_alpha
+            Robo.a_alpha = add_alpha
         elif Robo.a_alpha + add_alpha >= Robo.a_alpha_max:
             Robo.a_alpha = Robo.a_alpha_max
 
