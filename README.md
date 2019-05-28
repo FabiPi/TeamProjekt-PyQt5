@@ -36,7 +36,7 @@ class BaseRobot(threading.Thread):
         self.color = color
 ```
 
-**4 unterscheidliche Aktionen**
+**Roboteraktionen**
 
 
 ## Roboter im Spielfeld
