@@ -181,8 +181,17 @@ class RoboType3(BaseRobot):
 ```
 
 Roboter 4:<br/>
+Der Roboter fährt mit langsamen Kreisbewegungen über das Spielfeld.
 ```python
 
+class RoboType4(BaseRobot):
+    def run(self):
+        while True:
+            #Drehung + Pause
+            SpielFeld.accelerate(self, self, 0, 1)
+            time.sleep(GameStep*2)
+            SpielFeld.accelerate(self, self, 0, -0.5)
+            time.sleep(GameStep*3)
 ```
 
 
