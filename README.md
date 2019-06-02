@@ -1,3 +1,198 @@
+## Roboter und Threads 
+**Modifizierung der Roboterbasisklasse**
+Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
+
+```python
+class BaseRobot(threading.Thread):
+
+```
+In der Spielfeld Klasse wurden die 4 Roboterinstanzen dann initialisiert.
+```python
+    # Roboterinstanzen
+        #                     x    y    r  alph a a+  a_al al+ v v_al col
+        self.Robo1 = RoboType1(400, 10, 15, 0, 0, 2, 0, 3, 0, 0, QColor(255, 0, 250))
+        self.Robo2 = RoboType2(10, 900, 20, 0, 0, 2, 0, 3, 0, 0, QColor(0, 0, 250))
+        self.Robo3 = RoboType3(800, 100, 25, 270, 0, 2, 0, 3, 2, 0, QColor(0, 145, 250))
+        self.Robo4 = RoboType4(500, 500, 30, 225, 0, 2, 0, 4, 0, 0, QColor(245, 120, 0))
+
+        self.Robo1.start()
+        self.Robo2.start()
+        self.Robo3.start()
+        self.Robo4.start()
+
+```
+Zudem wurden 4 neue Klassen erstellt, die die 4 Roboter mit ihren jeweiligen Aktionen repräsentieren sollen. Die 4 Klassen sind Subklassen der Roboterbasisklasse. Jeder dieser Klassen soll eine run-Funktion enthalten, mit der die Beschleunigung der Roboter geändert wird. Um zu testen wird deren aktuelle Geschwindigkeit, wie Beschleunigung ausgegeben.
+Die einzelnen RoboterTypen erben dabei von der BaseRobot class.
+
+```python
+class RoboType1(BaseRobot):
+    def run(self):
+        while True:
+            print('Ges. ', self.v , '\n' , 'a ', self.a)
+            #ToDo
+```
+
+**Erweiterung der Roboterbasisklasse**
+Für die Erweiterung der Roboterbasisklasse haben wir unsere alte Version mit den neuen Attributen umgeschrieben:
+```python
+class BaseRobot(threading.Thread):
+    
+    def __init__(self, xPosition, yPosition, radius, alpha, a, a_max, a_alpha, a_alpha_max, v, v_alpha, color):
+        threading.Thread.__init__(self)
+        self.xPosition = xPosition
+        self.yPosition = yPosition
+        self.radius = radius
+        self.alpha = alpha
+        self.a = a
+        self.a_max = a_max
+        self.a_alpha = a_alpha
+        self.a_alpha_max = a_alpha_max
+        self.v = v
+        self.v_alpha = v_alpha
+        self.color = color
+```
+
+**Roboterbewegung**
+Zuerst werden mit der accelerate Methode die neuen Beschleunigungen der Roboter berechnet:<br/>
+Dazu gibt es jeweils 3 Fälle zu prüfen:<br/>
+1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt<br/>
+2)Beschleunigung befindet sich im gültigen Intervall    -> Beschleunigung wird auf den gegebenen Wert gesetzt<br/>
+3)Beschleunigung überschreitet den Maximalwert          -> Beschleunigung wird auf das Maximum gesetzt<br/>
+```python
+    def accelerate(self, Robo, add_a, add_alpha):
+        #neue Beschleunigung
+        if Robo.a + add_a <= -Robo.a_max:
+            Robo.a = -Robo.a_max
+        elif Robo.a + add_a < Robo.a_max:
+            Robo.a = add_a
+        elif Robo.a + add_a >= Robo.a_max:
+            Robo.a = Robo.a_max
+
+
+        #neue Drehbeschleunigung
+        if Robo.a_alpha + add_alpha <= -Robo.a_alpha_max:
+            Robo.a_alpha = -Robo.a_alpha_max
+        elif Robo.a_alpha + add_alpha < Robo.a_alpha_max:
+            Robo.a_alpha = add_alpha
+        elif Robo.a_alpha + add_alpha >= Robo.a_alpha_max:
+            Robo.a_alpha = Robo.a_alpha_max
+```
+
+Die Roboter werden mit der moveRobo Methode bewegt.
+Hierzu werden die neue Richtung aus der Drehgeschwindigkeit + Blickrichtung berechnet.
+Für die neue Position des Roboters wird die Geschwindigkeit in eine x- und y-Richtung zerlegt, und aus diesen wird
+dann jeweils die neue x- bzw. y-Position berechnet. <br/>
+Wände und andere Roboter werden noch nicht als Hindernisse erkann, Roboter fahren also weiter auch wenn sie auf eine Wand treffen.
+
+```python
+def moveRobo(self, Robo):
+
+        #berechne neue Lenkgeschwindigkeit
+        if (Robo.v_alpha + Robo.a_alpha) < -v_alpha_Max:
+            Robo.v_alpha = -v_alpha_Max
+        elif (Robo.v_alpha + Robo.a_alpha) <= v_alpha_Max:
+            Robo.v_alpha = (Robo.v_alpha + Robo.a_alpha)
+        elif (Robo.v_alpha + Robo.a_alpha) >= v_alpha_Max:
+            Robo.v_alpha = v_alpha_Max
+
+        #Neue Richtung   
+        Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
+
+        #berechne neue Geschwindigkeit
+        if (Robo.v + Robo.a) <= -vMax:
+            Robo.v = -vMax
+        elif (Robo.v + Robo.a) < vMax:
+            Robo.v += Robo.a
+        elif (Robo.v + Robo.a) >= vMax:
+            Robo.v = vMax
+
+
+        #X-Y Geschwindigkeit
+        GesX = math.cos(math.radians(Robo.alpha)) * Robo.v
+        GesY = -math.sin(math.radians(Robo.alpha)) * Robo.v
+
+        #Neue Positiion
+        Robo.xPosition += GesX 
+        Robo.yPosition += GesY
+```
+
+Anschließend wir das Spielfeld mit den Robotern an ihren neuen Positionen neu gezeichnet
+
+```python
+    def drawRobo(self, Robo, br):
+
+        br.setBrush(Robo.color)
+        br.setPen(QColor(0,0,0))
+        br.drawEllipse(Robo.xPosition, Robo.yPosition , 2* Robo.radius, 2*Robo.radius)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(Robo.alpha)) * Robo.radius
+        yPos = math.sin(math.radians(Robo.alpha)) * Robo.radius
+
+        br.drawLine(Robo.xPosition + Robo.radius, Robo.yPosition + Robo.radius,
+                    (Robo.xPosition + Robo.radius) + xPos, (Robo.yPosition + Robo.radius) - yPos)
+```
+
+Die Move bzw. Draw Methoden werden über einen Timer in regelmäßigen Abständen aufgerufen.
+
+**Roboteraktionen**
+Roboter 1:<br/>
+Der Roboter fährt vor und zurück, ohne sich zu drehen
+```python
+class RoboType1(BaseRobot):
+    def run(self):
+        while True:
+            #als hilfe um a und v zu sehen
+            #print('Ges. ', self.v , '\n' , 'a ', self.a)
+            #fährt vor und zurück(ohne drehen)
+            if self.xPosition <= 400:
+                SpielFeld.accelerate(self, self, 0.5, 0)
+            else:
+                SpielFeld.accelerate(self, self, -0.5, 0)
+            time.sleep(0.2)
+```
+
+Roboter 2:<br/>
+Der Roboter beschleunigt, bremst und fährt anschließend im Kreis
+```python
+class RoboType2(BaseRobot):
+    def run(self):
+            time.sleep(4*GameStep)
+            SpielFeld.accelerate(self, self, -0.5, 0)
+            time.sleep(1*GameStep)
+            SpielFeld.accelerate(self, self, 1, 0)
+            time.sleep(2*GameStep)
+            SpielFeld.accelerate(self, self, 0, 1)
+```
+
+Roboter 3:<br/>
+Der Roboter fährt im Kreis, abwechselnd links und rechts
+```python
+class RoboType3(BaseRobot):
+    def run(self):
+        while True:
+            #lenkt nach links und rechts
+            for i in range(0, 10, 1):
+                SpielFeld.accelerate(self, self, 0, -1)
+                time.sleep(GameStep*0.5)
+            for i in range(0, 10, 1):
+                SpielFeld.accelerate(self, self, 0, 2)
+                time.sleep(GameStep*0.5)
+```
+
+Roboter 4:<br/>
+Der Roboter fährt mit langsamen Kreisbewegungen über das Spielfeld.
+```python
+
+class RoboType4(BaseRobot):
+    def run(self):
+        while True:
+            #Drehung + Pause
+            SpielFeld.accelerate(self, self, 0, 1)
+            time.sleep(GameStep*2)
+            SpielFeld.accelerate(self, self, 0, -0.5)
+            time.sleep(GameStep*3)
+```
 
 
 ## Roboter im Spielfeld

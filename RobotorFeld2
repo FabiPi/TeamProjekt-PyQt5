@@ -1,0 +1,290 @@
+"""
+Roboter Feld
+von B-Dome, JangJang3, FabiPi
+"""
+from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget
+from PyQt5.QtGui import QPainter, QColor, QBrush
+from PyQt5.QtCore import Qt, QBasicTimer, QThread
+import math
+import sys
+import time
+import threading
+
+
+class SpielFeld(QWidget):
+    PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
+
+    refreshrate = 100
+
+    BLUE = QColor(0, 255, 255)
+
+    GREEN = QColor(0, 255, 0)
+
+    RED = QColor(255, 0, 0)
+
+    YELLOW = QColor(255, 255, 0)
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(0, 0, 1000, 1000)
+        self.setWindowTitle('PlayField')
+        self.center()
+        self.timer = QBasicTimer()
+        self.timer.start(SpielFeld.refreshrate, self)
+        # Roboterinstanzen(xPos, yPos, r, alpha)
+        self.Robo1 = Robo1(500, 500, 15, 45, SpielFeld.RED)
+        self.Robo1.start()
+        self.Robo2 = Robo2(90, 90, 15, 0, SpielFeld.YELLOW)
+        self.Robo2.start()
+        self.Robo3 = Robo3(180, 130, 15, 90, SpielFeld.BLUE)
+        self.Robo3.start()
+        self.Robo4 = Robo4(200, 150, 15, 0, SpielFeld.GREEN)
+        self.Robo4.start()
+
+        self.show()
+
+    def center(self):
+        '''centers the window on the screen'''
+
+        screen = QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2,
+                  (screen.height() - size.height()) / 2)
+
+    def timerEvent(self, event):
+        # Robo move in a circle
+        #self.Robo1.moveRoboCircle()
+
+        # moves back and forward, at xPos = 500 Robo speeds up, but slows at xPos 400
+        #self.Robo2.moveRoboForwardBackward()
+        #if self.Robo2.xPosition >= 500:
+        #    self.Robo2.accelateRobo()
+        #elif self.Robo2.xPosition <= 400 and self.Robo2.alpha == 180:
+        #    self.Robo2.brakeRobo()
+
+        # Bounce the Ball up and down
+        #self.Robo3.moveRoboBounce()
+        # moves down, up and back/forward
+        #self.Robo4.moveRoboForwardBackward()
+
+        self.update()
+
+    def paintEvent(self, qp):
+
+        qp = QPainter()
+        qp.begin(self)
+        self.drawField(qp)
+        self.Robo1.drawRobo(qp)
+        self.Robo2.drawRobo(qp)
+        self.Robo3.drawRobo(qp)
+        self.Robo4.drawRobo(qp)
+        qp.end()
+
+    def drawField(self, qp):
+
+        # Array construction
+
+        # set Walls, set array value to 1 to place Wall
+
+        # set Wall around the edges
+        for x in range(0, 100, 1):
+            SpielFeld.PlayFieldAR[x][0] = 1
+            SpielFeld.PlayFieldAR[x][99] = 1
+        for y in range(1, 99, 1):
+            SpielFeld.PlayFieldAR[0][y] = 1
+            SpielFeld.PlayFieldAR[99][y] = 1
+
+        # set some Obstacle
+        for i in range(0, 25, 1):
+            SpielFeld.PlayFieldAR[70][i + 45] = 1
+
+        for i in range(0, 40, 1):
+            SpielFeld.PlayFieldAR[i + 10][40] = 1
+        for i in range(0, 50, 1):
+            SpielFeld.PlayFieldAR[i + 30][70] = 1
+
+        for i in range(0, 30, 1):
+            SpielFeld.PlayFieldAR[i + 25][20] = 1
+
+        for i in range(0, 10, 1):
+            SpielFeld.PlayFieldAR[10][i + 50] = 1
+
+        # Draw the PlayField
+        for i in range(0, 100, 1):
+            for j in range(0, 100, 1):
+                if SpielFeld.PlayFieldAR[i][j] == 1:
+                    qp.setBrush(QColor(0, 0, 0))
+                    qp.drawRect(i * 10, j * 10, 10, 10)
+                else:
+                    qp.setBrush(QColor(150, 150, 150))
+                    qp.drawRect(i * 10, j * 10, 10, 10)
+
+    def keyPressEvent(self, event):
+        '''process key press'''
+        key = event.key()
+        alpha1 = self.Robo1.alpha
+
+        if key == Qt.Key_A:
+            self.Robo1.alpha = int(round((alpha1 - 45) % 360))
+            return
+
+        elif key == Qt.Key_D:
+            self.Robo1.alpha = int(round((alpha1 + 45) % 360))
+            return
+
+
+class BaseRobo(QThread):
+
+    def __init__(self, xPos, yPos, r, alpha, col):
+        QThread.__init__(self)
+        self.xPosition = xPos
+        self.yPosition = yPos
+        self.radius = r
+        self.alpha = alpha
+        self.color = col
+
+        self.a = 0
+        self.a_max = 5
+        self.a_alpha = 20
+        self.a_alpha_max = 50
+
+        self.v = 5
+        self.v_max = 15
+        self.v_alpha = 10
+        self.v_alpha_max = 50
+
+    def drawRobo(self, br):
+        xPosition = self.xPosition
+        yPosition = self.yPosition
+        r = self.radius
+        alpha = self.alpha
+        color = self.color
+
+        br.setBrush(color)
+        br.setPen(QColor(0, 0, 0))
+        br.drawEllipse(xPosition, yPosition, 2 * r, 2 * r)
+
+        # Berechnung der neuen xPos und yPos für die Blickausrichtung
+        xPos = math.cos(math.radians(alpha)) * r
+        yPos = math.sin(math.radians(alpha)) * r
+
+        br.drawLine(xPosition + r, yPosition + r,
+                    (xPosition + r) + xPos, (yPosition + r) - yPos)
+
+    def moveRoboCircle(self):
+
+        # berechne neue Lenkrichtung
+        if (self.v_alpha + self.a_alpha) < self.v_alpha_max:
+            self.v_alpha = (self.v_alpha + self.a_alpha)
+
+        # Neue Richtung
+        self.alpha = (self.alpha + self.v_alpha) % 360
+
+        # berechne neue Geschwindigkeit
+        if (self.v + self.a) < self.v_max:
+            self.v += self.a
+
+        # X-Y Geschwindigkeit
+        GesX = math.cos(math.radians(self.alpha)) * self.v
+        GesY = -math.sin(math.radians(self.alpha)) * self.v
+
+        # Neue Positiion
+
+        self.xPosition += GesX
+        self.yPosition += GesY
+
+    def moveRoboForwardBackward(self):
+        alpha = self.alpha
+
+        if abs(self.xPosition - 950) < (self.v_max + self.a_max):
+            self.alpha = 180
+        if self.xPosition < (self.v_max + self.a_max) and alpha == 180:
+            self.alpha = 0
+        elif alpha == 180:
+            self.xPosition -= self.v
+        elif alpha == 0:
+            self.xPosition += self.v
+
+    def accelateRobo(self):
+
+        currentVelocity = self.a
+
+        if self.v < self.v_max:
+            currentVelocity = self.a_max
+            self.v += currentVelocity
+        else:
+            self.a = 0
+
+    def brakeRobo(self):
+        currentVelocity = self.a
+
+        if self.v >= self.v_max:
+            currentVelocity = -self.a_max
+            self.v += currentVelocity
+        else:
+            self.a = self.a_max
+
+    def moveRoboBounce(self):
+        gravity = 0.1
+
+        # bounce down
+        self.v += gravity
+
+        self.yPosition += self.v
+
+        # bounce up
+        if self.yPosition > 900:
+            self.v *= -1
+
+
+class Robo1 (BaseRobo):
+
+    def run(self):
+
+        while True:
+            self.moveRoboCircle()
+
+            Robo1.msleep(200)
+
+class Robo2 (BaseRobo):
+
+    def changeSpeedRobo(self):
+        self.moveRoboForwardBackward()
+
+        if self.xPosition >= 500:
+            self.accelateRobo()
+        elif self.xPosition <= 400 and self.alpha == 180:
+            self.brakeRobo()
+
+
+    def run(self):
+        while True:
+            self.changeSpeedRobo()
+
+            Robo2.msleep(40)
+
+
+class Robo3 (BaseRobo):
+    def run(self):
+        while True:
+            self.moveRoboBounce()
+
+            Robo3.msleep(10)
+
+            
+class Robo4 (BaseRobo):
+    def run(self):
+        while True:
+            self.moveRoboForwardBackward()
+
+            Robo4.msleep(30)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = SpielFeld()
+    sys.exit(app.exec_())
