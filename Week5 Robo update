@@ -7,9 +7,10 @@ from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D
 from PyQt5.QtCore import Qt, QBasicTimer
 import sys
-import math, numpy
+import math
 import threading
 import time
+
 
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
@@ -20,6 +21,7 @@ vMax = 8
 v_alpha_Max = 10
 
 
+
 class BaseRobot(threading.Thread):
 
     def __init__(self, xPosition, yPosition, radius, alpha, a, a_max, a_alpha, a_alpha_max, v, v_alpha, color):
@@ -27,7 +29,7 @@ class BaseRobot(threading.Thread):
         self.xPosition = xPosition
         self.yPosition = yPosition
         self.radius = radius
-        self.mass = self.radius**3
+        self.mass = self.radius ***3
         self.alpha = alpha
         self.a = a
         self.a_max = a_max
@@ -35,6 +37,8 @@ class BaseRobot(threading.Thread):
         self.a_alpha_max = a_alpha_max
 
         self.v = v
+        self.v_X = 0
+        self.v_Y = 0
         self.v_alpha = v_alpha
         self.color = color
 
@@ -140,33 +144,33 @@ class SpielFeld(QWidget):
         # move robots on the game field
         for robot in self.robots:
             self.moveRobo(robot)
-            self.collison(self.robots, robot)
+            self.collison(robot)
             self.wallCollision(robot)
-            self.barrierCollision(robot)
+            #self.barrierCollision(robot)
 
         self.update()
 
 
 
-    def wallCollision(self, robots):
+    def wallCollision(self, robot):
         # Problem: not elegant, needs improvement
 
-        for robot in self.robots:
-            # moves out of left screen frame
-            if robot.xPosition - 10 < 0:
-                robot.xPosition = robot.xPosition + robot.radius
+        # moves out of left screen frame
+        if robot.xPosition - 10 < 0:
+            robot.xPosition = robot.xPosition + robot.radius
 
-            # moves out of right screen frame
-            elif robot.xPosition + 2*robot.radius + 10 > SCREENWIDTH:
-                robot.xPosition = robot.xPosition - robot.radius
+        # moves out of right screen frame
+        elif robot.xPosition + 2*robot.radius + 10 > SCREENWIDTH:
+            robot.xPosition = robot.xPosition - robot.radius
 
-            # moves out of top screen frame
-            elif robot.yPosition - 10 < 0:
-                robot.yPosition = robot.yPosition + robot.radius
+        # moves out of top screen frame
+        elif robot.yPosition - 10 < 0:
+            robot.yPosition = robot.yPosition + robot.radius
 
-            # moves out of bottom screen frame
-            elif robot.yPosition + robot.radius > SCREENHEIGHT:
-                robot.yPosition = robot.yPosition - robot.radius
+        # moves out of bottom screen frame
+        elif robot.yPosition + robot.radius > SCREENHEIGHT:
+            robot.yPosition = robot.yPosition - robot.radius
+
 
     def barriers(self):
         for i in range(0, 100, 1):
@@ -296,16 +300,24 @@ class SpielFeld(QWidget):
 
         #X-Y Geschwindigkeit
         GesX = math.cos(math.radians(Robo.alpha)) * Robo.v
-        GesY = -math.sin(math.radians(Robo.alpha)) * Robo.v
+        GesY = - math.sin(math.radians(Robo.alpha)) * Robo.v
+
+
+        Robo.v_X = GesX
+        Robo.v_Y = GesX
 
         #Neue Positiion
         Robo.xPosition += GesX
         Robo.yPosition += GesY
-    
-    #speedVektor Getter(?)
-    def speedVektor(GesX, GesY):
-        return[GesX, GesY]
-
+        
+        """"
+        # speedVektor Getter(?)
+        def speedVektor(GesX, GesY):
+            x = GesX
+            y = GesY
+            return [GesX, GesY]
+            
+        """
 
     def distanceTwoPoints(self, x1, y1, x2, y2):
         return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
@@ -314,12 +326,12 @@ class SpielFeld(QWidget):
         return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
 
 
-    def collison(self, robots, robo):
+    def collison(self, robo):
         for robot in self.robots:
             if robot != robo:
                 if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
                                        robo.xPosition + robo.radius, robo.yPosition + robo.radius,
-                                       robo.radius):
+                                       robo.radius) :
 
                     distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
                                                       robot.yPosition + robot.radius,
@@ -328,33 +340,38 @@ class SpielFeld(QWidget):
 
                     overlap = robot.radius + robo.radius - distance
 
-                    
+                    """"
                     # version without physics
                     # display current robot away from collision
-                    #robo.xPosition += overlap*(robo.xPosition + robo.radius - robot.xPosition + robot.radius)/ distance
-                    #robo.yPosition += overlap*(robo.yPosition + robo.radius - robot.yPosition + robot.radius)/ distance
+                    robo.xPosition += overlap*(robo.xPosition + robo.radius - robot.xPosition + robot.radius)/ distance
+                    robo.yPosition += overlap*(robo.yPosition + robo.radius - robot.yPosition + robot.radius)/ distance
 
 
                     # display other robot away from collision
-                    #robot.xPosition += overlap*(robot.xPosition + robot.radius - robo.xPosition + robo.radius)/ distance
-                    #robot.yPosition += overlap*(robot.yPosition + robot.radius - robo.yPosition + robo.radius)/ distance
+                    robot.xPosition += overlap*(robot.xPosition + robot.radius - robo.xPosition + robo.radius)/ distance
+                    robot.yPosition += overlap*(robot.yPosition + robot.radius - robo.yPosition + robo.radius)/ distance
 
 
-                   
+                    """
 
                     # with elastic collision
-                    # problem: only one velocity
-                    newVelX1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) /(robo.mass + robot.mass)
-                    newVelY1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) / (robo.mass + robot.mass)
+                    # problem: overlapping possible, why?
+                    print(robo.v_X, robo.v_Y)
 
-                    newVelX2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
-                    newVelY2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
+                    newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY1 = (robo.v_Y * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_Y)) / (
+                                robo.mass + robot.mass)
+
+                    newVelX2 = (robot.v_X * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY2 = (robot.v_Y * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_Y)) / (
+                                robo.mass + robot.mass)
 
                     robo.xPosition += newVelX1
                     robo.yPosition += newVelY1
                     robot.xPosition += newVelX2
                     robot.yPosition += newVelY2
-
 
 
 
