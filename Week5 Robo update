@@ -336,14 +336,14 @@ class SpielFeld(QWidget):
     def collison(self, robo):
         for robot in self.robots:
             if robot != robo:
+                distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
+                                                  robot.yPosition + robot.radius,
+                                                  robo.xPosition + robo.radius,
+                                                  robo.yPosition + robo.radius)
+
                 if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
                                        robo.xPosition + robo.radius, robo.yPosition + robo.radius,
-                                       robo.radius):
-
-                    distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
-                                                      robot.yPosition + robot.radius,
-                                                      robo.xPosition + robo.radius,
-                                                      robo.yPosition + robo.radius)
+                                       robo.radius) and distance <= robot.radius + robo.radius:
                     """"
                     overlap = robot.radius + robo.radius - distance
 
