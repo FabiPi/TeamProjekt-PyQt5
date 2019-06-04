@@ -304,8 +304,7 @@ class SpielFeld(QWidget):
     
     #speedVektor Getter(?)
     def speedVektor(GesX, GesY):
-        x = GesX
-        y = GesY
+        return[GesX, GesY]
 
 
     def distanceTwoPoints(self, x1, y1, x2, y2):
