@@ -146,7 +146,7 @@ class SpielFeld(QWidget):
             self.moveRobo(robot)
             self.collison(robot)
             self.wallCollision(robot)
-            #self.barrierCollision(robot)
+            self.barrierCollision(robot)
 
         self.update()
 
@@ -181,9 +181,23 @@ class SpielFeld(QWidget):
 
 
     def barrierCollision(self, robo):
-        for robot in self.robots:
-            PosX = int(round(robo.xPosition/ 10))
-            PosY = int(round(robo.xPosition/ 10))
+        PosX = int(round(robo.xPosition/ 10))
+        PosY = int(round(robo.xPosition/ 10))
+        Rad = int(round(robo.radius *0.2))
+        for rob in range(0, Rad, 1):
+            print(rob)
+            #oben
+            if (SpielFeld.PlayFieldAR[PosX + rob][PosY-1] == 1) & (robo.v_Y<0):
+                robo.v = 0
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX + rob][PosY + Rad] == 1) & (robo.v_Y>0):
+                robo.v = 0
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + rob] == 1) & (robo.v_X<0):
+                robo.v = 0
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + rob] == 1) & (robo.v_X>0):
+                robo.v = 0
 
 
 
