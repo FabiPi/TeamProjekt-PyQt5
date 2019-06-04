@@ -29,7 +29,7 @@ class BaseRobot(threading.Thread):
         self.xPosition = xPosition
         self.yPosition = yPosition
         self.radius = radius
-        self.mass = self.radius ***3
+        self.mass = self.radius **3
         self.alpha = alpha
         self.a = a
         self.a_max = a_max
