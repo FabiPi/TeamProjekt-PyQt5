@@ -301,6 +301,11 @@ class SpielFeld(QWidget):
         #Neue Positiion
         Robo.xPosition += GesX
         Robo.yPosition += GesY
+    
+    #speedVektor Getter(?)
+    def speedVektor(GesX, GesY):
+        x = GesX
+        y = GesY
 
 
     def distanceTwoPoints(self, x1, y1, x2, y2):
