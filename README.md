@@ -1,15 +1,16 @@
 ## Roboter - Geschwindigkeitsvektor Update
-**Einbauen der Kollision**
+**Overlapping**
 ```python
 def is_overlapping (self, x1, y1, r1,x2, y2, r2):
     return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
 ```
 Prüfen, ob die zwei Roboter überlappen. Dazu wir mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+**Distanz zw. Robos**
 ```python
 def distanceTwoPoints(self, x1, y1, x2, y2):
     return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
 ```
-
+**Collision Funktion**
 ```python
 # with elastic collision
 # problem: only one velocity
