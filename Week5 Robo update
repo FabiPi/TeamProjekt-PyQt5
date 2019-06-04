@@ -310,14 +310,7 @@ class SpielFeld(QWidget):
         Robo.xPosition += Robo.v_X
         Robo.yPosition += Robo.v_Y
 
-        """"
-        # speedVektor Getter(?)
-        def speedVektor(GesX, GesY):
-            x = GesX
-            y = GesY
-            return [GesX, GesY]
-            
-        """
+
 
     def distanceTwoPoints(self, x1, y1, x2, y2):
         return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
@@ -337,10 +330,10 @@ class SpielFeld(QWidget):
                                                       robot.yPosition + robot.radius,
                                                       robo.xPosition + robo.radius,
                                                       robo.yPosition + robo.radius)
-
+                    """"
                     overlap = robot.radius + robo.radius - distance
 
-                    """"
+                    
                     # version without physics
                     # display current robot away from collision
                     robo.xPosition += overlap*(robo.xPosition + robo.radius - robot.xPosition + robot.radius)/ distance
@@ -354,18 +347,15 @@ class SpielFeld(QWidget):
 
                     """
 
-                    # with elastic collision
-                    # problem: only one velocity
-                    print(robo.alpha)
-                    print(robo.v_X, robo.v_Y)
-
-                    #print(robot.v_X, robot.v_Y)
-
+                    # with elastic collision, does not apply to the reality because of spin, friction etc. 
+                    # our only concern is the mass of the robots 
+                    # new velocity of robo1
                     newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
                                 robo.mass + robot.mass)
                     newVelY1 = (robo.v_Y * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_Y)) / (
                                 robo.mass + robot.mass)
 
+                    # new velocity of robo2
                     newVelX2 = (robot.v_X * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_X)) / (
                                 robo.mass + robot.mass)
                     newVelY2 = (robot.v_Y * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_Y)) / (
@@ -375,12 +365,6 @@ class SpielFeld(QWidget):
                     robo.yPosition += newVelY1
                     robot.xPosition += newVelX2
                     robot.yPosition += newVelY2
-
-
-
-
-
-
 
 
 
