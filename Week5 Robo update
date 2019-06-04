@@ -193,7 +193,7 @@ class SpielFeld(QWidget):
 
     def barrierCollision(self, robo):
         PosX = int(round(robo.xPosition/ 10))
-        PosY = int(round(robo.xPosition/ 10))
+        PosY = int(round(robo.yPosition/ 10))
         Rad = int(round(robo.radius *0.2))
         for rob in range(0, Rad, 1):
             print(rob)
