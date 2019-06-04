@@ -1,3 +1,34 @@
+## Roboter - Geschwindigkeitsvektor Update
+**Einbauen der Kollision**
+```python
+def is_overlapping (self, x1, y1, r1,x2, y2, r2):
+    return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
+```
+Prüfen, ob die zwei Roboter überlappen. Dazu wir mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+```python
+def distanceTwoPoints(self, x1, y1, x2, y2):
+    return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
+```
+
+```python
+# with elastic collision
+# problem: only one velocity
+newVelX1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) /(robo.mass + robot.mass)
+newVelY1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) / (robo.mass + robot.mass)
+
+newVelX2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
+newVelY2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
+
+robo.xPosition += newVelX1
+robo.yPosition += newVelY1
+robot.xPosition += newVelX2
+robot.yPosition += newVelY2
+```
+Es werden die neuen Geschwindigkeiten aufgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment nivellieren (wenn beide Massen gleich sind).
+
+Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Geschwindigkeit auf die X und Y Achse gespalten haben, funktioniert diese Kollisionsfunktion nicht mehr, wenn wir auf diese die GesX und GesY Werte anwenden. Deswegen blieben wir ausnahmsweise bei robot.v in collison(self,robo).
+
+
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
 Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
