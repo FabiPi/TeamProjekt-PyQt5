@@ -29,7 +29,7 @@ class BaseRobot(threading.Thread):
         self.xPosition = xPosition
         self.yPosition = yPosition
         self.radius = radius
-        self.mass = self.radius **3
+        self.mass = self.radius ** 3
         self.alpha = alpha
         self.a = a
         self.a_max = a_max
@@ -117,7 +117,7 @@ class SpielFeld(QWidget):
 
         # Roboterinstanzen
         #                     x    y    r  alph a a+  a_al al+ v v_al col
-        self.Robo1 = RoboType1(100, 10, 15, 0, 0, 2, 0, 3, 0, 0, self.PINK)
+        self.Robo1 = RoboType1(100, 10, 25, 0, 0, 2, 0, 3, 0, 0, self.PINK)
         self.Robo1a = RoboType1(350, 10, 15, 0, 0, 2, 0, 3, 0, 0, self.PINK)
         self.Robo2 = RoboType2(900, 400, 20, 0, 0, 2, 0, 5, 2, 0, self.CORNBLUE)
         self.Robo3 = RoboType3(500, 150, 25, 270, 0, 2, 0, 3, 2, 0, self.DARKBLUE)
@@ -304,12 +304,12 @@ class SpielFeld(QWidget):
 
 
         Robo.v_X = GesX
-        Robo.v_Y = GesX
+        Robo.v_Y = GesY
 
         #Neue Positiion
-        Robo.xPosition += GesX
-        Robo.yPosition += GesY
-        
+        Robo.xPosition += Robo.v_X
+        Robo.yPosition += Robo.v_Y
+
         """"
         # speedVektor Getter(?)
         def speedVektor(GesX, GesY):
@@ -323,7 +323,7 @@ class SpielFeld(QWidget):
         return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
 
     def is_overlapping (self, x1, y1, r1,x2, y2, r2):
-        return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
+        return self.distanceTwoPoints(x1, y1, x2, y2) < (r1+r2)
 
 
     def collison(self, robo):
@@ -331,7 +331,7 @@ class SpielFeld(QWidget):
             if robot != robo:
                 if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
                                        robo.xPosition + robo.radius, robo.yPosition + robo.radius,
-                                       robo.radius) :
+                                       robo.radius):
 
                     distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
                                                       robot.yPosition + robot.radius,
@@ -355,8 +355,11 @@ class SpielFeld(QWidget):
                     """
 
                     # with elastic collision
-                    # problem: overlapping possible, why?
+                    # problem: only one velocity
+                    print(robo.alpha)
                     print(robo.v_X, robo.v_Y)
+
+                    #print(robot.v_X, robot.v_Y)
 
                     newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
                                 robo.mass + robot.mass)
@@ -372,6 +375,8 @@ class SpielFeld(QWidget):
                     robo.yPosition += newVelY1
                     robot.xPosition += newVelX2
                     robot.yPosition += newVelY2
+
+
 
 
 
