@@ -24,7 +24,7 @@ v_alpha_Max = 10
 
 class BaseRobot(threading.Thread):
 
-    def __init__(self, xPosition, yPosition, radius, alpha, a, a_max, a_alpha, a_alpha_max, v, v_alpha, color):
+    def __init__(self,roboid, xPosition, yPosition, radius, alpha, a, a_max, a_alpha, a_alpha_max, v, v_alpha, color):
         threading.Thread.__init__(self)
         self.xPosition = xPosition
         self.yPosition = yPosition
@@ -42,6 +42,7 @@ class BaseRobot(threading.Thread):
         self.v_alpha = v_alpha
         self.color = color
         self.RoboList = []
+        self.roboid = roboid
 
 
 class RoboType1(BaseRobot):
@@ -122,19 +123,19 @@ class SpielFeld(QWidget):
 
         # Roboterinstanzen
         #                     x    y    r  alph a a+  a_al al+ v v_al col
-        """
-        self.Robo1 = RoboType1(100, 10, 25, 0, 0, 2, 0, 3, 0, 0, self.PINK)
-        self.Robo1a = RoboType1(350, 10, 15, 0, 0, 2, 0, 3, 0, 0, self.PINK)
-        self.Robo2 = RoboType2(900, 400, 20, 0, 0, 2, 0, 5, 2, 0, self.CORNBLUE)
-        self.Robo3 = RoboType3(500, 150, 25, 270, 0, 2, 0, 3, 2, 0, self.DARKBLUE)
-        self.Robo4 = RoboType4(500, 200, 30, 135, 0, 2, 0, 4, 1, 0, self.ORANGE)
-        """
+        self.Robo1 = RoboType5(1, 40, 40, 25, 45, 0, 2, 0, 3, 3, 0, self.PINK)
+        self.Robo1a = RoboType5(2, 700, 920, 15, 135, 0, 2, 0, 3, 3, 0, self.PINK)
+        self.Robo2 = RoboType5(3, 900, 500, 20, 225, 0, 2, 0, 5, 3, 0, self.CORNBLUE)
+        self.Robo3 = RoboType5(4, 500, 450, 25, 315, 0, 2, 0, 3, 3, 0, self.DARKBLUE)
+        self.Robo4 = RoboType5(5, 500, 800, 30, 0, 0, 2, 0, 4, 3, 0, self.ORANGE)
         
-        self.Robo1 = RoboType5(40, 40, 25, 45, 0, 2, 0, 3, 3, 0, self.PINK)
-        self.Robo1a = RoboType5(700, 920, 15, 135, 0, 2, 0, 3, 3, 0, self.PINK)
-        self.Robo2 = RoboType5(900, 500, 20, 225, 0, 2, 0, 5, 3, 0, self.CORNBLUE)
-        self.Robo3 = RoboType5(500, 450, 25, 315, 0, 2, 0, 3, 3, 0, self.DARKBLUE)
-        self.Robo4 = RoboType5(500, 800, 30, 0, 0, 2, 0, 4, 3, 0, self.ORANGE)
+        """
+        self.Robo1 = RoboType1(1, 100, 10, 25, 0, 0, 2, 0, 3, 0, 0, self.PINK)
+        self.Robo1a = RoboType1(2, 350, 10, 15, 0, 0, 2, 0, 3, 0, 0, self.PINK)
+        self.Robo2 = RoboType2(3, 900, 400, 20, 0, 0, 2, 0, 5, 2, 0, self.CORNBLUE)
+        self.Robo3 = RoboType3(4, 500, 150, 25, 270, 0, 2, 0, 3, 2, 0, self.DARKBLUE)
+        self.Robo4 = RoboType4(5, 500, 300, 30, 135, 0, 2, 0, 4, 1, 0, self.ORANGE)
+        """
         self.robots = [self.Robo1, self.Robo1a, self.Robo2, self.Robo3, self.Robo4]
 
         for robot in self.robots:
@@ -155,7 +156,7 @@ class SpielFeld(QWidget):
         #print(self.tickCount)
         self.RobotList=[]
         for robot in self.robots:
-            self.RobotList.append ([robot.xPosition, robot.yPosition])
+            self.RobotList.append ([robot.roboid, int(round(robot.xPosition)), int(round(robot.yPosition))])
         #print(self.tickCount)
 
         if self.tickCount % 10 == 0:
