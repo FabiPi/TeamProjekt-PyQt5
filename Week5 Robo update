@@ -159,7 +159,7 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.moveRobo(robot)
             self.collison(robot)
-            self.wallCollision(robot)
+            #self.wallCollision(robot)
             self.barrierCollision(robot)
 
         self.update()
@@ -212,6 +212,14 @@ class SpielFeld(QWidget):
             if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + rob] == 1) & (robo.v_X>0):
                 robo.v = 0
 
+        self.moveAgain(robo)
+
+    def moveAgain(self, robo):
+        if robo.v == 0:
+
+            robo.alpha = robo.alpha +180
+
+        robo.v += 0.1
 
 
 
