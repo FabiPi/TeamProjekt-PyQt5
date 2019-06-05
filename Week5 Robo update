@@ -41,6 +41,7 @@ class BaseRobot(threading.Thread):
         self.v_Y = 0
         self.v_alpha = v_alpha
         self.color = color
+        self.RoboList = []
 
 
 class RoboType1(BaseRobot):
@@ -101,6 +102,7 @@ class SpielFeld(QWidget):
     CORNBLUE = QColor(0, 0, 250)
     DARKBLUE = QColor(0, 145, 250)
     ORANGE = QColor(245, 120, 0)
+    RobotList=[]
 
 
     def __init__(self):
@@ -151,10 +153,16 @@ class SpielFeld(QWidget):
     def timerEvent(self, Event):
         self.tickCount += 1
         #print(self.tickCount)
-        
-        if self.tickCount % 10 == 0:
-            print('send Robot Pos')
+        self.RobotList=[]
+        for robot in self.robots:
+            self.RobotList.append ([robot.xPosition, robot.yPosition])
+        #print(self.tickCount)
 
+        if self.tickCount % 10 == 0:
+            #print('send Robot Pos')
+            #print(self.RobotList)
+            for robot in self.robots:
+                robot.RoboList = self.RobotList
         # move robots on the game field
         for robot in self.robots:
             self.moveRobo(robot)
