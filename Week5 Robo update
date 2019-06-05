@@ -168,7 +168,7 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.moveRobo(robot)
             self.collison(robot)
-            #self.wallCollision(robot)
+            self.wallCollision(robot)
             self.barrierCollision(robot)
 
         self.update()
