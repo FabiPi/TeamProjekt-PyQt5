@@ -29,6 +29,35 @@ Es werden die neuen Geschwindigkeiten aufgerechnet, um die neue Position der Rob
 
 Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Geschwindigkeit auf die X und Y Achse gespalten haben, funktioniert diese Kollisionsfunktion nicht mehr, wenn wir auf diese die GesX und GesY Werte anwenden. Deswegen blieben wir ausnahmsweise bei robot.v in collison(self,robo).
 
+**Collision**
+Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.
+Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
+``python
+def barrierCollision(self, robo):
+        PosX = int(round(robo.xPosition/ 10))
+        PosY = int(round(robo.yPosition/ 10))
+        Rad = int(round((robo.radius *2)/10))
+        for i in range(0, Rad, 1):
+            #print('rob ',rob)
+            #print('Rad ',Rad)
+            #oben
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_Y<0):
+                robo.v = 0
+                #print('up')
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_Y>0):
+                robo.v = 0
+                #print('down')
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_X<0):
+                robo.v = 0
+                #print('left')
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_X>0):
+                robo.v = 0
+                #print('right')
+
+```
 
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
