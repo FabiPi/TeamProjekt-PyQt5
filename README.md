@@ -57,7 +57,17 @@ def barrierCollision(self, robo):
             if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_X>0):
                 robo.v = 0
                 #print('right')
+                
+        self.moveAgain(robo)
 
+def moveAgain(self, robo):
+    if robo.v == 0:
+        robo.alpha = robo.alpha +180
+        
+    robo.v += 0.1                
+
+```
+Nachdem wir der Robote ein obstacle wahrgenommen hat, wurde die Geschwindigkeit v auf null gesetzt. Um den Roboter wieder fahren zu lassen, aber wir eine einfache Funktion moveAgain() entworden, die bei einer Geschwindigkeit von null den Roboter um 180° drehen und langsam wieder an Geschwindigkeit zu nehmen soll.
 ```
 
 **Roboterkoordinaten senden** </br>
