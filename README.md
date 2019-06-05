@@ -42,7 +42,7 @@ def distanceTwoPoints(self, x1, y1, x2, y2):
                     robo.xPosition += newVelX1
                     robo.yPosition += newVelY1
                     robot.xPosition += newVelX2
-robot.yPosition += newVelY2
+                    robot.yPosition += newVelY2
 ```
 Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
 
