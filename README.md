@@ -29,8 +29,8 @@ Es werden die neuen Geschwindigkeiten aufgerechnet, um die neue Position der Rob
 
 Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Geschwindigkeit auf die X und Y Achse gespalten haben, funktioniert diese Kollisionsfunktion nicht mehr, wenn wir auf diese die GesX und GesY Werte anwenden. Deswegen blieben wir ausnahmsweise bei robot.v in collison(self,robo).
 
-**Collision**
-Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.
+**Collision** </br>
+Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
 Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
 
 ```python
