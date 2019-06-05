@@ -4,7 +4,7 @@
 def is_overlapping (self, x1, y1, r1,x2, y2, r2):
     return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
 ```
-Prüfen, ob die zwei Roboter überlappen. Dazu wir mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+Prüfen, ob die zwei Roboter überlappen. Dazu wird mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
 **Distanz zw. Robos**
 ```python
 def distanceTwoPoints(self, x1, y1, x2, y2):
@@ -25,7 +25,7 @@ robo.yPosition += newVelY1
 robot.xPosition += newVelX2
 robot.yPosition += newVelY2
 ```
-Es werden die neuen Geschwindigkeiten aufgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment nivellieren (wenn beide Massen gleich sind).
+Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
 
 Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Geschwindigkeit auf die X und Y Achse gespalten haben, funktioniert diese Kollisionsfunktion nicht mehr, wenn wir auf diese die GesX und GesY Werte anwenden. Deswegen blieben wir ausnahmsweise bei robot.v in collison(self,robo).
 
