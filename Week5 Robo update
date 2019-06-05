@@ -151,6 +151,9 @@ class SpielFeld(QWidget):
     def timerEvent(self, Event):
         self.tickCount += 1
         #print(self.tickCount)
+        
+        if self.tickCount % 10 == 0:
+            print('send Robot Pos')
 
         # move robots on the game field
         for robot in self.robots:
