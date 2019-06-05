@@ -60,6 +60,18 @@ def barrierCollision(self, robo):
 
 ```
 
+**Roboterkoordinaten senden** </br>
+Der Timer zählt jeden Tick
+```python
+def timerEvent(self, Event):
+        self.tickCount += 1
+```
+Um jeden 10ten Tick die Koordinaten zu senden teilen wir den TickCount einfach durch modulo 10 </br>
+```python
+        if self.tickCount % 10 == 0:
+            print('send Robot Pos')
+```
+
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
 Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
