@@ -75,14 +75,14 @@ Um jeden 10ten Tick die Koordinaten zu senden teilen wir den TickCount einfach d
 Wir haben die Roboterclass um ein weiteres Attribut erweitert welches eine Liste mit den RoboterPositionen enthält. </br>
 In jedem Tick werden in die Liste die neuen Positionen aller Roboter eingefügt, jedem zehnten Tick wird die Liste an die Roboter übergeben.
 ```python
-        self.RoboList=[]
+        self.RobotList=[]
         for robot in self.robots:
-            self.RoboList.append ([robot.xPosition, robot.yPosition])
+            self.RobotList.append ([robot.xPosition, robot.yPosition])
 
         if self.tickCount % 10 == 0:
             #print('send Robot Pos')
             for robot in self.robots:
-                robot.RobotList = self.RoboList
+                robot.RoboList = self.RobotList
 ```
 
 ## Roboter und Threads 
