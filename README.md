@@ -12,22 +12,39 @@ def distanceTwoPoints(self, x1, y1, x2, y2):
 ```
 **Collision Funktion**
 ```python
-# with elastic collision
-# problem: only one velocity
-newVelX1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) /(robo.mass + robot.mass)
-newVelY1 = (robo.v * (robo.mass - robot.mass) + (2 * robot.mass * robot.v)) / (robo.mass + robot.mass)
+    def collison(self, robo):
+        for robot in self.robots:
+            if robot != robo:
+                distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
+                                                  robot.yPosition + robot.radius,
+                                                  robo.xPosition + robo.radius,
+                                                  robo.yPosition + robo.radius)
 
-newVelX2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
-newVelY2 = (robot.v * (robot.mass - robo.mass) + (2 * robo.mass * robo.v)) / (robo.mass + robot.mass)
+                if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
+                                       robo.xPosition + robo.radius, robo.yPosition + robo.radius,
+                                       robo.radius) and distance <= robot.radius + robo.radius:
 
-robo.xPosition += newVelX1
-robo.yPosition += newVelY1
-robot.xPosition += newVelX2
-robot.yPosition += newVelY2
+                    # with elastic collision, does not apply to the reality because of spin, friction etc.
+                    # our only concern is the mass of the robots
+                    # new velocity of robo1
+                    newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY1 = (robo.v_Y * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_Y)) / (
+                                robo.mass + robot.mass)
+
+                    # new velocity of robo2
+                    newVelX2 = (robot.v_X * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY2 = (robot.v_Y * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_Y)) / (
+                                robo.mass + robot.mass)
+
+                    robo.xPosition += newVelX1
+                    robo.yPosition += newVelY1
+                    robot.xPosition += newVelX2
+                    robot.yPosition += newVelY2
 ```
 Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
 
-Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Geschwindigkeit auf die X und Y Achse gespalten haben, funktioniert diese Kollisionsfunktion nicht mehr, wenn wir auf diese die GesX und GesY Werte anwenden. Deswegen blieben wir ausnahmsweise bei robot.v in collison(self,robo).
 
 **Collision** </br>
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
