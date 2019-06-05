@@ -196,7 +196,6 @@ class SpielFeld(QWidget):
         PosY = int(round(robo.yPosition/ 10))
         Rad = int(round(robo.radius *0.2))
         for rob in range(0, Rad, 1):
-            print(rob)
             #oben
             if (SpielFeld.PlayFieldAR[PosX + rob][PosY-1] == 1) & (robo.v_Y<0):
                 robo.v = 0
