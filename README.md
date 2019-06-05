@@ -32,7 +32,8 @@ Unsere Problematik liegt daran, da wir (um den Geschw.-vektor zu bilden) die Ges
 **Collision**
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.
 Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
-``python
+
+```python
 def barrierCollision(self, robo):
         PosX = int(round(robo.xPosition/ 10))
         PosY = int(round(robo.yPosition/ 10))
