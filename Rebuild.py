@@ -118,8 +118,7 @@ class SpielFeld(QWidget):
             self.moveRobot(robot)
             self.barrierCollision(robot)
             #TODO COLLISION
-            
-        
+                   
         self.update()
 
     def paintEvent(self, qp):
