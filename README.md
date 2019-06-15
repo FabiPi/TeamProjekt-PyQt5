@@ -1,3 +1,118 @@
+## Roboter - Geschwindigkeitsvektor Update
+**Overlapping**
+```python
+def is_overlapping (self, x1, y1, r1,x2, y2, r2):
+    return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
+```
+Prüfen, ob die zwei Roboter überlappen. Dazu wird mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+**Distanz zw. Robos**
+```python
+def distanceTwoPoints(self, x1, y1, x2, y2):
+    return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
+```
+**Collision Funktion**
+```python
+
+    def collison(self, robo):
+        for robot in self.robots:
+            if robot != robo:
+                distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
+                                                  robot.yPosition + robot.radius,
+                                                  robo.xPosition + robo.radius,
+                                                  robo.yPosition + robo.radius)
+
+                if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
+                                       robo.xPosition + robo.radius, robo.yPosition + robo.radius,
+                                       robo.radius) and distance <= robot.radius + robo.radius:
+
+                    # with elastic collision, does not apply to the reality because of spin, friction etc. 
+                    # our only concern is the mass of the robots 
+                    # new velocity of robo1
+                    newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY1 = (robo.v_Y * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_Y)) / (
+                                robo.mass + robot.mass)
+
+                    # new velocity of robo2
+                    newVelX2 = (robot.v_X * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_X)) / (
+                                robo.mass + robot.mass)
+                    newVelY2 = (robot.v_Y * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_Y)) / (
+                                robo.mass + robot.mass)
+
+                    robo.xPosition += newVelX1
+                    robo.yPosition += newVelY1
+                    robot.xPosition += newVelX2
+                    robot.yPosition += newVelY2
+```
+Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
+
+
+**Collision** </br>
+Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
+Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
+
+```python
+def barrierCollision(self, robo):
+        PosX = int(round(robo.xPosition/ 10))
+        PosY = int(round(robo.yPosition/ 10))
+        Rad = int(round((robo.radius *2)/10))
+        for i in range(0, Rad, 1):
+            #print('rob ',rob)
+            #print('Rad ',Rad)
+            #oben
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_Y<0):
+                robo.v = 0
+                #print('up')
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_Y>0):
+                robo.v = 0
+                #print('down')
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_X<0):
+                robo.v = 0
+                #print('left')
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_X>0):
+                robo.v = 0
+                #print('right')
+                
+        self.moveAgain(robo)
+
+def moveAgain(self, robo):
+    if robo.v == 0:
+        robo.alpha = robo.alpha +180
+        
+    robo.v += 0.1                
+
+```
+Nachdem der Robote ein obstacle wahrgenommen hat, wurde die Geschwindigkeit v auf null gesetzt. Um den Roboter wieder fahren zu lassen, aber wir eine einfache Funktion moveAgain() entworden, die bei einer Geschwindigkeit von null den Roboter um 180° drehen und langsam wieder an Geschwindigkeit zu nehmen soll.
+
+
+**Roboterkoordinaten senden** </br>
+Der Timer zählt jeden Tick
+```python
+def timerEvent(self, Event):
+        self.tickCount += 1
+```
+Um jeden 10ten Tick die Koordinaten zu senden teilen wir den TickCount einfach durch modulo 10 </br>
+```python
+        if self.tickCount % 10 == 0:
+            print('send Robot Pos')
+```
+
+Wir haben die Roboterclass um ein weiteres Attribut erweitert welches eine Liste mit den RoboterPositionen enthält. </br>
+In jedem Tick werden in die Liste die neuen Positionen aller Roboter eingefügt, jedem zehnten Tick wird die Liste an die Roboter übergeben.
+```python
+        self.RobotList=[]
+        for robot in self.robots:
+            self.RobotList.append ([robot.xPosition, robot.yPosition])
+
+        if self.tickCount % 10 == 0:
+            #print('send Robot Pos')
+            for robot in self.robots:
+                robot.RoboList = self.RobotList
+```
+
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
 Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
