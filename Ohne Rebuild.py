@@ -46,7 +46,10 @@ class BaseRobot(threading.Thread):
         self.v_alpha = 0
         self.a = 0
         self.a_alpha= 0
-        self.RobotList = {}
+        self.RobotList = {1 : QVector2D(0,0),
+                          2 : QVector2D(0,0),
+                          3 : QVector2D(0,0),
+                          4 : QVector2D(0,0)}
 
 class RoboTypeRun(BaseRobot):
     def run(self):
@@ -271,18 +274,22 @@ class SpielFeld(QWidget):
         for i in range(0, Rad, 1):
             #oben
             if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
+                robo.position.__isub__(robo.v_vector)
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
             #unten
             if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
+                robo.position.__isub__(robo.v_vector)
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
             #links
             if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
+                robo.position.__isub__(robo.v_vector)
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
             #rechts
             if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
+                robo.position.__isub__(robo.v_vector)
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
 
