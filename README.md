@@ -1,3 +1,47 @@
+## Week5 - Field of View der Roboter
+Wir haben uns zuerst entschieden unsere Code so zu ändern, so dass der Server den größeren Teil der Roboterbefehle übernimmt (Da vorher alles auf der Spielfeldklasse vorkam). Wir haben auch die X/Y Koordinaten der Roboter in QVector2D-Form gebracht.
+```python
+Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
+Robot2 = RoboTypeChase1(2, QVector2D(70,200), 0, 2, 2, 15, 50,DARKBLUE)
+Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, 60,LIGHTBLUE)
+Robot4 = RoboTypeChase3(4, QVector2D(400,430), 30, 2, 2, 15, 85,ORANGE)
+
+self.robots = [Robot1, Robot2, Robot3, Robot4]
+```
+Im Timer-Event werden die Parameter der Roboter jetzt in 10 Ticks auf diese Weise weitergegeben:
+```python
+if self.tickCount % 10 == 0:
+    for y in self.robots:
+        #print position List of Robots
+        #print(int(round(self.RobotList[robot.robotid].x())), '---', int(round(self.RobotList[robot.robotid].y())))
+        #robot.RoboList = self.RobotList.copy()
+        for x in self.robots:
+            y.RobotList[x.robotid] = x.position
+```
+Unsere Roboter werden durch ein Dictionary gekennzeichnet:
+```python
+self.RobotList = {1 : QVector2D(0,0),
+                  2 : QVector2D(0,0),
+                  3 : QVector2D(0,0),
+                  4 : QVector2D(0,0)}
+```
+Um das Sichtfeld besser darzustellen, haben wir in drawRobo die dazugehörigen Linien des FOV implementiert:
+```python
+#draw FOV
+        if VISUALS:
+            br.setPen(QColor(255,255,255))
+            xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                       (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+            xPos = math.cos(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                       (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+```
+
+Zunächst suchten wir eine Idee, wie wir überhaupt prüfen können, ob sich andere Objekte im Sichtfeld befinden.
+
 ## Roboter - Geschwindigkeitsvektor Update
 **Overlapping**
 ```python
