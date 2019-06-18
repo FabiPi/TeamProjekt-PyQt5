@@ -49,10 +49,10 @@ class RoboTypeRun(BaseRobot):
     def run(self):
         time.sleep(15* GameStep)
         print(self.RobotList)
-        if self.RobotList[2].x() > 100:
-            a_alpha = a_alpha_max
-        else:
-            a_alpha = - a_alpha_max
+        #if self.RobotList[2].x() > 100:
+        #    a_alpha = a_alpha_max
+        #else:
+        #    a_alpha = - a_alpha_max
 
 class RoboTypeChase1(BaseRobot):
     def run(self):
@@ -102,12 +102,12 @@ class SpielFeld(QWidget):
         self.tickCount = 0
         
         #init Robots
-        self.Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, PINK)
-        self.Robot2 = RoboTypeChase1(2, QVector2D(500,500), 150, 2, 2, 15, DARKBLUE)
-        self.Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, LIGHTBLUE)
-        self.Robot4 = RoboTypeChase3(4, QVector2D(360,260), 30, 2, 2, 15, ORANGE)
+        Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, PINK)
+        Robot2 = RoboTypeChase1(2, QVector2D(500,500), 150, 2, 2, 15, DARKBLUE)
+        Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, LIGHTBLUE)
+        Robot4 = RoboTypeChase3(4, QVector2D(360,260), 30, 2, 2, 15, ORANGE)
 
-        self.robots = [self.Robot1, self.Robot2, self.Robot3, self.Robot4]
+        self.robots = [Robot1, Robot2, Robot3, Robot4]
         
         for robot in self.robots:
             robot.start()
