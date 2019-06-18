@@ -278,11 +278,11 @@ class SpielFeld(QWidget):
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
             #links
-            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.y()<0):
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
             #rechts
-            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.y()>0):
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
 
