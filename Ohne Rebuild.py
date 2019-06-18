@@ -34,6 +34,7 @@ class BaseRobot(threading.Thread):
         threading.Thread.__init__(self)
         self.robotid = robotid
         self.position = position
+        self.mass = radius**3
         self.alpha = alpha
         self.a_max = a_max
         self.a_alpha_max = a_alpha_max
@@ -107,15 +108,15 @@ class SpielFeld(QWidget):
         self.timer = QBasicTimer()
         self.timer.start(FPS, self)
         self.tickCount = 0
-        
+
         #init Robots
         Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
-        Robot2 = RoboTypeChase1(2, QVector2D(10,800), 0, 2, 2, 15, 50,DARKBLUE)
+        Robot2 = RoboTypeChase1(2, QVector2D(70,200), 0, 2, 2, 15, 50,DARKBLUE)
         Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, 60,LIGHTBLUE)
-        Robot4 = RoboTypeChase3(4, QVector2D(360,260), 30, 2, 2, 15, 85,ORANGE)
+        Robot4 = RoboTypeChase3(4, QVector2D(400,430), 30, 2, 2, 15, 85,ORANGE)
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
-        
+
         for robot in self.robots:
             robot.start()
 
@@ -150,9 +151,10 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.moveRobot(robot)
             self.barrierCollision(robot)
-            #TODO COLLISION
+            self.collison(robot)
+            
 
-        self.update()              
+        self.update()
 
     def paintEvent(self, qp):
 
@@ -186,7 +188,7 @@ class SpielFeld(QWidget):
             yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
             br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                         (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
- 
+
 
     def drawField(self, qp):
 
@@ -226,7 +228,7 @@ class SpielFeld(QWidget):
 
                 else:
                     qp.setBrush(QColor(50, 155, 50))
-                    qp.drawRect(i*10, j*10, 10, 10)  
+                    qp.drawRect(i*10, j*10, 10, 10)
 
     def moveRobot(self, Robo):
         #berechne neue Lenkrichtung
@@ -239,7 +241,7 @@ class SpielFeld(QWidget):
 
         #Neue Richtung
         Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
-        
+
         #berechne geschwindigkeit
         v= math.sqrt(math.pow(Robo.v_vector.x(),2) + math.pow(Robo.v_vector.y(),2))
         if (v + Robo.a) <= -vMax:
@@ -264,6 +266,55 @@ class SpielFeld(QWidget):
 
     def is_overlapping (self, x1, y1, r1,x2, y2, r2):
         return self.distanceTwoPoints(x1, y1, x2, y2) < (r1+r2)
+
+    def collison(self, robo):
+        for robot in self.robots:
+            if robot != robo:
+                distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                                  int(round(robot.position.y()))+ robot.radius,
+                                                  int(round(robo.position.x())) + robo.radius,
+                                                  int(round(robo.position.y())) + robo.radius)
+
+                if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
+                                       int(round(robo.position.x())) + robo.radius, int(round(robo.position.y()))+ robo.radius,
+                                       robo.radius) and distance <= robot.radius + robo.radius:
+                    """"
+                    overlap = robot.radius + robo.radius - distance
+
+
+                    # version without physics
+                    # display current robot away from collision
+                    robo.xPosition += overlap*(robo.xPosition + robo.radius - robot.xPosition + robot.radius)/ distance
+                    robo.yPosition += overlap*(robo.yPosition + robo.radius - robot.yPosition + robot.radius)/ distance
+
+
+                    # display other robot away from collision
+                    robot.xPosition += overlap*(robot.xPosition + robot.radius - robo.xPosition + robo.radius)/ distance
+                    robot.yPosition += overlap*(robot.yPosition + robot.radius - robo.yPosition + robo.radius)/ distance
+
+
+                    """
+
+                    # with elastic collision, does not apply to the reality because of spin, friction etc.
+                    # our only concern is the mass of the robots
+                    # new velocity of robo1
+                    newVelX1 = (int(round(robo.v_vector.x())) * (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY1 = (int(round(robo.v_vector.y()))* (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    # new velocity of robo2
+                    newVelX2 = (int(round(robot.v_vector.x())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY2 = (int(round(robot.v_vector.y())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    newV_1 = QVector2D(newVelX1, newVelY1)
+                    newV_2 = QVector2D(newVelX2, newVelY2)
+
+                    robo.position.__iadd__(newV_1)
+
+                    robot.position.__iadd__(newV_2)
 
 
     def barrierCollision(self, robo):
