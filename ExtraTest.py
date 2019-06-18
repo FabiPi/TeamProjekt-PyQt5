@@ -10,6 +10,7 @@ import sys
 import math
 import threading
 import time
+import random
 
 VISUALS = True
 
@@ -61,6 +62,13 @@ class BaseRobot(threading.Thread):
                 self.a_alpha = 0.5
         self.a_alpha=0
 
+    def ReStart(self):
+            if self.v_vector.x() == self.v_vector.y() == 0:
+                self.a_alpha= 1
+                time.sleep(GameStep)
+                self.a=1
+                self.Stabalize()
+
 class RoboTypeRun(BaseRobot):  
     def run(self):
         while True:
@@ -71,11 +79,7 @@ class RoboTypeRun(BaseRobot):
                     self.a_alpha = 1
                     time.sleep(0.5)
                     self.Stabalize()
-            if self.v_vector.x() == self.v_vector.y() == 0:
-                self.a_alpha= 1
-                time.sleep(GameStep)
-                self.a=1
-                self.Stabalize()
+            self.ReStart()
 
 
                 
@@ -88,32 +92,20 @@ class RoboTypeChase1(BaseRobot):
         time.sleep(2)
         self.position = QVector2D(800,800)
         while True:
-                if self.v_vector.x() == self.v_vector.y() == 0:
-                    self.a_alpha= 1
-                    time.sleep(GameStep)
-                    self.a=1
-                    self.Stabalize()
+                self.ReStart()
 
 
 class RoboTypeChase2(BaseRobot):
     def run(self):
         while True:
             self.a = 1
-            if self.v_vector.x() == self.v_vector.y() == 0:
-                self.a_alpha= 1
-                time.sleep(GameStep)
-                self.a=1
-                self.Stabalize()
+            self.ReStart()
 
 class RoboTypeChase3(BaseRobot):
     def run(self):
         while True:
             self.a = 1
-            if self.v_vector.x() == self.v_vector.y() == 0:
-                self.a_alpha= 1
-                time.sleep(GameStep)
-                self.a=1
-                self.Stabalize()
+            self.ReStart()
 
 
 class SpielFeld(QWidget):
