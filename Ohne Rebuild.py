@@ -49,10 +49,11 @@ class RoboTypeRun(BaseRobot):
     def run(self):
         time.sleep(15* GameStep)
         print(self.RobotList)
-        #if self.RobotList[2].x() > 100:
-        #    a_alpha = a_alpha_max
-        #else:
-        #    a_alpha = - a_alpha_max
+        while True:
+            if self.RobotList[2].x() < 500:
+                self.a= self.a_max
+            else:
+                self.a = - self.a_max
 
 class RoboTypeChase1(BaseRobot):
     def run(self):
@@ -81,10 +82,10 @@ class SpielFeld(QWidget):
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
     #Dictionary for RobotPositions
-    RobotList={1 : "temp",
-               2 : "temp",
-               3 : "temp",
-               4 : "temp"}
+    #RobotList={1 : "temp",
+    #           2 : "temp",
+    #           3 : "temp",
+    #           4 : "temp"}
 
 
     def __init__(self):
@@ -127,14 +128,17 @@ class SpielFeld(QWidget):
         self.tickCount += 1
 
         #update RobotPositions each step
-        for robot in self.robots:
-            self.RobotList[robot.robotid] = robot.position
+        #for robot in self.robots:
+        #    self.RobotList[robot.robotid] = robot.position
 
         #update RobotLists of each Robot
         if self.tickCount % 10 == 0:
-            for robot in self.robots:
-                #print(self.RobotList[robot.robotid].x(), '---', self.RobotList[robot.robotid].y())
-                robot.RoboList = self.RobotList.copy()
+            for y in self.robots:
+                #print position List of Robots
+                #print(int(round(self.RobotList[robot.robotid].x())), '---', int(round(self.RobotList[robot.robotid].y())))
+                #robot.RoboList = self.RobotList.copy()
+                for x in self.robots:
+                    y.RobotList[x.robotid] = x.position
 
         # move robots on the game field
         for robot in self.robots:
