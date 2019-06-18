@@ -69,20 +69,20 @@ class BaseRobot(threading.Thread):
                 self.a=1
                 self.Stabalize()
 
-class RoboTypeRun(BaseRobot):  
+class RoboTypeRun(BaseRobot):
     def run(self):
         while True:
             self.a = 1
             time.sleep(GameStep)
             for ID in range(2, 5,1):
-                if self.position.distanceToPoint(self.RobotList[ID]) < 100: 
+                if self.position.distanceToPoint(self.RobotList[ID]) < 100:
                     self.a_alpha = 1
                     time.sleep(0.5)
                     self.Stabalize()
             self.ReStart()
 
 
-                
+
 
 class RoboTypeChase1(BaseRobot):
     def run(self):
@@ -114,6 +114,11 @@ class SpielFeld(QWidget):
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
     BarrierList = []
 
+    # Teleport Positions
+    TP_TopL = QVector2D(100, 100)
+    TP_TopR = QVector2D(850, 100)
+    TP_BotL = QVector2D(100, 850)
+    TP_BotR = QVector2D(850, 850)
 
     def __init__(self):
         super().__init__()
@@ -129,7 +134,7 @@ class SpielFeld(QWidget):
         self.timer.start(FPS, self)
         self.tickCount = 0
 
-        
+
         #set Walls, set array value to 1 to place Wall
 
         #set Wall around the edges
@@ -159,15 +164,15 @@ class SpielFeld(QWidget):
             for j in range(0, 100, 1):
                 if SpielFeld.PlayFieldAR[i][j]==1:
                     SpielFeld.BarrierList.append(QVector2D(i,j))
-        
-        #init Robots
-        Robot1 = RoboTypeRun(1, QVector2D(50,110), 0, 2, 2, 20, 40 ,PINK)
-        Robot2 = RoboTypeChase1(2, QVector2D(650,600), 90, 2, 2, 10, 50,DARKBLUE)
-        Robot3 = RoboTypeChase2(3, QVector2D(400,460), 180, 2, 2, 30, 60,LIGHTBLUE)
-        Robot4 = RoboTypeChase3(4, QVector2D(360,260), 270, 2, 2, 25, 85,ORANGE)
 
-        self.robots = [Robot1, Robot2, Robot3, Robot4]
-        
+        #init Robots
+        self.Robot1 = RoboTypeRun(1, QVector2D(50,110), 0, 2, 2, 20, 40 ,PINK)
+        self.Robot2 = RoboTypeChase1(2, QVector2D(92,110), 90, 2, 2, 10, 50,DARKBLUE)
+        self.Robot3 = RoboTypeChase2(3, QVector2D(400,280), 180, 2, 2, 30, 60,LIGHTBLUE)
+        self.Robot4 = RoboTypeChase3(4, QVector2D(300,260), 270, 2, 2, 25, 85,ORANGE)
+
+        self.robots = [self.Robot1, self.Robot2, self.Robot3, self.Robot4]
+
         for robot in self.robots:
             robot.start()
 
@@ -184,7 +189,7 @@ class SpielFeld(QWidget):
     def timerEvent(self, Event):
         #Count
         self.tickCount += 1
-        
+
         #update RobotLists of each Robot
         if self.tickCount % 10 == 0:
             for y in self.robots:
@@ -195,9 +200,10 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.moveRobot(robot)
             self.barrierCollision(robot)
-            self.collision(robot)
+            self.collision(robot, self.Robot1)
+            #self.teleport(self.Robot1, robot)
 
-        self.update()              
+        self.update()
 
     def paintEvent(self, qp):
 
@@ -232,7 +238,7 @@ class SpielFeld(QWidget):
             yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
             br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                         (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
- 
+
 
     def drawField(self, qp):
         #Draw the PlayField
@@ -259,10 +265,10 @@ class SpielFeld(QWidget):
 
         #Neue Richtung
         Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
-        
+
         #berechne geschwindigkeit
         v= math.sqrt(math.pow(Robo.v_vector.x(),2) + math.pow(Robo.v_vector.y(),2))
-        
+
         if (v + Robo.a) <= 0:
             v = 0
             Robo.a = 0
@@ -316,17 +322,18 @@ class SpielFeld(QWidget):
                 robo.a = 0
 
 
-    def collision(self, robo):
+    def collision(self, robo, target):
         for robot in self.robots:
-            if robot != robo:
+            if robot != robo and robot != target and robo != target :
                 distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
                                                   int(round(robot.position.y()))+ robot.radius,
                                                   int(round(robo.position.x())) + robo.radius,
                                                   int(round(robo.position.y())) + robo.radius)
 
+
                 if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
                                        int(round(robo.position.x())) + robo.radius, int(round(robo.position.y()))+ robo.radius,
-                                       robo.radius) and distance <= robot.radius + robo.radius:
+                                       robo.radius) and distance < robot.radius + robo.radius :
 
                     # with elastic collision, does not apply to the reality because of spin, friction etc.
                     # our only concern is the mass of the robots
@@ -348,6 +355,35 @@ class SpielFeld(QWidget):
                     robo.position.__iadd__(newV_1)
 
                     robot.position.__iadd__(newV_2)
+
+            else: self.teleport(target, robo)
+
+
+
+    def teleport(self, target, robot):
+
+        if robot != target:
+            distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                              int(round(robot.position.y())) + robot.radius,
+                                              int(round(target.position.x())) + target.radius,
+                                              int(round(target.position.y())) + target.radius)
+
+            if distance <= target.radius + robot.radius:
+
+                if  int(round(target.position.x())) > 500 and  int(round(target.position.y())) < 500:
+
+                    robot.position = QVector2D(100,850)
+
+                elif int(round(target.position.x())) > 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(100,100)
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) < 500:
+                    robot.position = QVector2D(850,850)
+
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(850,100)
+
 
 
 if __name__ == '__main__':
