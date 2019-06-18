@@ -10,7 +10,7 @@ import sys
 import math
 import threading
 import time
-import random
+
 
 VISUALS = True
 
@@ -201,7 +201,6 @@ class SpielFeld(QWidget):
             self.moveRobot(robot)
             self.barrierCollision(robot)
             self.collision(robot, self.Robot1)
-            #self.teleport(self.Robot1, robot)
 
         self.update()
 
@@ -363,12 +362,10 @@ class SpielFeld(QWidget):
     def teleport(self, target, robot):
 
         if robot != target:
-            distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
-                                              int(round(robot.position.y())) + robot.radius,
-                                              int(round(target.position.x())) + target.radius,
-                                              int(round(target.position.y())) + target.radius)
 
-            if distance <= target.radius + robot.radius:
+            if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
+                                       int(round(target.position.x())) + target.radius, int(round(target.position.y()))+ target.radius,
+                                       target.radius):
 
                 if  int(round(target.position.x())) > 500 and  int(round(target.position.y())) < 500:
 
