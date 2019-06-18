@@ -15,6 +15,8 @@ import time
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
 
+VISUALS = True
+
 FPS = 100/ 30
 GameStep = 1/ FPS
 vMax = 5
@@ -28,7 +30,7 @@ ORANGE = QColor(245, 120, 0)
 
 class BaseRobot(threading.Thread):
     #mit Id, Position, Richtung, max Beschleunigung, max Dreh.Beschl., Radius, Color
-    def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, color):
+    def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, color):
         threading.Thread.__init__(self)
         self.robotid = robotid
         self.position = position
@@ -36,6 +38,7 @@ class BaseRobot(threading.Thread):
         self.a_max = a_max
         self.a_alpha_max = a_alpha_max
         self.radius = radius
+        self.FOV = FOV
         self.color = color
 
         #Values set to "0" so Robot stands still at the start
@@ -103,10 +106,10 @@ class SpielFeld(QWidget):
         self.tickCount = 0
         
         #init Robots
-        Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, PINK)
-        Robot2 = RoboTypeChase1(2, QVector2D(500,500), 150, 2, 2, 15, DARKBLUE)
-        Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, LIGHTBLUE)
-        Robot4 = RoboTypeChase3(4, QVector2D(360,260), 30, 2, 2, 15, ORANGE)
+        Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
+        Robot2 = RoboTypeChase1(2, QVector2D(10,800), 0, 2, 2, 15, 50,DARKBLUE)
+        Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, 60,LIGHTBLUE)
+        Robot4 = RoboTypeChase3(4, QVector2D(360,260), 30, 2, 2, 15, 85,ORANGE)
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
         
@@ -169,6 +172,17 @@ class SpielFeld(QWidget):
 
         br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                     (int(round(Robo.position.x())) + Robo.radius) + xPos, (int(round(Robo.position.y())) + Robo.radius) - yPos)
+        #draw FOV
+        if VISUALS:
+            br.setPen(QColor(255,255,255))
+            xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+            xPos = math.cos(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
  
 
     def drawField(self, qp):
@@ -257,16 +271,20 @@ class SpielFeld(QWidget):
         for i in range(0, Rad, 1):
             #oben
             if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
-                robo.v_vector = QVector2D(0,0)     
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
             #unten
             if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
-                robo.v_vector = QVector2D(0,0) 
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
             #links
             if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.y()<0):
-                robo.v_vector = QVector2D(0,0) 
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
             #rechts
             if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.y()>0):
                 robo.v_vector = QVector2D(0,0)
+                robo.a = 0
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
