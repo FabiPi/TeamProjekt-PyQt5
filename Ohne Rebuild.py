@@ -137,10 +137,6 @@ class SpielFeld(QWidget):
         for i in range(0, 10, 1):
             SpielFeld.PlayFieldAR[10][i+50] = 1
 
-        for i in range(0, 100, 1):
-            for j in range(0, 100, 1):
-                if SpielFeld.PlayFieldAR[i][j] == 1:
-                    SpielFeld.BarrierList.append(QVector2D(i,j))
 
         #init Robots
         Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
@@ -231,6 +227,9 @@ class SpielFeld(QWidget):
                 if SpielFeld.PlayFieldAR[i][j]==1:
                     qp.setBrush(QColor(65, 50, 25))
                     qp.drawRect(i*10, j*10, 10, 10)
+                    
+                    # put walls in the list
+                    SpielFeld.BarrierList.append(QVector2D(i,j))
 
 
 
