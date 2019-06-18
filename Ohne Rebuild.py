@@ -53,10 +53,11 @@ class BaseRobot(threading.Thread):
                           3 : QVector2D(0,0),
                           4 : QVector2D(0,0)}
     def Stabalize(self):
-        if self.v_alpha > 0:
-            self.a_alpha=-0.5
-        elif self.v_alpha < 0:
-            self.a_alpha=0.5
+        while self.v_alpha != 0:
+            if self.v_alpha > 0:
+                self.a_alpha=-0.5
+            elif self.v_alpha < 0:
+                self.a_alpha=0.5
 
 class RoboTypeRun(BaseRobot):
     def run(self):
