@@ -19,6 +19,7 @@ VISUALS = True
 
 FPS = 100/ 30
 GameStep = 1/ FPS
+alpha_eps = 0.5
 vMax = 5
 v_alpha_Max = 10
 count = 0
@@ -51,48 +52,49 @@ class BaseRobot(threading.Thread):
                           2 : QVector2D(0,0),
                           3 : QVector2D(0,0),
                           4 : QVector2D(0,0)}
+    def Stabalize(self):
+        if self.v_alpha > 0:
+            self.a_alpha=-0.5
+        elif self.v_alpha < 0:
+            self.a_alpha=0.5
 
 class RoboTypeRun(BaseRobot):
     def run(self):
-        time.sleep(15* GameStep)
-        print(self.RobotList)
         while True:
             if self.RobotList[2].x() < 500:
                 self.a= self.a_max
             else:
-                self.a = - self.a_max
+                self.a_alpha = - self.a_alpha_max
 
 class RoboTypeChase1(BaseRobot):
     def run(self):
         self.a=1
-        time.sleep(1*GameStep)
-        self.a=0
-        self.a_alpha = self.a_alpha_max
+        time.sleep(10* GameStep)
+        self.a=-1
+
 
 class RoboTypeChase2(BaseRobot):
     def run(self):
-        self.a=1
-        time.sleep(1*GameStep)
-        self.a=0
-        self.a_alpha = self.a_alpha_max
+        while True:
+            self.a=1
+            time.sleep(5* GameStep)
+            self.a=-1
+            time.sleep(5* GameStep)
 
 class RoboTypeChase3(BaseRobot):
     def run(self):
-        self.a=1
-        time.sleep(1*GameStep)
-        self.a=0
-        self.a_alpha = self.a_alpha_max
+        self.a_alpha = 1
+        time.sleep(3)
+        self.Stabalize()
+        while True:
+            self.a = 1
 
 
 class SpielFeld(QWidget):
 
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
-    #Dictionary for RobotPositions
-    #RobotList={1 : "temp",
-    #           2 : "temp",
-    #           3 : "temp",
-    #           4 : "temp"}
+    BarrierList = []
 
 
     def __init__(self):
@@ -108,6 +110,36 @@ class SpielFeld(QWidget):
         self.timer = QBasicTimer()
         self.timer.start(FPS, self)
         self.tickCount = 0
+        
+        #set Walls, set array value to 1 to place Wall
+
+        #set Wall around the edges
+        for x in range(0,100,1):
+            SpielFeld.PlayFieldAR[x][0]= 1
+            SpielFeld.PlayFieldAR[x][99]= 1
+        for y in range(1,99,1):
+            SpielFeld.PlayFieldAR[0][y]= 1
+            SpielFeld.PlayFieldAR[99][y]= 1
+
+        #set some Obstacle
+        for i in range(0, 25, 1):
+            SpielFeld.PlayFieldAR[70][i+45] = 1
+
+        for i in range(0, 40, 1):
+            SpielFeld.PlayFieldAR[i+10][40] = 1
+        for i in range(0, 50, 1):
+            SpielFeld.PlayFieldAR[i+30][70] = 1
+
+        for i in range(0, 30, 1):
+            SpielFeld.PlayFieldAR[i+25][20] = 1
+
+        for i in range(0, 10, 1):
+            SpielFeld.PlayFieldAR[10][i+50] = 1
+
+        for i in range(0, 100, 1):
+            for j in range(0, 100, 1):
+                if SpielFeld.PlayFieldAR[i][j] == 1:
+                    SpielFeld.BarrierList.append(QVector2D(i,j))
 
         #init Robots
         Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
@@ -192,31 +224,6 @@ class SpielFeld(QWidget):
 
     def drawField(self, qp):
 
-        #set Walls, set array value to 1 to place Wall
-
-        #set Wall around the edges
-        for x in range(0,100,1):
-            SpielFeld.PlayFieldAR[x][0]= 1
-            SpielFeld.PlayFieldAR[x][99]= 1
-        for y in range(1,99,1):
-            SpielFeld.PlayFieldAR[0][y]= 1
-            SpielFeld.PlayFieldAR[99][y]= 1
-
-        #set some Obstacle
-        for i in range(0, 25, 1):
-            SpielFeld.PlayFieldAR[70][i+45] = 1
-
-        for i in range(0, 40, 1):
-            SpielFeld.PlayFieldAR[i+10][40] = 1
-        for i in range(0, 50, 1):
-            SpielFeld.PlayFieldAR[i+30][70] = 1
-
-        for i in range(0, 30, 1):
-            SpielFeld.PlayFieldAR[i+25][20] = 1
-
-        for i in range(0, 10, 1):
-            SpielFeld.PlayFieldAR[10][i+50] = 1
-
         #Draw the PlayField
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
@@ -232,7 +239,9 @@ class SpielFeld(QWidget):
 
     def moveRobot(self, Robo):
         #berechne neue Lenkrichtung
-        if (Robo.v_alpha + Robo.a_alpha) < -v_alpha_Max:
+        if abs(Robo.v_alpha) <= alpha_eps and abs(Robo.a_alpha) <= alpha_eps:
+            Robo.v_alpha = 0
+        elif (Robo.v_alpha + Robo.a_alpha) < -v_alpha_Max:
             Robo.v_alpha = -v_alpha_Max
         elif (Robo.v_alpha + Robo.a_alpha) <= v_alpha_Max:
             Robo.v_alpha = (Robo.v_alpha + Robo.a_alpha)
@@ -244,12 +253,15 @@ class SpielFeld(QWidget):
 
         #berechne geschwindigkeit
         v= math.sqrt(math.pow(Robo.v_vector.x(),2) + math.pow(Robo.v_vector.y(),2))
-        if (v + Robo.a) <= -vMax:
-            v = -vMax
+        
+        if (v + Robo.a) <= 0:
+            v = 0
+            Robo.a = 0
         elif (v + Robo.a) < vMax:
             v += Robo.a
         elif (v + Robo.a) >= vMax:
             v = vMax
+
 
         #X-Y Geschwindigkeit
         GesX = math.cos(math.radians(Robo.alpha)) * v
