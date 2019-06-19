@@ -56,40 +56,70 @@ def distanceTwoPoints(self, x1, y1, x2, y2):
 ```
 **Collision Funktion**
 ```python
-
-    def collison(self, robo):
+    def collision(self, robo, target):
         for robot in self.robots:
-            if robot != robo:
-                distance = self.distanceTwoPoints(robot.xPosition + robot.radius,
-                                                  robot.yPosition + robot.radius,
-                                                  robo.xPosition + robo.radius,
-                                                  robo.yPosition + robo.radius)
+            if robot != robo and robot != target and robo != target :
+                distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                                  int(round(robot.position.y()))+ robot.radius,
+                                                  int(round(robo.position.x())) + robo.radius,
+                                                  int(round(robo.position.y())) + robo.radius)
 
-                if self.is_overlapping(robot.xPosition + robot.radius, robot.yPosition + robot.radius, robot.radius,
-                                       robo.xPosition + robo.radius, robo.yPosition + robo.radius,
-                                       robo.radius) and distance <= robot.radius + robo.radius:
 
-                    # with elastic collision, does not apply to the reality because of spin, friction etc. 
-                    # our only concern is the mass of the robots 
+                if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
+                                       int(round(robo.position.x())) + robo.radius, int(round(robo.position.y()))+ robo.radius,
+                                       robo.radius) and distance < robot.radius + robo.radius :
+
+                    # with elastic collision, does not apply to the reality because of spin, friction etc.
+                    # our only concern is the mass of the robots
                     # new velocity of robo1
-                    newVelX1 = (robo.v_X * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_X)) / (
-                                robo.mass + robot.mass)
-                    newVelY1 = (robo.v_Y * (robo.mass - robot.mass) + (2 * robot.mass * robot.v_Y)) / (
-                                robo.mass + robot.mass)
+                    newVelX1 = (int(round(robo.v_vector.x())) * (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY1 = (int(round(robo.v_vector.y()))* (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.y())))) / (
+                            robo.mass + robot.mass)
 
                     # new velocity of robo2
-                    newVelX2 = (robot.v_X * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_X)) / (
-                                robo.mass + robot.mass)
-                    newVelY2 = (robot.v_Y * (robot.mass - robo.mass) + (2 * robo.mass * robo.v_Y)) / (
-                                robo.mass + robot.mass)
+                    newVelX2 = (int(round(robot.v_vector.x())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY2 = (int(round(robot.v_vector.y())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.y())))) / (
+                            robo.mass + robot.mass)
 
-                    robo.xPosition += newVelX1
-                    robo.yPosition += newVelY1
-                    robot.xPosition += newVelX2
-                    robot.yPosition += newVelY2
+                    newV_1 = QVector2D(newVelX1, newVelY1)
+                    newV_2 = QVector2D(newVelX2, newVelY2)
+
+                    robo.position.__iadd__(newV_1)
+
+                    robot.position.__iadd__(newV_2)
+
+            else: self.teleport(target, robo)
 ```
 Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
 
+**Teleport** </br>
+```python             
+    def teleport(self, target, robot):
+
+        if robot != target:
+            distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                              int(round(robot.position.y())) + robot.radius,
+                                              int(round(target.position.x())) + target.radius,
+                                              int(round(target.position.y())) + target.radius)
+
+            if distance <= target.radius + robot.radius:
+
+                if  int(round(target.position.x())) > 500 and  int(round(target.position.y())) < 500:
+
+                    robot.position = QVector2D(100,850)
+
+                elif int(round(target.position.x())) > 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(100,100)
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) < 500:
+                    robot.position = QVector2D(850,850)
+
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(850,100)
+```
 
 **Collision** </br>
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
