@@ -71,7 +71,7 @@ class BaseRobot(threading.Thread):
 
     def velocity(self):
         return math.sqrt(math.pow(self.v_vector.x(),2) + math.pow(self.v_vector.y(),2))
-    
+
     def checkChase(self, ID):
         xEnemy = self.RobotList[ID].x()
         yEnemy = self.RobotList[ID].y()
@@ -82,6 +82,7 @@ class BaseRobot(threading.Thread):
         spot = ''
         action =''
 
+        #search position of enemy
         if xEnemy <= xSelf and yEnemy <= ySelf:
             spot = 'TopLeft'
         elif xEnemy >= xSelf and yEnemy <= ySelf:
@@ -103,7 +104,8 @@ class BaseRobot(threading.Thread):
             view = 'BotLeft'
         elif 270 <= self.alpha <= 360:
             view = 'BotRight'
-        
+
+        #determin turn-type
         if view == spot:
             #hard Turn
             action = 'hard Turn'
@@ -127,7 +129,66 @@ class BaseRobot(threading.Thread):
             self.a_alpha = 0.7
         elif action == 'right Turn':
             self.a_alpha = -0.7
-                
+
+    def lookTarget(self, ID):
+        #Based on check Chase Method
+
+        xEnemy = self.RobotList[ID].x()
+        yEnemy = self.RobotList[ID].y()
+
+        xSelf = self.position.x()
+        ySelf = self.position.y()
+
+        spot = ''
+        action =''
+        #search position of target
+        if xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'TopLeft'
+        elif xEnemy >= xSelf and yEnemy <= ySelf:
+            spot = 'TopRight'
+        elif xEnemy <= xSelf and yEnemy >= ySelf:
+            spot = 'BotLeft'
+        elif xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'BotRight'
+
+        #check direktion (rough)
+        #right -> 0° up -> 90° left -> 180° down -> 270°
+        view = ''
+
+        if  0 <= self.alpha <= 90:
+            view = 'TopRight'
+        elif 90 <= self.alpha <= 180:
+            view = 'TopLeft'
+        elif 180 <= self.alpha <= 270:
+            view = 'BotLeft'
+        elif 270 <= self.alpha <= 360:
+            view = 'BotRight'
+
+        #determin turn-type
+        if view == spot:
+            #hard Turn
+            action = 'no Turn'
+        elif (view == 'TopRight' and spot == 'BotLeft') or (view == 'TopLeft' and spot == 'TopRight') or (view == 'BotRight' and spot == 'TopLeft') or (view == 'BotLeft' and spot == 'TopRight'):
+            #no turn
+            action = 'hard Turn'
+        elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
+            #left turn
+            action = 'left Turn'
+        else:
+            #right turn
+            action = 'right Turn'
+
+        print(action)
+        
+        if action == 'hard Turn':
+            self.a_alpha = 2
+        elif action == 'no Turn':
+            self.a_alpha = 0
+        elif action == 'left Turn':
+            self.a_alpha = 0.7
+        elif action == 'right Turn':
+            self.a_alpha = -0.7
+
 
 class RoboTypeRun(BaseRobot):  
     def run(self):
@@ -138,7 +199,6 @@ class RoboTypeRun(BaseRobot):
                 if self.position.distanceToPoint(self.RobotList[ID]) < 150:
                     #check where Chaser is
                     self.checkChase(ID)
-                    #self.a_alpha = 1
                     time.sleep(0.5)
                     self.Stabilize()
             self.ReStart()
@@ -159,14 +219,14 @@ class RoboTypeChase1(BaseRobot):
 
 class RoboTypeChase2(BaseRobot):
     def run(self):
-        self.a = 1
         while True:
-            self.a= -10
-            time.sleep(GameStep *2)
-            self.a_alpha = 1
-            self.Stabilize
-            while self.v_alpha != 0:
-                time.sleep(1)
+            self.a = 1
+            time.sleep(GameStep)
+            if self.position.distanceToPoint(self.RobotList[1]) < 250:
+                #check where Chaser is
+                self.lookTarget(1)
+                time.sleep(0.5)
+                self.Stabilize()
             self.ReStart()
 
 class RoboTypeChase3(BaseRobot):
@@ -203,7 +263,6 @@ class SpielFeld(QWidget):
         self.timer.start(FPS, self)
         self.tickCount = 0
 
-        
         #set Walls, set array value to 1 to place Wall
 
         #set Wall around the edges
@@ -217,28 +276,25 @@ class SpielFeld(QWidget):
         #set some Obstacle
         for i in range(0, 25, 1):
             SpielFeld.PlayFieldAR[70][i+45] = 1
-
         for i in range(0, 40, 1):
             SpielFeld.PlayFieldAR[i+10][40] = 1
         for i in range(0, 50, 1):
             SpielFeld.PlayFieldAR[i+30][70] = 1
-
         for i in range(0, 30, 1):
             SpielFeld.PlayFieldAR[i+25][20] = 1
-
         for i in range(0, 10, 1):
             SpielFeld.PlayFieldAR[10][i+50] = 1
-
+            
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
                 if SpielFeld.PlayFieldAR[i][j]==1:
                     SpielFeld.BarrierList.append(QVector2D(i,j))
         
         #init Robots
-        Robot1 = RoboTypeRun(1, QVector2D(50,110), 0, 2, 2, 20, 40 ,PINK)
-        Robot2 = RoboTypeChase1(2, QVector2D(100,100), 90, 2, 2, 10, 50,DARKBLUE)
-        Robot3 = RoboTypeChase2(3, QVector2D(150,150), 180, 2, 2, 30, 60,LIGHTBLUE)
-        Robot4 = RoboTypeChase3(4, QVector2D(100,150), 270, 2, 2, 25, 85,ORANGE)
+        Robot1 = RoboTypeRun(1, QVector2D(500,500), 0, 2, 2, 20, 40 ,PINK)
+        Robot2 = RoboTypeChase1(2, QVector2D(200,200), 90, 2, 2, 20, 50,DARKBLUE)
+        Robot3 = RoboTypeChase2(3, QVector2D(550,550), 180, 2, 2, 30, 60,LIGHTBLUE)
+        Robot4 = RoboTypeChase3(4, QVector2D(600,150), 270, 2, 2, 25, 85,ORANGE)
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
 
