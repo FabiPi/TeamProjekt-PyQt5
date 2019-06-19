@@ -121,6 +121,106 @@ Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Rob
                     robot.position = QVector2D(850,100)
 ```
 
+**Steuerungs Methoden** </br>
+```python             
+ #brings Rotation to a halt
+    def Stabilize(self):
+        while self.v_alpha != 0:
+            if self.v_alpha > 0:
+                self.a_alpha = -0.5
+            elif self.v_alpha < 0:
+                self.a_alpha = 0.5
+        self.a_alpha=0
+
+    def ReStart(self):
+            if self.v_vector.x() == self.v_vector.y() == 0:
+                self.a_alpha= 0.7
+                time.sleep(GameStep)
+                self.a=1
+                self.Stabilize()
+
+    def velocity(self):
+        return math.sqrt(math.pow(self.v_vector.x(),2) + math.pow(self.v_vector.y(),2))
+```
+
+
+**Flüchtender Roboter** </br>
+```python             
+class RoboTypeRun(BaseRobot):  
+    def run(self):
+        while True:
+            self.a = 1
+            time.sleep(GameStep)
+            for ID in range(2, 5,1):
+                if self.position.distanceToPoint(self.RobotList[ID]) < 150:
+                    #check where Chaser is
+                    self.checkChase(ID)
+                    time.sleep(0.5)
+                    self.Stabilize()
+            self.ReStart()
+```
+**Die CheckChase Methode** </br>
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+```python             
+    def checkChase(self, ID):
+        xEnemy = self.RobotList[ID].x()
+        yEnemy = self.RobotList[ID].y()
+
+        xSelf = self.position.x()
+        ySelf = self.position.y()
+
+        spot = ''
+        action =''
+
+        if xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'TopLeft'
+        elif xEnemy >= xSelf and yEnemy <= ySelf:
+            spot = 'TopRight'
+        elif xEnemy <= xSelf and yEnemy >= ySelf:
+            spot = 'BotLeft'
+        elif xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'BotRight'
+
+        #check direktion (rough)
+        #right -> 0° up -> 90° left -> 180° down -> 270°
+        view = ''
+
+        if  0 <= self.alpha <= 90:
+            view = 'TopRight'
+        elif 90 <= self.alpha <= 180:
+            view = 'TopLeft'
+        elif 180 <= self.alpha <= 270:
+            view = 'BotLeft'
+        elif 270 <= self.alpha <= 360:
+            view = 'BotRight'
+        
+        if view == spot:
+            #hard Turn
+            action = 'hard Turn'
+        elif (view == 'TopRight' and spot == 'BotLeft') or (view == 'TopLeft' and spot == 'TopRight') or (view == 'BotRight' and spot == 'TopLeft') or (view == 'BotLeft' and spot == 'TopRight'):
+            #no turn
+            action = 'no Turn'
+        elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
+            #left turn
+            action = 'right Turn'
+        else:
+            #right turn
+            action = 'left Turn'
+
+        print(action)
+        
+        if action == 'hard Turn':
+            self.a_alpha = 2
+        elif action == 'no Turn':
+            self.a_alpha = 0
+        elif action == 'left Turn':
+            self.a_alpha = 0.7
+        elif action == 'right Turn':
+            self.a_alpha = -0.7
+```
+
+## Week4 - ...
+
 **Collision** </br>
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
 Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
