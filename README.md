@@ -205,11 +205,88 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
             #no turn
             action = 'no Turn'
         elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
-            #left turn
+            #right turn
             action = 'right Turn'
         else:
-            #right turn
+            #left turn
             action = 'left Turn'
+
+        print(action)
+        
+        if action == 'hard Turn':
+            self.a_alpha = 2
+        elif action == 'no Turn':
+            self.a_alpha = 0
+        elif action == 'left Turn':
+            self.a_alpha = 0.7
+        elif action == 'right Turn':
+            self.a_alpha = -0.7
+```
+
+**Verfolgender Roboter 1** </br>
+```python             
+    def run(self):
+        while True:
+            self.a = 1
+            time.sleep(GameStep)
+            if self.position.distanceToPoint(self.RobotList[1]) < 250:
+                #check where Chaser is
+                self.lookTarget(1)
+                time.sleep(0.5)
+                self.Stabilize()
+            self.ReStart()
+```
+
+**Die LookTarget Methode** </br>
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+```python             
+    def lookTarget(self, ID):
+        #Based on check Chase Method
+
+        xEnemy = self.RobotList[ID].x()
+        yEnemy = self.RobotList[ID].y()
+
+        xSelf = self.position.x()
+        ySelf = self.position.y()
+
+        spot = ''
+        action =''
+        #search position of enemy
+        if xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'TopLeft'
+        elif xEnemy >= xSelf and yEnemy <= ySelf:
+            spot = 'TopRight'
+        elif xEnemy <= xSelf and yEnemy >= ySelf:
+            spot = 'BotLeft'
+        elif xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'BotRight'
+
+        #check direktion (rough)
+        #right -> 0° up -> 90° left -> 180° down -> 270°
+        view = ''
+
+        if  0 <= self.alpha <= 90:
+            view = 'TopRight'
+        elif 90 <= self.alpha <= 180:
+            view = 'TopLeft'
+        elif 180 <= self.alpha <= 270:
+            view = 'BotLeft'
+        elif 270 <= self.alpha <= 360:
+            view = 'BotRight'
+
+        #determin turn-type
+        if view == spot:
+            #hard Turn
+            action = 'no Turn'
+        elif (view == 'TopRight' and spot == 'BotLeft') or (view == 'TopLeft' and spot == 'TopRight') or (view == 'BotRight' and spot == 'TopLeft') or (view == 'BotLeft' and spot == 'TopRight'):
+            #no turn
+            action = 'hard Turn'
+        elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
+            #left turn
+            action = 'left Turn'
+        else:
+            #right turn
+            action = 'right Turn'
 
         print(action)
         
