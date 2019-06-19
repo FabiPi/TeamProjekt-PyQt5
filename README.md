@@ -172,6 +172,7 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
         spot = ''
         action =''
 
+        #search position of enemy
         if xEnemy <= xSelf and yEnemy <= ySelf:
             spot = 'TopLeft'
         elif xEnemy >= xSelf and yEnemy <= ySelf:
@@ -193,7 +194,8 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
             view = 'BotLeft'
         elif 270 <= self.alpha <= 360:
             view = 'BotRight'
-        
+
+        #determin turn-type
         if view == spot:
             #hard Turn
             action = 'hard Turn'
