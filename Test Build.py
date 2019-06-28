@@ -4,8 +4,8 @@ von B-Dome, JangJang3, FabiPi
 """
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
-from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap
-from PyQt5.QtCore import Qt, QBasicTimer
+from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint
 import sys
 import math
 import threading
