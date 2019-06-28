@@ -350,8 +350,11 @@ class SpielFeld(QWidget):
         qp.begin(self)
         self.drawField(qp)
         # draw Robots on the game field
+
         for robot in self.robots:
             self.drawRobo(robot,qp)
+            qp.drawPath(self.FOV(robot))
+
 
 
     def drawRobo(self, Robo, br):
@@ -366,18 +369,26 @@ class SpielFeld(QWidget):
         br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                     (int(round(Robo.position.x())) + Robo.radius) + xPos, (int(round(Robo.position.y())) + Robo.radius) - yPos)
 
-        #draw FOV
-        if VISUALS:
-            br.setPen(QColor(255,255,255))
-            xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
-            yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
-            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
-                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
-            xPos = math.cos(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
-            yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
-            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
-                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
- 
+
+
+    def FOV(self, Robo):
+
+        view = QPainterPath()
+
+        xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV / 2))) * Robo.radius
+        yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV / 2))) * Robo.radius
+
+        xPos2 = math.cos(math.radians(Robo.alpha - (Robo.FOV / 2))) * Robo.radius
+        yPos2 = math.sin(math.radians(Robo.alpha - (Robo.FOV / 2))) * Robo.radius
+
+        x1 = QPoint(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius)
+        x2 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos)
+        x3 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos2, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos2)
+
+        view.addPolygon(QPolygonF([x1, x2, x3]))
+        view.closeSubpath()
+
+        return view
 
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
