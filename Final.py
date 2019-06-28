@@ -439,11 +439,6 @@ class SpielFeld(QWidget):
         #berechne neue Position
         Robo.position.__iadd__(Robo.v_vector)
 
-    def distanceTwoPoints(self, x1, y1, x2, y2):
-        return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
-
-    def is_overlapping (self, x1, y1, r1,x2, y2, r2):
-        return self.distanceTwoPoints(x1, y1, x2, y2) < (r1+r2)
 
 
     def barrierCollision(self, robo):
@@ -474,18 +469,22 @@ class SpielFeld(QWidget):
                 robo.a = 0
 
 
+    def distanceTwoPoints(self, x1, y1, x2, y2):
+        return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
+
+    def distance(self, robo1, robo2):
+        return self.distanceTwoPoints(int(round(robo1.position.x())) + robo1.radius,
+                                                  int(round(robo1.position.y()))+ robo1.radius,
+                                                  int(round(robo2.position.x())) + robo2.radius,
+                                                  int(round(robo2.position.y())) + robo2.radius)
+
+
     def collision(self, robo, target):
         for robot in self.robots:
             if robot != robo and robot != target and robo != target :
-                distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
-                                                  int(round(robot.position.y()))+ robot.radius,
-                                                  int(round(robo.position.x())) + robo.radius,
-                                                  int(round(robo.position.y())) + robo.radius)
+                distance = self.distance(robot, robo)
 
-
-                if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
-                                       int(round(robo.position.x())) + robo.radius, int(round(robo.position.y()))+ robo.radius,
-                                       robo.radius) and distance < robot.radius + robo.radius :
+                if distance <= robot.radius + robo.radius :
 
                     # with elastic collision, does not apply to the reality because of spin, friction etc.
                     # our only concern is the mass of the robots
@@ -514,32 +513,33 @@ class SpielFeld(QWidget):
 
     def teleport(self, target, robot):
 
+        MID = 500
+
         if robot != target:
-            distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
-                                              int(round(robot.position.y())) + robot.radius,
-                                              int(round(target.position.x())) + target.radius,
-                                              int(round(target.position.y())) + target.radius)
+            distance = self.distance(robot, target)
 
             if distance <= target.radius + robot.radius:
 
-                if  int(round(target.position.x())) > 500 and  int(round(target.position.y())) < 500:
+                if  int(round(target.position.x())) > MID and  int(round(target.position.y())) < MID:
 
                     robot.position = QVector2D(100,850)
 
-                elif int(round(target.position.x())) > 500 and int(round(target.position.y())) > 500:
+                elif int(round(target.position.x())) > MID and int(round(target.position.y())) > MID:
                     robot.position = QVector2D(100,100)
 
-                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) < 500:
+                elif int(round(target.position.x())) < MID and int(round(target.position.y())) < MID:
                     robot.position = QVector2D(850,850)
 
 
-                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) > 500:
+                elif int(round(target.position.x())) < MID and int(round(target.position.y())) > MID:
                     robot.position = QVector2D(850,100)
 
                 robot.v_vector = QVector2D(0,0)
                 robot.a =0
                 robot.a_alpha =0
                 robot.v_alpha = 0
+
+
 
 
 
