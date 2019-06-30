@@ -139,6 +139,33 @@ class Robot(object):
             return True
         else:
             return False
+        
+    def aimTargetView(self, target):
+        # who is my target
+        target_id = target
+
+        # is my target in my FOV?
+        if self.ViewList[target_id][3]:
+
+            # Yes, chase him
+            target_alpha = self.ViewList[target_id][2]
+
+            if 0 + self.alpha < target_alpha <= 180 + self.alpha:
+                # turn left
+                self.a_alpha = 0.5
+            elif self.alpha == target_alpha:
+                # keep straight
+                self.a_alpha = 0
+                self.v_alpha = 0
+            else:
+                # turn right
+                self.a_alpha = -0.5
+
+        # no, turn around and wait
+        else:
+            self.v = 0
+            self.a_alpha = 2
+            
 
 class RobotControl(QThread):
 
@@ -175,7 +202,15 @@ class TargetChase2(RobotControl):
             self.msleep(100)
     
             
+class TargetChase3(RobotControl):
 
+    def run(self):
+        self.robot.a = 1
+
+        while True:
+            target = 1
+            self.robot.aimTargetView(target)
+            self.msleep(100)
             
 
 
