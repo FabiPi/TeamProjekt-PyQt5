@@ -4,7 +4,7 @@ von B-Dome, JangJang3, FabiPi
 """
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
-from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap
+from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
 from PyQt5.QtCore import Qt, QBasicTimer
 import sys
 import math
@@ -138,6 +138,7 @@ class SpielFeld(QWidget):
         # draw Robots on the game field
         for robot in self.robots:
             self.drawRobo(robot,qp)
+            qp.drawPath(self.FOV(robot))
         
 
     def drawRobo(self, Robo, br):
@@ -152,18 +153,55 @@ class SpielFeld(QWidget):
         br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                     (int(round(Robo.position.x())) + Robo.radius) + xPos, (int(round(Robo.position.y())) + Robo.radius) - yPos)
 
-        #draw FOV
-        if VISUALS:
-            br.setPen(QColor(255,255,255))
-            xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
-            yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
-            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
-                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
-            xPos = math.cos(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
-            yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
-            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
-                        (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+    def FOV(self, Robo):
+        view = QPainterPath()
 
+        xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV / 2))) * Robo.radius
+        yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV / 2))) * Robo.radius
+
+        xPos2 = math.cos(math.radians(Robo.alpha - (Robo.FOV / 2))) * Robo.radius
+        yPos2 = math.sin(math.radians(Robo.alpha - (Robo.FOV / 2))) * Robo.radius
+
+        x1 = QPoint(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius)
+        x2 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos)
+        x3 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos2, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos2)
+
+        view.addPolygon(QPolygonF([x1, x2, x3]))
+        view.closeSubpath()
+
+        return view    
+    
+    
+    def SightingData(self, robo):
+
+        viewPanel = self.FOV(robo)
+
+        ids = []
+
+        # seeing other robots in FOV
+        for x in self.robots:
+            if robo != x:
+                if viewPanel.intersects(x.roboShape()):
+                    ids.append(x.robotid)
+                    #print(robo.robotid, ids)
+                else:
+                    robo.ViewList[x.robotid][3] = False
+
+        # update ViewList
+        for id in ids:
+            for robot in self.robots:
+
+                if robot.robotid == id and (robo.position - robot.position).length() < 200:
+                    viewedRobo = robot.robotid
+                    distance = (robo.position - robot.position).length()
+                    viewedDirection = robot.alpha
+                    seen = True
+
+                    toUpDate = {viewedRobo: [robot.position, distance, viewedDirection, seen]}
+
+                    robo.ViewList.update(toUpDate)
+                    #print(robo.robotid, robo.ViewList)    
+                    
             
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
