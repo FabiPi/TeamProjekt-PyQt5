@@ -582,6 +582,35 @@ class SpielFeld(QWidget):
                 robot.a =0
                 robot.a_alpha =0
                 robot.v_alpha = 0
+ 
+
+
+
+#####  BULLET   ######
+
+BULLET_SIZE = 10
+
+class Bullet(threading.Thread):
+        def __init__(self, position, alpha):
+            threading.Thread.__init__(self)
+            self.position = position
+            self.alpha = alpha
+
+# Funktion | Zeichnen von Bullet #
+        def drawBullet(self, Bullet, br):
+            br.setBrush(YELLOW)
+            br.setPen(QColor(0,0,0))
+            br.drawEllipse(int(round(bullet.position.x())), int(round(bullet.position.y())) , BULLET_SIZE, BULLET_SIZE)
+
+            # Gleiche Funkt. aus DrawRobo (mögl. Refactoring?)
+            xPos = math.cos(math.radians(Robo.alpha))
+            yPos = math.sin(math.radians(Robo.alpha))
+
+# TODO: If Robo1-Blickwinkel intersects Robo2-Position ==> drawBullet
+                                                            # and move it with constant alpha and speed [While (CheckIfBulletOutOfSpielFeld) do moveBullet)
+    
+    
+######################
 
 
 if __name__ == '__main__':
