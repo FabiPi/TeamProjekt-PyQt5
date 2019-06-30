@@ -105,6 +105,21 @@ class Robot(object):
 
         return shape
     
+    def moveChase(self, tarAlpha):
+        target_alpha = tarAlpha
+
+        if 0 + self.alpha < target_alpha <= 180 + self.alpha:
+            # turn left
+            self.a_alpha = 0.5
+        elif self.alpha == target_alpha:
+            # keep straight
+            self.a_alpha = 0
+            self.v_alpha = 0
+        else:
+            # turn right
+            self.a_alpha = -0.5
+
+
     def aimTarget(self, target):
         target_x = target.x()
         target_y = target.y()
@@ -112,21 +127,13 @@ class Robot(object):
         pos_x = self.position.x()
         pos_y = self.position.y()
 
+
         #Berechnung Blickrichtung
         delta_x = target_x - pos_x
         delta_y = target_y - pos_y
         target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
 
-        if 0 + self.alpha < target_alpha <= 180 + self.alpha:
-            #turn left
-            self.a_alpha =0.5
-        elif self.alpha == target_alpha:
-            #keep straight
-            self.a_alpha = 0
-            self.v_alpha = 0
-        else:
-            #turn right
-            self.a_alpha =-0.5
+        self.moveChase(target_alpha)
 
         #self.alpha = target_alpha
 
@@ -139,7 +146,8 @@ class Robot(object):
             return True
         else:
             return False
-        
+
+
     def aimTargetView(self, target):
         # who is my target
         target_id = target
@@ -150,21 +158,13 @@ class Robot(object):
             # Yes, chase him
             target_alpha = self.ViewList[target_id][2]
 
-            if 0 + self.alpha < target_alpha <= 180 + self.alpha:
-                # turn left
-                self.a_alpha = 0.5
-            elif self.alpha == target_alpha:
-                # keep straight
-                self.a_alpha = 0
-                self.v_alpha = 0
-            else:
-                # turn right
-                self.a_alpha = -0.5
+            self.moveChase(target_alpha)
 
         # no, turn around and wait
         else:
             self.v = 0
             self.a_alpha = 2
+
             
 
 class RobotControl(QThread):
