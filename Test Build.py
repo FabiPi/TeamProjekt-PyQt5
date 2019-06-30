@@ -48,11 +48,11 @@ class BaseRobot(threading.Thread):
         self.v_alpha = 0
         self.a = 0
         self.a_alpha= 0
-                            # Position, Distanz zueinander, Blickwinkel
-        self.RobotList = {1 : [ QVector2D(0,0), 0, 0],
-                          2 : [ QVector2D(0,0), 0, 0],
-                          3 : [ QVector2D(0,0), 0, 0],
-                          4 : [ QVector2D(0,0), 0, 0]}
+                            # Position, Distanz zueinander, Blickwinkel, seen
+        self.RobotList = {1 : [ QVector2D(0,0), 0, 0, False],
+                          2 : [ QVector2D(0,0), 0, 0, False],
+                          3 : [ QVector2D(0,0), 0, 0, False],
+                          4 : [ QVector2D(0,0), 0, 0, False]}
 
 
 
@@ -371,7 +371,6 @@ class SpielFeld(QWidget):
             self.drawRobo(robot,qp)
             qp.drawPath(self.FOV(robot))
 
-
     def newData(self, robo):
 
         viewPanel = self.FOV(robo)
@@ -382,20 +381,23 @@ class SpielFeld(QWidget):
         for x in self.robots:
             if viewPanel.intersects(x.roboShape()):
                 ids.append(x.robotid)
-                #print(ids)
+                #print(robo, ids)
 
         # update RoboList
         for id in ids:
+
             for robot in self.robots:
 
                 if robot.robotid == id:
                     viewedRobo = robot.robotid
                     distance = (robo.position - robot.position).length()
                     viewedDirection = robot.alpha
+                    seen = True
 
-                    toUpDate = {viewedRobo: [robot.position, distance, viewedDirection ]}
+                    toUpDate = {viewedRobo: [robot.position, distance, viewedDirection, seen]}
 
                     robo.RobotList.update(toUpDate)
+                    #print(robo.robotid, robo.RobotList)
 
 
     def drawRobo(self, Robo, br):
