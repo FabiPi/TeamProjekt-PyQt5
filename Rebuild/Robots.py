@@ -12,7 +12,7 @@ RobotLists und stuff
 """
 
 
-from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap
+from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
 from PyQt5.QtCore import Qt, QBasicTimer, QThread
 import sys
 import math
