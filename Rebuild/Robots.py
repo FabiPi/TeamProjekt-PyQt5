@@ -164,8 +164,29 @@ class Robot(object):
         else:
             self.v = 0
             self.a_alpha = 2
-
             
+    def aimTargetIntelligent(self, target, chaserFriend):
+
+        # who is my target
+        target_id = target
+        chaser_id = chaserFriend
+
+        # is my target in my FOV?
+        if self.ViewList[target_id][3]:
+            # yes, chase him
+            target_alpha = self.ViewList[target_id][2]
+            self.moveChase(target_alpha)
+
+        # no, follow different chaser, maybe they saw him
+        elif self.ViewList[chaser_id][3]:
+            chaser_alpha = self.ViewList[chaser_id][2]
+            self.moveChase(chaser_alpha)
+
+        # no, wait around
+        else:
+            self.v = 0
+            self.a_alpha = 2   
+      
 
 class RobotControl(QThread):
 
@@ -213,5 +234,13 @@ class TargetChase3(RobotControl):
             self.msleep(100)
             
 
+class TargetChase4(RobotControl):
+    def run(self):
+        self.robot.a = 1
 
+        while True:
+            target = 1
+            chaserFriend = 2
+            self.robot.aimTargetIntelligent(target, chaserFriend)
+            self.msleep(100)
     
