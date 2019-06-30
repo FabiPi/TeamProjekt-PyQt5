@@ -612,8 +612,7 @@ class Bullet(threading.Thread):
             yPos = math.sin(math.radians(Robo.alpha))
 
 # TODO: If Robo1-Blickwinkel intersects Robo2-Position ==> drawBullet
-                                                            # and move it with constant alpha and speed [While (CheckIfBulletOutOfSpielFeld) do moveBullet)
-    
+                                                            # and move it with constant Robo.alpha and Robo.speed [While (CheckIfBulletOutOfSpielFeld = FALSE) do moveBullet)
     
 ######################
 
