@@ -38,6 +38,13 @@ class Robot(object):
                           2 : QVector2D(0,0),
                           3 : QVector2D(0,0),
                           4 : QVector2D(0,0)}
+        
+                # for FOV
+                            # Position, Distanz zueinander, Blickwinkel, seen
+        self.ViewList = {1 : [ QVector2D(0,0), 0, 0, False],
+                         2 : [ QVector2D(0,0), 0, 0, False],
+                         3 : [ QVector2D(0,0), 0, 0, False],
+                         4 : [ QVector2D(0,0), 0, 0, False]}
         self.FOV = FOV
 
         self.a = 0        
@@ -91,7 +98,13 @@ class Robot(object):
     def get_a_alpha_max(self):
         return self.a_alpha_max
 
+        # for the FOV
+    def roboShape(self):
+        shape = QPainterPath()
+        shape.addEllipse(int(round(self.position.x())), int(round(self.position.y())), self.radius, self.radius)
 
+        return shape
+    
     def aimTarget(self, target):
         target_x = target.x()
         target_y = target.y()
