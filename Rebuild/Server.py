@@ -25,7 +25,6 @@ DARKBLUE = QColor(0, 0, 250)
 LIGHTBLUE = QColor(0, 145, 250)
 ORANGE = QColor(245, 120, 0)
 
-VISUALS =  True
 
 class SpielFeld(QWidget):
 
