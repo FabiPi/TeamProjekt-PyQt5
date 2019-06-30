@@ -49,11 +49,13 @@ class SpielFeld(QWidget):
 
         Robot1.setProgram(Robots.TargetChase(Robot1))
         Robot2.setProgram(Robots.TargetChase2(Robot2))
+        Robot3.setProgram(Robots.TargetChase2(Robot3))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
         
         Robot1.executeProgram()
         Robot2.executeProgram()
+        Robot3.executeProgram()
 
         self.timer = QBasicTimer()
         self.timer.start(FPS, self)
