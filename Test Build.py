@@ -370,7 +370,7 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.drawRobo(robot,qp)
             qp.drawPath(self.FOV(robot))
-
+            
     def newData(self, robo):
 
         viewPanel = self.FOV(robo)
@@ -379,13 +379,16 @@ class SpielFeld(QWidget):
 
         # seeing other robots in FOV
         for x in self.robots:
-            if viewPanel.intersects(x.roboShape()):
-                ids.append(x.robotid)
-                #print(robo, ids)
+            if robo != x:
+                if viewPanel.intersects(x.roboShape()):
+                    ids.append(x.robotid)
+                    print(robo.robotid, ids)
+                else:
+                    # not seen robots
+                    robo.RobotList[x.robotid][3] = False
 
         # update RoboList
         for id in ids:
-
             for robot in self.robots:
 
                 if robot.robotid == id:
