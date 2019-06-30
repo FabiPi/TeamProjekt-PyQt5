@@ -130,6 +130,8 @@ class SpielFeld(QWidget):
         # move robots on the game field
         for robot in self.robots:
             self.moveRobot(robot)
+            self.roboCollision(robot, self.robots[0])
+            self.SightingData(robot)
                 
         self.update()
 
@@ -247,6 +249,74 @@ class SpielFeld(QWidget):
 
         #berechne neue Position
         Robo.position.__iadd__(Robo.v_vector)
+        
+        
+    def distanceTwoPoints(self, x1, y1, x2, y2):
+        return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
+
+
+    def distance(self, robo1, robo2):
+        return self.distanceTwoPoints(int(round(robo1.position.x())) + robo1.radius,
+                                                  int(round(robo1.position.y()))+ robo1.radius,
+                                                  int(round(robo2.position.x())) + robo2.radius,
+                                                  int(round(robo2.position.y())) + robo2.radius)
+
+
+    def roboCollision(self, robo, target):
+        for robot in self.robots:
+            if robot != robo and robot != target and robo != target :
+                distance = self.distance(robot, robo)
+
+                if distance <= robot.radius + robo.radius :
+
+                    # with elastic collision, does not apply to the reality because of spin, friction etc.
+                    # our only concern is the mass of the robots
+                    # new velocity of robo1
+                    newVelX1 = (int(round(robo.v_vector.x())) * (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY1 = (int(round(robo.v_vector.y()))* (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    # new velocity of robo2
+                    newVelX2 = (int(round(robot.v_vector.x())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY2 = (int(round(robot.v_vector.y())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    newV_1 = QVector2D(newVelX1, newVelY1)
+                    newV_2 = QVector2D(newVelX2, newVelY2)
+
+                    robo.position.__iadd__(newV_1)
+
+                    robot.position.__iadd__(newV_2)
+
+            else: self.teleport(target, robo)
+
+
+
+    def teleport(self, target, robot):
+
+        MID = 500
+
+        if robot != target:
+            distance = self.distance(robot, target)
+
+            if distance <= target.radius + robot.radius:
+
+                if  int(round(target.position.x())) > MID and  int(round(target.position.y())) < MID:
+
+                    robot.position = QVector2D(100,850)
+
+                elif int(round(target.position.x())) > MID and int(round(target.position.y())) > MID:
+                    robot.position = QVector2D(100,100)
+
+                elif int(round(target.position.x())) < MID and int(round(target.position.y())) < MID:
+                    robot.position = QVector2D(850,850)
+
+
+                elif int(round(target.position.x())) < MID and int(round(target.position.y())) > MID:
+                    robot.position = QVector2D(850,100)
+     
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
