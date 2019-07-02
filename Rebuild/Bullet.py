@@ -9,23 +9,25 @@ import math
 import Server
 import Robots
 
-#####  BULLET   ######
-
-BULLET_SIZE = 10
-
+Bullet_Size = 10
+Bullet_Speed =5
 
 class Bullet(object):
-    def __init__(self, position, alpha, bulletspeed):
+    def __init__(self, position, velocity):
         self.position = position
-        self.alpha = alpha
-        self.bulletspeed = bulletspeed
+        self.velocity = velocity
 
-        # bulletstate:
-        # ready - is ready to fire
-        # fire - bullet is firing
-        # loading - bullet is not ready
-        self.bulletstate = "ready"
 
+    def drawBullet(self, br):
+        br.setBrush(QColor(255, 255, 250))
+        br.drawEllipse(self.position.x() - (0.5 * Bullet_Size),self.position.y() - (0.5 * Bullet_Size), Bullet_Size, Bullet_Size)
+
+    def moveBullet(self):
+        self.position.__iadd__(self.velocity)
+        
+        
+        
+'''
     # Funktion | Zeichnen von Bullet #
     def drawBullet(self, Bullet, br):
         br.setBrush(Server.colors["yellow"])
@@ -46,7 +48,7 @@ class Bullet(object):
 
         pass
 
-
+'''
 
 # TODO: If Robo1-Blickwinkel intersects Robo2-Position ==> drawBullet
 # and move it with constant Robo.alpha and Robo.speed [While (CheckIfBulletOutOfSpielFeld = FALSE) do moveBullet)
