@@ -305,3 +305,60 @@ class TargetChase4(RobotControl):
             chaserFriend = 2
             self.robot.aimTargetIntelligent(target, chaserFriend)
             self.msleep(100)
+            
+class CircleMap1(RobotControl):
+    def run(self):
+        self.robot.a = 1
+        targetnum = 0
+        while True:
+            if targetnum == 0:
+                target= QVector2D(950,950)
+            elif targetnum == 1:
+                target= QVector2D(950,50)
+            elif targetnum == 2:
+                target= QVector2D(50,50)
+            elif targetnum == 3:
+                target= QVector2D(50,950)
+                
+            if self.robot.inVicinity(target):
+                targetnum = (targetnum +1) % 4
+            self.robot.aimTarget(target)
+            self.msleep(100)
+
+class CircleMap2(RobotControl):
+    def run(self):
+        self.robot.a = 1
+        targetnum = 3
+        while True:
+            if targetnum == 0:
+                target= QVector2D(900,900)
+            elif targetnum == 1:
+                target= QVector2D(900,100)
+            elif targetnum == 2:
+                target= QVector2D(100,100)
+            elif targetnum == 3:
+                target= QVector2D(100,900)
+                
+            if self.robot.inVicinity(target):
+                targetnum = (targetnum +1) % 4
+            self.robot.aimTarget(target)
+            self.msleep(100)
+
+class CircleMap3(RobotControl):
+    def run(self):
+        self.robot.a = 1
+        targetnum = 2
+        while True:
+            if targetnum == 0:
+                target= QVector2D(900,900)
+            elif targetnum == 1:
+                target= QVector2D(900,100)
+            elif targetnum == 2:
+                target= QVector2D(100,100)
+            elif targetnum == 3:
+                target= QVector2D(100,900)
+                
+            if self.robot.inVicinity(target):
+                targetnum = (targetnum +1) % 4
+            self.robot.aimTarget(target)
+            self.msleep(100)
