@@ -147,7 +147,7 @@ class SpielFeld(QWidget):
         # move robots on the game field
         for robot in self.robots:
             self.moveRobot(robot)
-            #self.barrierCollision(robot)
+            self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
         for bul in SpielFeld.Bullets:
