@@ -117,8 +117,8 @@ class Robot(object):
             self.a_alpha = 0.5
         elif self.alpha == target_alpha:
             # keep straight
+            # not implemented
             self.a_alpha = 0
-            self.v_alpha = 0
         else:
             # turn right
             self.a_alpha = -0.5
