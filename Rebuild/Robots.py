@@ -20,6 +20,7 @@ import threading
 import time
 import Server
 import random
+import Bullet
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
