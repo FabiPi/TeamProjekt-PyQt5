@@ -27,7 +27,8 @@ colors = {
     "darkblue": QColor(0, 0, 250),
     "lightblue": QColor(0, 145, 250),
     "orange": QColor(245, 120, 0), 
-    "black": QColor(0,0,0)
+    "black": QColor(0,0,0),
+    "yellow": QColor(255,255,0)
 }
 
 class SpielFeld(QWidget):
