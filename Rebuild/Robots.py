@@ -203,6 +203,9 @@ class Robot(object):
         Vel = QVector2D(GesX,GesY)
         Vel.__iadd__(self.v_vector)
         Bullet1 = Bullet.Bullet(bulletpos, Vel)
+        print(Server.SpielFeld.Bullets)
+        Server.SpielFeld.Bullets.append(Bullet1)
+        print(Server.SpielFeld.Bullets)
         #TODO übergabe an serverliste
 
 """
