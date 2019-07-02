@@ -20,11 +20,15 @@ alpha_eps = 0.5
 vMax = 3
 v_alpha_Max = 3
 count = 0
-PINK =  QColor(255, 0, 250)
-DARKBLUE = QColor(0, 0, 250)
-LIGHTBLUE = QColor(0, 145, 250)
-ORANGE = QColor(245, 120, 0)
 
+# color library
+colors = {
+    "pink":     QColor(255, 0, 250),
+    "darkblue": QColor(0, 0, 250),
+    "lightblue": QColor(0, 145, 250),
+    "orange": QColor(245, 120, 0), 
+    "black": QColor(0,0,0)
+}
 
 class SpielFeld(QWidget):
 
@@ -40,10 +44,10 @@ class SpielFeld(QWidget):
         self.createBoard()
 
         #init Robots
-        Robot1 = Robots.Robot(1, QVector2D(50,110), 0, 2, 2, 15, 90, PINK)
-        Robot2 = Robots.Robot(2, QVector2D(500,500), 20, 2, 2, 15, 90, DARKBLUE)
-        Robot3 = Robots.Robot(3, QVector2D(400,460), 240, 2, 2, 15, 90, LIGHTBLUE)
-        Robot4 = Robots.Robot(4, QVector2D(360,260), 30, 2, 2, 15, 90, ORANGE)
+        Robot1 = Robots.Robot(1, QVector2D(50,110), 0, 2, 2, 15, 90, colors["pink"])
+        Robot2 = Robots.Robot(2, QVector2D(500,500), 20, 2, 2, 15, 90, colors["darkblue"])
+        Robot3 = Robots.Robot(3, QVector2D(400,460), 240, 2, 2, 15, 90, colors["lightblue"])
+        Robot4 = Robots.Robot(4, QVector2D(360,260), 30, 2, 2, 15, 90, colors["orange"])
 
 
         Robot1.setProgram(Robots.TargetChase(Robot1))
@@ -148,7 +152,7 @@ class SpielFeld(QWidget):
 
     def drawRobo(self, Robo, br):
         br.setBrush(Robo.color)
-        br.setPen(QColor(0,0,0))
+        br.setPen(colors["black"])
         br.drawEllipse(int(round(Robo.position.x())), int(round(Robo.position.y())) , 2* Robo.radius, 2*Robo.radius)
 
         # Berechnung der neuen xPos und yPos für die Blickausrichtung
