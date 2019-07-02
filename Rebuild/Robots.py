@@ -113,16 +113,22 @@ class Robot(object):
     def moveChase(self, tarAlpha):
         target_alpha = tarAlpha
 
-        if 0 + self.alpha < target_alpha <= 180 + self.alpha:
-            # turn left
-            self.a_alpha = 0.5
-        elif self.alpha == target_alpha:
-            # keep straight
-            # not implemented
-            self.a_alpha = 0
+        if target_alpha < 180:
+            if  target_alpha+180 < self.alpha or target_alpha > self.alpha:
+                # turn left
+                self.a_alpha = 0.5
+
+            else:
+                # turn right
+                self.a_alpha = -0.5
         else:
-            # turn right
-            self.a_alpha = -0.5
+            if  target_alpha > self.alpha >= ((target_alpha+180)% 360):
+                # turn left
+                self.a_alpha = 0.5
+
+            else:
+                # turn right
+                self.a_alpha = -0.5
 
 
     def aimTarget(self, target):
