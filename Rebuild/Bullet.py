@@ -8,6 +8,7 @@ from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPa
 import math
 import Server
 import Robots
+import Bullet
 
 Bullet_Size = 10
 Bullet_Speed =5
