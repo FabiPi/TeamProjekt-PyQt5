@@ -152,6 +152,8 @@ class SpielFeld(QWidget):
             self.SightingData(robot)
         for bul in SpielFeld.Bullets:
             bul.moveBullet()
+               if self.BulletBarrierCollision(bul):
+               SpielFeld.Bullets.remove(bul)
 
         self.update()
 
@@ -371,7 +373,24 @@ class SpielFeld(QWidget):
                 robo.position.__isub__(robo.v_vector)
                 robo.v_vector = QVector2D(0,0)
                 robo.a = 0
-                    
+                
+    def BulletBarrierCollision(self, bullet):
+        #Collision with Obstacles
+        PosX = int(round(bullet.position.x()/ 10))
+        PosY = int(round(bullet.position.y()/ 10))
+        #oben
+        if (SpielFeld.PlayFieldAR[PosX][PosY-1] == 1):
+            return True
+        #unten
+        if (SpielFeld.PlayFieldAR[PosX][PosY + 1] == 1):
+            return True
+        #links
+        if (SpielFeld.PlayFieldAR[PosX - 1][PosY] == 1):
+            return True
+        #rechts
+        if (SpielFeld.PlayFieldAR[PosX + 1][PosY] == 1):
+            return True
+        return False
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
