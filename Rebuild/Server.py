@@ -142,6 +142,7 @@ class SpielFeld(QWidget):
         # move robots on the game field
         for robot in self.robots:
             self.moveRobot(robot)
+            self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
 
@@ -334,6 +335,33 @@ class SpielFeld(QWidget):
                     robot.position = QVector2D(850,100)
 
 
+    def barrierCollision(self, robo):
+        #Collision with Obstacles
+        PosX = int(round(robo.position.x()/ 10))
+        PosY = int(round(robo.position.y()/ 10))
+        Rad = int(round((robo.radius *2)/10))
+        for i in range(0, Rad, 1):
+            #oben
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
+                robo.position.__isub__(robo.v_vector)
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
+                robo.position.__isub__(robo.v_vector)
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
+                robo.position.__isub__(robo.v_vector)
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
+                robo.position.__isub__(robo.v_vector)
+                robo.v_vector = QVector2D(0,0)
+                robo.a = 0
+                    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
