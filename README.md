@@ -1,3 +1,17 @@
+## Einbauen der Bullet Class
+**Bullet**
+```python
+```
+
+**Bullet List**
+```python
+```
+
+**Roboter-Chase**
+```python
+```
+
+
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
 Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
