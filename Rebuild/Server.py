@@ -4,8 +4,8 @@ von B-Dome, JangJang3, FabiPi
 """
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
-from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
-from PyQt5.QtCore import Qt, QBasicTimer
+from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint
 import sys
 import math
 import threading
@@ -26,20 +26,25 @@ colors = {
     "pink":     QColor(255, 0, 250),
     "darkblue": QColor(0, 0, 250),
     "lightblue": QColor(0, 145, 250),
-    "orange": QColor(245, 120, 0), 
+    "orange": QColor(245, 120, 0),
     "black": QColor(0,0,0),
     "yellow": QColor(255,255,0)
 }
+
+
+
+VISUALS =  True
 
 class SpielFeld(QWidget):
 
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
+    BarrierList = []
 
 
     def __init__(self):
         super().__init__()
-        
+
         self.wallTexture = QPixmap('textures/wall.png')
         self.floorTexture = QPixmap('textures/floor.png')
         self.createBoard()
@@ -57,7 +62,7 @@ class SpielFeld(QWidget):
         Robot4.setProgram(Robots.TargetChase4(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
-        
+
         Robot1.executeProgram()
         Robot2.executeProgram()
         Robot3.executeProgram()
@@ -66,7 +71,7 @@ class SpielFeld(QWidget):
         self.timer = QBasicTimer()
         self.timer.start(FPS, self)
         self.tickCount = 0
-        
+
         self.initUI()
 
     def initUI(self):
@@ -75,17 +80,19 @@ class SpielFeld(QWidget):
         self.center()
 
 
-        
+
         self.show()
 
+
+
     def createBoard(self):
-        
+
         #set Walls, set array value to 1 to place Wall
         #set Wall around the edges
 
-        SpielFeld.PlayFieldAR[90][90] = 1
-        SpielFeld.PlayFieldAR[10][10] = 1
-        
+        #SpielFeld.PlayFieldAR[90][90] = 1
+        #SpielFeld.PlayFieldAR[10][10] = 1
+
         for x in range(0,100,1):
             SpielFeld.PlayFieldAR[x][0]= 1
             SpielFeld.PlayFieldAR[x][99]= 1
@@ -127,7 +134,7 @@ class SpielFeld(QWidget):
         self.tickCount += 1
 
         #update RobotLists of each Robot
-        if self.tickCount % 10 == 0:
+        if self.tickCount % 5 == 0:
             for y in self.robots:
                 for x in self.robots:
                     y.RobotList[x.robotid] = x.position
@@ -137,7 +144,7 @@ class SpielFeld(QWidget):
             self.moveRobot(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
-                
+
         self.update()
 
     def paintEvent(self, qp):
@@ -148,8 +155,8 @@ class SpielFeld(QWidget):
         # draw Robots on the game field
         for robot in self.robots:
             self.drawRobo(robot,qp)
-            qp.drawPath(self.FOV(robot))
-        
+            #qp.drawPath(self.FOV(robot))
+
 
     def drawRobo(self, Robo, br):
         br.setBrush(Robo.color)
@@ -162,6 +169,7 @@ class SpielFeld(QWidget):
 
         br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
                     (int(round(Robo.position.x())) + Robo.radius) + xPos, (int(round(Robo.position.y())) + Robo.radius) - yPos)
+
 
     def FOV(self, Robo):
         view = QPainterPath()
@@ -179,9 +187,8 @@ class SpielFeld(QWidget):
         view.addPolygon(QPolygonF([x1, x2, x3]))
         view.closeSubpath()
 
-        return view    
-    
-    
+        return view
+
     def SightingData(self, robo):
 
         viewPanel = self.FOV(robo)
@@ -201,7 +208,7 @@ class SpielFeld(QWidget):
         for id in ids:
             for robot in self.robots:
 
-                if robot.robotid == id and (robo.position - robot.position).length() < 200:
+                if robot.robotid == id and (robo.position - robot.position).length() < 400:
                     viewedRobo = robot.robotid
                     distance = (robo.position - robot.position).length()
                     viewedDirection = robot.alpha
@@ -210,9 +217,9 @@ class SpielFeld(QWidget):
                     toUpDate = {viewedRobo: [robot.position, distance, viewedDirection, seen]}
 
                     robo.ViewList.update(toUpDate)
-                    #print(robo.robotid, robo.ViewList)    
-                    
-            
+                    #print(robo.robotid, robo.ViewList)
+
+
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
         #Draw the PlayField
@@ -220,6 +227,7 @@ class SpielFeld(QWidget):
             for j in range(0, 100, 1):
                     if SpielFeld.PlayFieldAR[i][j]==1:
                         texture = self.wallTexture
+                        self.BarrierList.append(texture)
                     else:
                         texture = self.floorTexture
                     qp.drawPixmap(i*10, j*10, texture)
@@ -236,7 +244,7 @@ class SpielFeld(QWidget):
 
         #Neue Richtung
         Robo.alpha = (Robo.alpha + Robo.v_alpha) % 360
-        
+
         #berechne geschwindigkeit
         if (Robo.v + Robo.a) <= -vMax:
             Robo.v = -vMax
@@ -254,8 +262,8 @@ class SpielFeld(QWidget):
 
         #berechne neue Position
         Robo.position.__iadd__(Robo.v_vector)
-        
-        
+
+
     def distanceTwoPoints(self, x1, y1, x2, y2):
         return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
 
@@ -290,10 +298,13 @@ class SpielFeld(QWidget):
 
                     newV_1 = QVector2D(newVelX1, newVelY1)
                     newV_2 = QVector2D(newVelX2, newVelY2)
+                    
+                    
 
                     robo.position.__iadd__(newV_1)
 
                     robot.position.__iadd__(newV_2)
+
 
             else: self.teleport(target, robo)
 
@@ -321,7 +332,8 @@ class SpielFeld(QWidget):
 
                 elif int(round(target.position.x())) < MID and int(round(target.position.y())) > MID:
                     robot.position = QVector2D(850,100)
-     
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
