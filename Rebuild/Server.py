@@ -54,6 +54,8 @@ class SpielFeld(QWidget):
         Robot2 = Robots.Robot(2, QVector2D(500,500), 20, 2, 2, 15, 90, colors["darkblue"])
         Robot3 = Robots.Robot(3, QVector2D(400,460), 240, 2, 2, 15, 90, colors["lightblue"])
         Robot4 = Robots.Robot(4, QVector2D(360,260), 30, 2, 2, 15, 90, colors["orange"])
+        #test
+        Bullet1 = Bullet.Bullet(QVector2D(50,50), QVector2D(1,1))
 
 
         Robot1.setProgram(Robots.TargetChase(Robot1))
@@ -62,6 +64,8 @@ class SpielFeld(QWidget):
         Robot4.setProgram(Robots.TargetChase4(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
+        self.bullets = []
+        self.bullets.append(Bullet1)
 
         Robot1.executeProgram()
         Robot2.executeProgram()
@@ -145,6 +149,8 @@ class SpielFeld(QWidget):
             #self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
+        for bul in self.bullets:
+            bul.moveBullet()
 
         self.update()
 
@@ -157,6 +163,9 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.drawRobo(robot,qp)
             #qp.drawPath(self.FOV(robot))
+        for bul in self.bullets:
+            bul.drawBullet(qp)
+
 
 
     def drawRobo(self, Robo, br):
