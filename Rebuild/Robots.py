@@ -193,6 +193,16 @@ class Robot(object):
 
             # or walk around
             # self.aimTarget(self.findTarget_pos())
+            
+    def shoot(self):
+        bulletpos = self.position
+        #velocity based on angle
+        GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
+        GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
+        Vel = QVector2D(GesX,GesY)
+        Vel.__iadd__(self.v_vector)
+        Bullet1 = Bullet.Bullet(bulletpos, Vel)
+        #TODO übergabe an serverliste
 
 """
 
