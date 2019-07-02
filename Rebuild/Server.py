@@ -41,6 +41,7 @@ class SpielFeld(QWidget):
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
     BarrierList = []
+    Bullets = [Bullet.Bullet(QVector2D(30,30), QVector2D(1,1))]
 
 
     def __init__(self):
@@ -65,8 +66,7 @@ class SpielFeld(QWidget):
         Robot4.setProgram(Robots.TargetChase4(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
-        self.bullets = []
-        self.bullets.append(Bullet1)
+        SpielFeld.Bullets.append(Bullet1)
 
         Robot1.executeProgram()
         Robot2.executeProgram()
@@ -150,7 +150,7 @@ class SpielFeld(QWidget):
             #self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
-        for bul in self.bullets:
+        for bul in SpielFeld.Bullets:
             bul.moveBullet()
 
         self.update()
@@ -164,7 +164,7 @@ class SpielFeld(QWidget):
         for robot in self.robots:
             self.drawRobo(robot,qp)
             #qp.drawPath(self.FOV(robot))
-        for bul in self.bullets:
+        for bul in SpielFeld.Bullets:
             bul.drawBullet(qp)
 
 
