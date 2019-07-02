@@ -19,7 +19,7 @@ import math
 import threading
 import time
 import Server
-
+import random
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
@@ -28,18 +28,19 @@ v_alpha_Max = 10 #max alpha velocity
 
 class Robot(object):
     def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, color):
-        
+
         self.robotid = robotid
         self.position = position
         self.alpha = alpha % 360
         self.radius = radius
+        self.mass = radius ** 2
         self.color = color
         self.RobotList = {1 : QVector2D(0,0),
                           2 : QVector2D(0,0),
                           3 : QVector2D(0,0),
                           4 : QVector2D(0,0)}
-        
-                # for FOV
+
+        # for FOV
                             # Position, Distanz zueinander, Blickwinkel, seen
         self.ViewList = {1 : [ QVector2D(0,0), 0, 0, False],
                          2 : [ QVector2D(0,0), 0, 0, False],
@@ -47,7 +48,7 @@ class Robot(object):
                          4 : [ QVector2D(0,0), 0, 0, False]}
         self.FOV = FOV
 
-        self.a = 0        
+        self.a = 0
         self.a_max = a_max
         self.a_alpha= 0
         self.a_alpha_max = a_alpha_max
@@ -56,7 +57,7 @@ class Robot(object):
         self.v_alpha = 0
         self.v = 0
 
-    #Methods for Robot Controll 
+    #Methods for Robot Controll
     def setProgram(self, program):
         self.program = program
 
@@ -73,16 +74,16 @@ class Robot(object):
 
     def get_xPos(self):
         return self.position.x()
-    
+
     def get_yPos(self):
         return self.position.y()
-    
+
     def get_alpha(self):
         return self.alpha
-    
+
     def get_List(self):
         return self.RobotList
-    
+
     def get_v_Vector(self):
         return self.v_vector
 
@@ -98,13 +99,16 @@ class Robot(object):
     def get_a_alpha_max(self):
         return self.a_alpha_max
 
-        # for the FOV
-    def roboShape(self):
+    # for the FOV
+    def roundshape(self, position, r ):
         shape = QPainterPath()
-        shape.addEllipse(int(round(self.position.x())), int(round(self.position.y())), self.radius, self.radius)
-
+        shape.addEllipse(int(round(position.x())), int(round(position.y())), r, r)
         return shape
-    
+
+    def roboShape(self):
+        return self.roundshape(self.position, self.radius)
+
+
     def moveChase(self, tarAlpha):
         target_alpha = tarAlpha
 
@@ -164,7 +168,7 @@ class Robot(object):
         else:
             self.v = 0
             self.a_alpha = 2
-            
+
     def aimTargetIntelligent(self, target, chaserFriend):
 
         # who is my target
@@ -182,11 +186,34 @@ class Robot(object):
             chaser_alpha = self.ViewList[chaser_id][2]
             self.moveChase(chaser_alpha)
 
-        # no, wait around
+        # no, look around
         else:
             self.v = 0
-            self.a_alpha = 2   
-      
+            self.a_alpha = 2
+
+            # or walk around
+            # self.aimTarget(self.findTarget_pos())
+
+"""
+
+    def findTarget_pos(self):
+
+        start_x = random.randint(10, 990)
+        start_y = random.randint(10, 990)
+
+        start_coord = QVector2D(start_x, start_y)
+
+        # new position not in a barrier
+        if start_coord not in Server.SpielFeld.BarrierList and start_coord not in self.RobotList.values() and start_coord not in self.ViewList.values():
+            return start_coord
+        else:
+            self.findTarget_pos()
+
+"""
+
+
+
+
 
 class RobotControl(QThread):
 
@@ -194,9 +221,10 @@ class RobotControl(QThread):
         super().__init__()
         self.robot = robot
         threading.Thread.__init__(self)
-    
+
 
 #Roboter Steuerung
+
 class TargetChase(RobotControl):
 
     def run(self):
@@ -209,8 +237,21 @@ class TargetChase(RobotControl):
                 target = QVector2D(900,900)
             self.robot.inVicinity(target)
             self.robot.aimTarget(target)
+            self.robot.aimTarget(target)
             self.msleep(100)
 
+"""
+# idee for random movement Runner
+class TargetChase(RobotControl):
+
+    def run(self):
+        self.robot.a = 1
+        while True:
+            target = self.robot.findTarget_pos()
+            self.robot.aimTarget(target)
+            self.msleep(100)
+
+"""
 
 class TargetChase2(RobotControl):
 
@@ -221,8 +262,8 @@ class TargetChase2(RobotControl):
             self.robot.inVicinity(target)
             self.robot.aimTarget(target)
             self.msleep(100)
-    
-            
+
+
 class TargetChase3(RobotControl):
 
     def run(self):
@@ -232,15 +273,15 @@ class TargetChase3(RobotControl):
             target = 1
             self.robot.aimTargetView(target)
             self.msleep(100)
-            
+
+
 
 class TargetChase4(RobotControl):
     def run(self):
         self.robot.a = 1
 
         while True:
-            target = 1
+            target = 3
             chaserFriend = 2
             self.robot.aimTargetIntelligent(target, chaserFriend)
             self.msleep(100)
-    
