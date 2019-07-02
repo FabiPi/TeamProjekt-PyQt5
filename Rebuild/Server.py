@@ -52,18 +52,18 @@ class SpielFeld(QWidget):
         self.createBoard()
 
         #init Robots
-        Robot1 = Robots.Robot(1, QVector2D(50,110), 0, 2, 2, 15, 90, colors["pink"])
-        Robot2 = Robots.Robot(2, QVector2D(500,500), 20, 2, 2, 15, 90, colors["darkblue"])
-        Robot3 = Robots.Robot(3, QVector2D(400,460), 240, 2, 2, 15, 90, colors["lightblue"])
-        Robot4 = Robots.Robot(4, QVector2D(360,260), 30, 2, 2, 15, 90, colors["orange"])
+        Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, colors["pink"])
+        Robot2 = Robots.Robot(2, QVector2D(100,900), 10, 2, 2, 15, 90, colors["darkblue"])
+        Robot3 = Robots.Robot(3, QVector2D(50,50), 270, 2, 2, 15, 90, colors["lightblue"])
+        Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, colors["orange"])
         #test
         Bullet1 = Bullet.Bullet(QVector2D(50,50), QVector2D(1,1))
 
 
         Robot1.setProgram(Robots.TargetChase(Robot1))
-        Robot2.setProgram(Robots.TargetChase2(Robot2))
-        Robot3.setProgram(Robots.TargetChase3(Robot3))
-        Robot4.setProgram(Robots.TargetChase4(Robot4))
+        Robot2.setProgram(Robots.CircleMap1(Robot2))
+        Robot3.setProgram(Robots.CircleMap2(Robot3))
+        Robot4.setProgram(Robots.CircleMap3(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
         SpielFeld.Bullets.append(Bullet1)
