@@ -1,12 +1,14 @@
 ## Einbauen der Bullet Class
+**Code Refactoring**
+Da die Menge an Elementen stark angestiegen ist, haben wir uns entschieden die Robos, den Server und dazu auch die Bullet-Klasse in separate .py Files zu packen, um Sachen zu veranschaulichen.
 **Bullet**
 ```python
 ```
-
+In der Bullet-Klasse befinden sich alle wichtigen Methoden, die zum Zeichnen und Bewegen des Bullets nötig sind.  Da die Wirkungsweise fast identisch zu den Robo-Methoden ist, haben wir eine ähnliche Struktur verwendet, die sich nur in Parametern und Vorbedingungen unterscheidet. Die Kugel wird mit der Geschwindigkeit und Winkel des Robos abgeschossen (danach konstant).
 **Bullet List**
 ```python
 ```
-
+Um zu verfolgen welche Bullets sich gerade auf dem Spielfeld befinden, erstellen wir eine Liste, die alle Bulletinformationen abspeichert. Wenn eine Bullet im Spielfeld abgefeuert wird, wird diese in die Liste appended. Trifft eine Bullet einen anderen Robo oder eine Wand, so verschwindet die und wird auch aus der Liste gelöscht.
 **Roboter-Chase**
 ```python
 ```
