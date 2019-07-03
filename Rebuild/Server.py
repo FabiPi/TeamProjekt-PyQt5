@@ -146,6 +146,7 @@ class SpielFeld(QWidget):
 
         # move robots on the game field
         for robot in self.robots:
+            self.fetchBullets(robot)
             self.moveRobot(robot)
             self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
@@ -157,6 +158,11 @@ class SpielFeld(QWidget):
 
         self.update()
 
+    def fetchBullets(self,Robot):
+        SpielFeld.Bullets.extend(Robot.BulList)
+        #print(SpielFeld.Bullets)
+        Robot.BulList.clear()
+        
     def paintEvent(self, qp):
 
         qp = QPainter()
