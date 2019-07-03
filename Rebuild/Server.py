@@ -159,6 +159,7 @@ class SpielFeld(QWidget):
                 if bul.one_hit(robot):
                     # change color after hit (test)
                     robot.color = colors["yellow"]
+                    SpielFeld.Bullets.remove(bul)
         self.update()
 
     def fetchBullets(self,Robot):
