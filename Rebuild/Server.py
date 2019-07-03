@@ -41,7 +41,7 @@ class SpielFeld(QWidget):
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
     BarrierList = []
-    Bullets = [Bullet.Bullet(QVector2D(30,30), QVector2D(1,1))]
+    Bullets = []
 
 
     def __init__(self):
@@ -56,8 +56,6 @@ class SpielFeld(QWidget):
         Robot2 = Robots.Robot(2, QVector2D(100,900), 10, 2, 2, 15, 90, colors["darkblue"])
         Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, colors["lightblue"])
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, colors["orange"])
-        #test
-        Bullet1 = Bullet.Bullet(QVector2D(50,50), QVector2D(1,1))
 
 
         Robot1.setProgram(Robots.Hunter(Robot1))
@@ -66,7 +64,6 @@ class SpielFeld(QWidget):
         Robot4.setProgram(Robots.CircleMap3(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
-        SpielFeld.Bullets.append(Bullet1)
 
         Robot1.executeProgram()
         Robot2.executeProgram()
