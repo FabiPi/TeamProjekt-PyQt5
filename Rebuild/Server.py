@@ -52,7 +52,7 @@ class SpielFeld(QWidget):
         self.createBoard()
 
         #init Robots
-        Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, colors["pink"])
+        Robot1 = Robots.Robot(1, QVector2D(200,250), 290, 2, 2, 15, 90, colors["pink"])
         Robot2 = Robots.Robot(2, QVector2D(100,900), 10, 2, 2, 15, 90, colors["darkblue"])
         Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, colors["lightblue"])
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, colors["orange"])
