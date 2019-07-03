@@ -155,7 +155,10 @@ class SpielFeld(QWidget):
             bul.moveBullet()
             if self.BulletBarrierCollision(bul):
                SpielFeld.Bullets.remove(bul)
-
+            for robot in self.robots:
+                if bul.one_hit(robot):
+                    # change color after hit (test)
+                    robot.color = colors["yellow"]
         self.update()
 
     def fetchBullets(self,Robot):
