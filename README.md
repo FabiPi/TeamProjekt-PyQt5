@@ -88,13 +88,32 @@ class Robot(object):
 Um zu verfolgen welche Bullets sich gerade auf dem Spielfeld befinden, erstellen wir eine Liste, die alle Bulletinformationen abspeichert. Wenn eine Bullet im Spielfeld abgefeuert wird, wird diese in die Liste appended. Dazu verfügt jeder Roboter über eine eigene BulletList, welche in jedem Takt vom Server gefetched wird. Trifft eine Bullet einen anderen Robo oder eine Wand, so verschwindet die und wird auch aus der Liste gelöscht.<br/>
 ```python
     #in Timer
-        for bul in SpielFeld.Bullets:
-            bul.moveBullet()
-            if self.BulletBarrierCollision(bul):
-               SpielFeld.Bullets.remove(bul)
+            for bul in SpielFeld.Bullets:
+                bul.moveBullet()
+                if self.BulletBarrierCollision(bul):
+                    SpielFeld.Bullets.remove(bul)
+                elif bul.one_hit(robot):
+                    #robot.color = colors["yellow"]
+                    self.teleport_bullet(robot)
+                    SpielFeld.Bullets.remove(bul)
+```
+Wenn ein Bullet auf einen Roboter trifft, wird dieser Roboter auf eine andere Position transportiert und die Kugel von dem Spielfeld gelöscht. Mithilfe der Funktion on_hit() wird eine True oder ein False ausgegeben, dass anzeigt, ob eine Kugel auf dem Roboter trifft.
+
+```python
+
+    def one_hit(self, robo):
+        if self.bulletShape().intersects(robo.roboShape()):
+            return True
+        else: return False
+```
+Für den Anfang haben wir uns einen Teleportposition selbst ausgesucht, an denen die getroffenen Robotern spawnen.
+
+```python
+    def teleport_bullet(self, robo):
+        robo.position = QVector2D(100,850)
 ```
 
-Bullet Barrier Collision
+**<Bullet Barrier Collision**<br>
 
 ```python
     def BulletBarrierCollision(self, bullet):
