@@ -354,25 +354,26 @@ class SpielFeld(QWidget):
         Rad = int(round((robo.radius *2)/10))
         for i in range(0, Rad, 1):
             #oben
-            if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
-                robo.position.__isub__(robo.v_vector)
-                robo.v_vector = QVector2D(0,0)
-                robo.a = 0
+            if 0< PosX+i < 100 and 0 < PosY+i < 100:
+                if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
+                    robo.position.__isub__(robo.v_vector)
+                    robo.v_vector = QVector2D(0,0)
+                    robo.a = 0
             #unten
-            if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
-                robo.position.__isub__(robo.v_vector)
-                robo.v_vector = QVector2D(0,0)
-                robo.a = 0
+                if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
+                    robo.position.__isub__(robo.v_vector)
+                    robo.v_vector = QVector2D(0,0)
+                    robo.a = 0
             #links
-            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
-                robo.position.__isub__(robo.v_vector)
-                robo.v_vector = QVector2D(0,0)
-                robo.a = 0
+                if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
+                    robo.position.__isub__(robo.v_vector)
+                    robo.v_vector = QVector2D(0,0)
+                    robo.a = 0
             #rechts
-            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
-                robo.position.__isub__(robo.v_vector)
-                robo.v_vector = QVector2D(0,0)
-                robo.a = 0
+                if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
+                    robo.position.__isub__(robo.v_vector)
+                    robo.v_vector = QVector2D(0,0)
+                    robo.a = 0
                 
     def BulletBarrierCollision(self, bullet):
         #Collision with Obstacles
