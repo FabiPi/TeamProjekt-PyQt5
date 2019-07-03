@@ -26,6 +26,8 @@ import Bullet
 alpha_eps = 0.5 #velocity-stop breakpoint
 vMax = 5 #max velocity
 v_alpha_Max = 10 #max alpha velocity
+RELOAD_TIME = 100
+
 
 class Robot(object):
     def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, color):
@@ -203,24 +205,26 @@ class Robot(object):
             # self.aimTarget(self.findTarget_pos())
             
     def shoot(self):
-        #StartPosition sollte um ein Offset in Blickrichtung verschoben werden
-        bulletpos = QVector2D(self.position.x(),self.position.y())
-        #velocity based on angle
-        GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
-        GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
-        #set Bullet to middle of Robot
-        OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
-        bulletpos.__iadd__(OffsetVector)
-        #set bullet to edge in firing direction
-        OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 6)
-        OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 6)
-        OffsetVector = QVector2D(OffsetX,OffsetY)
-        bulletpos.__iadd__(OffsetVector)
-        Vel = QVector2D(GesX,GesY)
-        Vel.__iadd__(self.v_vector)
-        Bullet1 = Bullet.Bullet(bulletpos, Vel)
-        self.BulList.append(Bullet1)
-        #print(self.BulList)
+        if self.reload == 0:
+            #StartPosition sollte um ein Offset in Blickrichtung verschoben werden
+            bulletpos = QVector2D(self.position.x(),self.position.y())
+            #velocity based on angle
+            GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
+            GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
+            #set Bullet to middle of Robot
+            OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
+            bulletpos.__iadd__(OffsetVector)
+            #set bullet to edge in firing direction
+            OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 6)
+            OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 6)
+            OffsetVector = QVector2D(OffsetX,OffsetY)
+            bulletpos.__iadd__(OffsetVector)
+            Vel = QVector2D(GesX,GesY)
+            Vel.__iadd__(self.v_vector)
+            Bullet1 = Bullet.Bullet(bulletpos, Vel)
+            self.BulList.append(Bullet1)
+            self.reload = RELOAD_TIME
+            #print(self.BulList)
 
 """
 
@@ -318,7 +322,7 @@ class TargetChase4(RobotControl):
 class Hunter(RobotControl):
     def run(self):
         self.robot.a_alpha = 1
-        self.msleep(1000)
+        self.msleep(100)
         self.robot.shoot() 
             
             
