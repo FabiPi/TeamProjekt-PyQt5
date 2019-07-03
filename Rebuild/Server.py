@@ -156,7 +156,7 @@ class SpielFeld(QWidget):
                     SpielFeld.Bullets.remove(bul)
                 elif bul.one_hit(robot):
                     #robot.color = colors["yellow"]
-                    self.teleport_buellez(robot)
+                    self.teleport_bullet(robot)
                     SpielFeld.Bullets.remove(bul)
 
         self.update()
