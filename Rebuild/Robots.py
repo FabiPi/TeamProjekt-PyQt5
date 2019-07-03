@@ -323,9 +323,10 @@ class TargetChase4(RobotControl):
             
 class Hunter(RobotControl):
     def run(self):
-        self.robot.a_alpha = 1
-        self.msleep(100)
-        self.robot.shoot() 
+        while True:
+            self.robot.a_alpha = 1
+            self.msleep(100)
+            self.robot.shoot() 
             
             
 class CircleMap1(RobotControl):
