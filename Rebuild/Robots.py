@@ -208,12 +208,16 @@ class Robot(object):
         #velocity based on angle
         GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
         GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
-        OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 5)
-        OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 5)
+        #set Bullet to middle of Robot
+        OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
+        bulletpos.__iadd__(OffsetVector)
+        #set bullet to edge in firing direction
+        OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 6)
+        OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 6)
         OffsetVector = QVector2D(OffsetX,OffsetY)
+        bulletpos.__iadd__(OffsetVector)
         Vel = QVector2D(GesX,GesY)
         Vel.__iadd__(self.v_vector)
-        bulletpos.__iadd__(OffsetVector)
         Bullet1 = Bullet.Bullet(bulletpos, Vel)
         self.BulList.append(Bullet1)
         #print(self.BulList)
