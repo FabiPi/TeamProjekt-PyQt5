@@ -153,15 +153,15 @@ class SpielFeld(QWidget):
             self.SightingData(robot)
             self.reduceDelay(robot)
             
-        for bul in SpielFeld.Bullets:
-            bul.moveBullet()
-            if self.BulletBarrierCollision(bul):
-               SpielFeld.Bullets.remove(bul)
-            for robot in self.robots:
-                if bul.one_hit(robot):
-                    # change color after hit (test)
-                    robot.color = colors["yellow"]
+            for bul in SpielFeld.Bullets:
+                bul.moveBullet()
+                if self.BulletBarrierCollision(bul):
                     SpielFeld.Bullets.remove(bul)
+                elif bul.one_hit(robot):
+                    #robot.color = colors["yellow"]
+                    self.teleport_buellez(robot)
+                    SpielFeld.Bullets.remove(bul)
+
         self.update()
 
     def fetchBullets(self,Robot):
@@ -361,7 +361,9 @@ class SpielFeld(QWidget):
 
                 elif int(round(target.position.x())) < MID and int(round(target.position.y())) > MID:
                     robot.position = QVector2D(850,100)
-
+                    
+    def teleport_bullet(self, robo):
+        robo.position = QVector2D(100,850)  
 
     def barrierCollision(self, robo):
         #Collision with Obstacles
