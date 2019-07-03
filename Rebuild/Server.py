@@ -152,7 +152,7 @@ class SpielFeld(QWidget):
             self.SightingData(robot)
         for bul in SpielFeld.Bullets:
             bul.moveBullet()
-               if self.BulletBarrierCollision(bul):
+            if self.BulletBarrierCollision(bul):
                SpielFeld.Bullets.remove(bul)
 
         self.update()
