@@ -56,6 +56,8 @@ class Robot(object):
         self.a_max = a_max
         self.a_alpha= 0
         self.a_alpha_max = a_alpha_max
+        
+        self.reload = 0
 
         self.v_vector = QVector2D(0,0)
         self.v_alpha = 0
