@@ -40,6 +40,7 @@ class Robot(object):
                           2 : QVector2D(0,0),
                           3 : QVector2D(0,0),
                           4 : QVector2D(0,0)}
+        self.BulList= []
 
         # for FOV
                             # Position, Distanz zueinander, Blickwinkel, seen
@@ -202,17 +203,20 @@ class Robot(object):
             # self.aimTarget(self.findTarget_pos())
             
     def shoot(self):
-        bulletpos = self.position
+        #StartPosition sollte um ein Offset in Blickrichtung verschoben werden
+        bulletpos = QVector2D(self.position.x(),self.position.y())
         #velocity based on angle
         GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
         GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
+        OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 5)
+        OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 5)
+        OffsetVector = QVector2D(OffsetX,OffsetY)
         Vel = QVector2D(GesX,GesY)
         Vel.__iadd__(self.v_vector)
+        bulletpos.__iadd__(OffsetVector)
         Bullet1 = Bullet.Bullet(bulletpos, Vel)
-        print(Server.SpielFeld.Bullets)
-        Server.SpielFeld.Bullets.append(Bullet1)
-        print(Server.SpielFeld.Bullets)
-        #TODO übergabe an serverliste
+        self.BulList.append(Bullet1)
+        #print(self.BulList)
 
 """
 
@@ -310,9 +314,8 @@ class TargetChase4(RobotControl):
 class Hunter(RobotControl):
     def run(self):
         self.robot.a_alpha = 1
-        while True:
-            self.msleep(100)
-            #self.robot.shoot() 
+        self.msleep(1000)
+        self.robot.shoot() 
             
             
 class CircleMap1(RobotControl):
