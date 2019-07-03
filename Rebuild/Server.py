@@ -60,7 +60,7 @@ class SpielFeld(QWidget):
         Bullet1 = Bullet.Bullet(QVector2D(50,50), QVector2D(1,1))
 
 
-        Robot1.setProgram(Robots.TargetChase(Robot1))
+        Robot1.setProgram(Robots.Hunter(Robot1))
         Robot2.setProgram(Robots.CircleMap1(Robot2))
         Robot3.setProgram(Robots.CircleMap2(Robot3))
         Robot4.setProgram(Robots.CircleMap3(Robot4))
