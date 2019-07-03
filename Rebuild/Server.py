@@ -151,6 +151,8 @@ class SpielFeld(QWidget):
             self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
+            self.reduceDelay(robot)
+            
         for bul in SpielFeld.Bullets:
             bul.moveBullet()
             if self.BulletBarrierCollision(bul):
@@ -166,6 +168,10 @@ class SpielFeld(QWidget):
         SpielFeld.Bullets.extend(Robot.BulList)
         #print(SpielFeld.Bullets)
         Robot.BulList.clear()
+        
+    def reduceDelay(self,Robot):
+        if Robot.reload != 0:
+            Robot.reload -= 1
         
     def paintEvent(self, qp):
 
