@@ -324,8 +324,15 @@ class TargetChase4(RobotControl):
             
 class Hunter(RobotControl):
     def run(self):
-        while True:
+# TODO: While Bedingungen anpassen
+# Idee: deathTimer wird auf 1000 gesetzt und runtergezahlt. Wenn == 0 => Bewegung wieder frei
+        
+        ## Count-Death-Time ##
+        while deathtimer != 0:
+                deathtimer -= 1
 
+                ## Keyboard_Control ##                
+        while deathTimer == 0:
             if keyboard.is_pressed('w'):
                 print('W-Key')
                 self.robot.v += 0.05
@@ -345,6 +352,12 @@ class Hunter(RobotControl):
             if keyboard.is_pressed('j'):
                 print('J-Key')
                 self.robot.shoot()
+                
+
+            ## Death - Set deathTimer ##
+            ##      Check if Hit      ##
+            if bul.one_hit(self):
+                deathTimer = 1000
 
         
                     
