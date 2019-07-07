@@ -241,7 +241,7 @@ def distanceTwoPoints(self, x1, y1, x2, y2):
 ```
 Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
 
-**Teleport** </br>
+**Teleport**
 ```python             
     def teleport(self, target, robot):
 
@@ -269,7 +269,7 @@ Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Rob
 ```
 Hier werden die Roboter je nach auftreffen mit dem Target in eine bestimmte Position des Spielfelds teleportiert. Das Spielfeld wird dabei in 4 Quadranten unterteilt. Treffen sich Chaser und Target im Quadranten links unten, dann wird der Chaser in das Quadrant rechts oben teleportiert. Dabei wurden bestimmte Positionen in den jeweiligen Quadranten festgelegt.
 
-**Steuerungs Methoden** </br>
+**Steuerungs Methoden** 
 ```python             
  #brings Rotation to a halt
     def Stabilize(self):
@@ -292,7 +292,7 @@ Hier werden die Roboter je nach auftreffen mit dem Target in eine bestimmte Posi
 ```
 
 
-**Flüchtender Roboter** </br>
+**Flüchtender Roboter** 
 ```python             
 class RoboTypeRun(BaseRobot):  
     def run(self):
@@ -309,7 +309,7 @@ class RoboTypeRun(BaseRobot):
 ```
 **Die CheckChase Methode**
 
-Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss 
 ```python             
     def checkChase(self, ID):
         xEnemy = self.RobotList[ID].x()
@@ -385,7 +385,8 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
 ```
 
 **Die LookTarget Methode** 
-Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss 
 ```python             
     def lookTarget(self, ID):
         #Based on check Chase Method
@@ -449,7 +450,8 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
 
 ## Week 5 - Interaktionen zwischen Server und Roboterklasse
 
-**Collision** </br>
+**Collision** 
+
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
 Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
 
@@ -490,7 +492,8 @@ def moveAgain(self, robo):
 Nachdem der Robote ein obstacle wahrgenommen hat, wurde die Geschwindigkeit v auf null gesetzt. Um den Roboter wieder fahren zu lassen, aber wir eine einfache Funktion moveAgain() entworden, die bei einer Geschwindigkeit von null den Roboter um 180° drehen und langsam wieder an Geschwindigkeit zu nehmen soll.
 
 
-**Roboterkoordinaten senden** </br>
+**Roboterkoordinaten senden** 
+
 Der Timer zählt jeden Tick
 ```python
 def timerEvent(self, Event):
