@@ -704,7 +704,7 @@ class RoboType4(BaseRobot):
 ```
 
 
-## Roboter im Spielfeld
+## Week 3 - Roboter im Spielfeld
 **Erste Entwürfe des Spielfelds**
 
 Wir haben uns zuerst einmal damit beschäftigt das 1000x1000 Pixel große Spielfeld zu entwerfen.
@@ -732,7 +732,6 @@ Das Spielfeld wird über eine Schleife gezeichnet, welche erst in y und anschlie
                         qp.setBrush(QColor(150, 150, 150))
                         qp.drawRect(i*10, j*10, 10, 10)
 ```
-![Grid](/BlogIMG/02_Spielfeld_mit_outer_Ring.png)
 
 Im nächsten Schritt haben wir begonnen erste Hindernisse zu platzieren.
 
@@ -756,6 +755,7 @@ Das Spielfeld mit einer Wand zu umranden,
             PlayFieldAR[0][y]= 1
             PlayFieldAR[99][y]= 1
 ```
+![Grid](/BlogIMG/02_Spielfeld_mit_outer_Ring.png)
 
 und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
 
@@ -832,6 +832,7 @@ Für die selbständige Bewegung des Roboters im Feld haben wir dazu einen timer 
                 self.moveUp()
                 self.moveLeft()
 ```
+**Steuerung mit keypressEvent**
 Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die Tasten A und D führen hierbei Rotationsbewegen aus. Indem sie die Alpha-Werte des Roboters verändern und diese in den folgenden Methoden moveUp(), moveDown(), moveLeft() und moveRight() nutzen, bewegen sie den Robotor abhängig von dem veränderten Alpha-Wert in eine bestimmte Richtung. Dadurch sind dann auch 360° Bewegungen möglich.
 ```python
    def keyPressEvent(self, event):
@@ -933,7 +934,7 @@ def keyPressEvent(self, event):
 
 
 ## Week 2 - Chessboard 
-** drawBlock methode:**
+**drawBlock methode:**
 ```python
 def drawBlocks(self, qp):
 
