@@ -1,5 +1,5 @@
 
-## Einbauen der Bullet Class
+## Week 7 - Einbauen der Bullet Class
 
 **Code Refactoring**
 
