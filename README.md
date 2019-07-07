@@ -932,8 +932,8 @@ def keyPressEvent(self, event):
 ```
 
 
-## Chess.py
-**Full Code:**
+## Week 2 - Chessboard 
+** drawBlock methode:**
 ```python
 def drawBlocks(self, qp):
 
