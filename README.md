@@ -1,3 +1,4 @@
+
 ## Einbauen der Bullet Class
 **Code Refactoring**<br/>
 Da die Menge an Elementen stark angestiegen ist, haben wir uns entschieden die Robos, den Server und dazu auch die Bullet-Klasse in separate .py Files zu packen, um Sachen zu veranschaulichen.<br/>
@@ -135,6 +136,376 @@ Für den Anfang haben wir uns einen Teleportposition selbst ausgesucht, an denen
         return False
 ```
 
+=======
+## Week5 - Field of View der Roboter
+Wir haben uns zuerst entschieden unsere Code so zu ändern, so dass der Server den größeren Teil der Roboterbefehle übernimmt (Da vorher alles auf der Spielfeldklasse vorkam). Wir haben auch die X/Y Koordinaten der Roboter in QVector2D-Form gebracht.
+```python
+#Runner
+Robot1 = RoboTypeRun(1, QVector2D(50,110), 300, 2, 2, 15, 40 ,PINK)
+#Chasers
+Robot2 = RoboTypeChase1(2, QVector2D(70,200), 0, 2, 2, 15, 50,DARKBLUE)
+Robot3 = RoboTypeChase2(3, QVector2D(400,460), 240, 2, 2, 15, 60,LIGHTBLUE)
+Robot4 = RoboTypeChase3(4, QVector2D(400,430), 30, 2, 2, 15, 85,ORANGE)
+
+self.robots = [Robot1, Robot2, Robot3, Robot4]
+```
+Im Timer-Event werden die Parameter der Roboter jetzt in 10 Ticks auf diese Weise weitergegeben:
+```python
+if self.tickCount % 10 == 0:
+    for y in self.robots:
+        #print position List of Robots
+        #print(int(round(self.RobotList[robot.robotid].x())), '---', int(round(self.RobotList[robot.robotid].y())))
+        #robot.RoboList = self.RobotList.copy()
+        for x in self.robots:
+            y.RobotList[x.robotid] = x.position
+```
+Unsere Roboter werden durch ein Dictionary gekennzeichnet:
+```python
+self.RobotList = {1 : QVector2D(0,0),
+                  2 : QVector2D(0,0),
+                  3 : QVector2D(0,0),
+                  4 : QVector2D(0,0)}
+```
+Um das Sichtfeld besser darzustellen, haben wir in drawRobo die dazugehörigen Linien des FOV implementiert:
+```python
+#draw FOV
+        if VISUALS:
+            br.setPen(QColor(255,255,255))
+            xPos = math.cos(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha + (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                       (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+            xPos = math.cos(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            yPos = math.sin(math.radians(Robo.alpha - (Robo.FOV/2))) * Robo.radius
+            br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
+                       (int(round(Robo.position.x())) + Robo.radius) + 10*xPos, (int(round(Robo.position.y())) + Robo.radius) - 10*yPos)
+```
+
+Zunächst suchten wir eine Idee, wie wir überhaupt prüfen können, ob sich andere Objekte im Sichtfeld befinden.
+
+## Roboter - Geschwindigkeitsvektor Update
+**Overlapping**
+```python
+def is_overlapping (self, x1, y1, r1,x2, y2, r2):
+    return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
+```
+Prüfen, ob die zwei Roboter überlappen. Dazu wird mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+**Distanz zw. Robos**
+```python
+def distanceTwoPoints(self, x1, y1, x2, y2):
+    return math.sqrt((x2-x1) * (x2-x1) + (y2-y1)*(y2-y1))
+```
+**Collision Funktion**
+```python
+    def collision(self, robo, target):
+        for robot in self.robots:
+            if robot != robo and robot != target and robo != target :
+                distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                                  int(round(robot.position.y()))+ robot.radius,
+                                                  int(round(robo.position.x())) + robo.radius,
+                                                  int(round(robo.position.y())) + robo.radius)
+
+
+                if self.is_overlapping(int(round(robot.position.x())) + robot.radius, int(round(robot.position.y())) + robot.radius, robot.radius,
+                                       int(round(robo.position.x())) + robo.radius, int(round(robo.position.y()))+ robo.radius,
+                                       robo.radius) and distance < robot.radius + robo.radius :
+
+                    # with elastic collision, does not apply to the reality because of spin, friction etc.
+                    # our only concern is the mass of the robots
+                    # new velocity of robo1
+                    newVelX1 = (int(round(robo.v_vector.x())) * (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY1 = (int(round(robo.v_vector.y()))* (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    # new velocity of robo2
+                    newVelX2 = (int(round(robot.v_vector.x())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.x())))) / (
+                            robo.mass + robot.mass)
+                    newVelY2 = (int(round(robot.v_vector.y())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.y())))) / (
+                            robo.mass + robot.mass)
+
+                    newV_1 = QVector2D(newVelX1, newVelY1)
+                    newV_2 = QVector2D(newVelX2, newVelY2)
+
+                    robo.position.__iadd__(newV_1)
+
+                    robot.position.__iadd__(newV_2)
+
+            else: self.teleport(target, robo)
+```
+Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Roboter zu berechnen. Wenn z.B. beide in entegengesetze Richtungen sich bewegen und kollidieren, würden sich dessen Geschwindigkeiten in dem Moment aufheben (wenn beide Massen auch gleich sind).
+
+**Teleport** </br>
+```python             
+    def teleport(self, target, robot):
+
+        if robot != target:
+            distance = self.distanceTwoPoints(int(round(robot.position.x())) + robot.radius,
+                                              int(round(robot.position.y())) + robot.radius,
+                                              int(round(target.position.x())) + target.radius,
+                                              int(round(target.position.y())) + target.radius)
+
+            if distance <= target.radius + robot.radius:
+
+                if  int(round(target.position.x())) > 500 and  int(round(target.position.y())) < 500:
+
+                    robot.position = QVector2D(100,850)
+
+                elif int(round(target.position.x())) > 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(100,100)
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) < 500:
+                    robot.position = QVector2D(850,850)
+
+
+                elif int(round(target.position.x())) < 500 and int(round(target.position.y())) > 500:
+                    robot.position = QVector2D(850,100)
+```
+
+**Steuerungs Methoden** </br>
+```python             
+ #brings Rotation to a halt
+    def Stabilize(self):
+        while self.v_alpha != 0:
+            if self.v_alpha > 0:
+                self.a_alpha = -0.5
+            elif self.v_alpha < 0:
+                self.a_alpha = 0.5
+        self.a_alpha=0
+
+    def ReStart(self):
+            if self.v_vector.x() == self.v_vector.y() == 0:
+                self.a_alpha= 0.7
+                time.sleep(GameStep)
+                self.a=1
+                self.Stabilize()
+
+    def velocity(self):
+        return math.sqrt(math.pow(self.v_vector.x(),2) + math.pow(self.v_vector.y(),2))
+```
+
+
+**Flüchtender Roboter** </br>
+```python             
+class RoboTypeRun(BaseRobot):  
+    def run(self):
+        while True:
+            self.a = 1
+            time.sleep(GameStep)
+            for ID in range(2, 5,1):
+                if self.position.distanceToPoint(self.RobotList[ID]) < 150:
+                    #check where Chaser is
+                    self.checkChase(ID)
+                    time.sleep(0.5)
+                    self.Stabilize()
+            self.ReStart()
+```
+**Die CheckChase Methode** </br>
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+```python             
+    def checkChase(self, ID):
+        xEnemy = self.RobotList[ID].x()
+        yEnemy = self.RobotList[ID].y()
+
+        xSelf = self.position.x()
+        ySelf = self.position.y()
+
+        spot = ''
+        action =''
+
+        #search position of enemy
+        if xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'TopLeft'
+        elif xEnemy >= xSelf and yEnemy <= ySelf:
+            spot = 'TopRight'
+        elif xEnemy <= xSelf and yEnemy >= ySelf:
+            spot = 'BotLeft'
+        elif xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'BotRight'
+
+        #check direktion (rough)
+        #right -> 0° up -> 90° left -> 180° down -> 270°
+        view = ''
+
+        if  0 <= self.alpha <= 90:
+            view = 'TopRight'
+        elif 90 <= self.alpha <= 180:
+            view = 'TopLeft'
+        elif 180 <= self.alpha <= 270:
+            view = 'BotLeft'
+        elif 270 <= self.alpha <= 360:
+            view = 'BotRight'
+
+        #determin turn-type
+        if view == spot:
+            #hard Turn
+            action = 'hard Turn'
+        elif (view == 'TopRight' and spot == 'BotLeft') or (view == 'TopLeft' and spot == 'TopRight') or (view == 'BotRight' and spot == 'TopLeft') or (view == 'BotLeft' and spot == 'TopRight'):
+            #no turn
+            action = 'no Turn'
+        elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
+            #right turn
+            action = 'right Turn'
+        else:
+            #left turn
+            action = 'left Turn'
+
+        print(action)
+        
+        if action == 'hard Turn':
+            self.a_alpha = 2
+        elif action == 'no Turn':
+            self.a_alpha = 0
+        elif action == 'left Turn':
+            self.a_alpha = 0.7
+        elif action == 'right Turn':
+            self.a_alpha = -0.7
+```
+
+**Verfolgender Roboter 1** </br>
+```python             
+    def run(self):
+        while True:
+            self.a = 1
+            time.sleep(GameStep)
+            if self.position.distanceToPoint(self.RobotList[1]) < 250:
+                #check where Chaser is
+                self.lookTarget(1)
+                time.sleep(0.5)
+                self.Stabilize()
+            self.ReStart()
+```
+
+**Die LookTarget Methode** </br>
+Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
+```python             
+    def lookTarget(self, ID):
+        #Based on check Chase Method
+
+        xEnemy = self.RobotList[ID].x()
+        yEnemy = self.RobotList[ID].y()
+
+        xSelf = self.position.x()
+        ySelf = self.position.y()
+
+        spot = ''
+        action =''
+        #search position of enemy
+        if xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'TopLeft'
+        elif xEnemy >= xSelf and yEnemy <= ySelf:
+            spot = 'TopRight'
+        elif xEnemy <= xSelf and yEnemy >= ySelf:
+            spot = 'BotLeft'
+        elif xEnemy <= xSelf and yEnemy <= ySelf:
+            spot = 'BotRight'
+
+        #check direktion (rough)
+        #right -> 0° up -> 90° left -> 180° down -> 270°
+        view = ''
+
+        if  0 <= self.alpha <= 90:
+            view = 'TopRight'
+        elif 90 <= self.alpha <= 180:
+            view = 'TopLeft'
+        elif 180 <= self.alpha <= 270:
+            view = 'BotLeft'
+        elif 270 <= self.alpha <= 360:
+            view = 'BotRight'
+
+        #determin turn-type
+        if view == spot:
+            #hard Turn
+            action = 'no Turn'
+        elif (view == 'TopRight' and spot == 'BotLeft') or (view == 'TopLeft' and spot == 'TopRight') or (view == 'BotRight' and spot == 'TopLeft') or (view == 'BotLeft' and spot == 'TopRight'):
+            #no turn
+            action = 'hard Turn'
+        elif (view == 'TopRight' and spot == 'TopLeft') or (view == 'BotRight' and spot == 'TopRight') or (view == 'BotLeft' and spot == 'BotRight') or (view == 'TopLeft' and spot == 'BotLeft'):
+            #left turn
+            action = 'left Turn'
+        else:
+            #right turn
+            action = 'right Turn'
+
+        print(action)
+        
+        if action == 'hard Turn':
+            self.a_alpha = 2
+        elif action == 'no Turn':
+            self.a_alpha = 0
+        elif action == 'left Turn':
+            self.a_alpha = 0.7
+        elif action == 'right Turn':
+            self.a_alpha = -0.7
+```
+
+## Week4 - ...
+
+**Collision** </br>
+Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
+Dazu wird eine Schleife anhand des Radius durchlaufen und prüft je nach Bewegungsrichtung die notwendigen Felder.
+
+```python
+def barrierCollision(self, robo):
+        PosX = int(round(robo.xPosition/ 10))
+        PosY = int(round(robo.yPosition/ 10))
+        Rad = int(round((robo.radius *2)/10))
+        for i in range(0, Rad, 1):
+            #print('rob ',rob)
+            #print('Rad ',Rad)
+            #oben
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_Y<0):
+                robo.v = 0
+                #print('up')
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_Y>0):
+                robo.v = 0
+                #print('down')
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_X<0):
+                robo.v = 0
+                #print('left')
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_X>0):
+                robo.v = 0
+                #print('right')
+                
+        self.moveAgain(robo)
+
+def moveAgain(self, robo):
+    if robo.v == 0:
+        robo.alpha = robo.alpha +180
+        
+    robo.v += 0.1                
+
+```
+Nachdem der Robote ein obstacle wahrgenommen hat, wurde die Geschwindigkeit v auf null gesetzt. Um den Roboter wieder fahren zu lassen, aber wir eine einfache Funktion moveAgain() entworden, die bei einer Geschwindigkeit von null den Roboter um 180° drehen und langsam wieder an Geschwindigkeit zu nehmen soll.
+
+
+**Roboterkoordinaten senden** </br>
+Der Timer zählt jeden Tick
+```python
+def timerEvent(self, Event):
+        self.tickCount += 1
+```
+Um jeden 10ten Tick die Koordinaten zu senden teilen wir den TickCount einfach durch modulo 10 </br>
+```python
+        if self.tickCount % 10 == 0:
+            print('send Robot Pos')
+```
+
+Wir haben die Roboterclass um ein weiteres Attribut erweitert welches eine Liste mit den RoboterPositionen enthält. </br>
+In jedem Tick werden in die Liste die neuen Positionen aller Roboter eingefügt, jedem zehnten Tick wird die Liste an die Roboter übergeben.
+```python
+        self.RobotList=[]
+        for robot in self.robots:
+            self.RobotList.append ([robot.xPosition, robot.yPosition])
+
+        if self.tickCount % 10 == 0:
+            #print('send Robot Pos')
+            for robot in self.robots:
+                robot.RoboList = self.RobotList
+```
 
 ## Roboter und Threads 
 **Modifizierung der Roboterbasisklasse**
