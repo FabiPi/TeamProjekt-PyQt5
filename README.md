@@ -1,8 +1,11 @@
 
 ## Einbauen der Bullet Class
-**Code Refactoring**<br/>
-Da die Menge an Elementen stark angestiegen ist, haben wir uns entschieden die Robos, den Server und dazu auch die Bullet-Klasse in separate .py Files zu packen, um Sachen zu veranschaulichen.<br/>
-**Bullet**<br/>
+
+**Code Refactoring**
+
+Da die Menge an Elementen stark angestiegen ist, haben wir uns entschieden die Robos, den Server und dazu auch die Bullet-Klasse in separate .py Files zu packen, um unseren Code besser zu veranschaulichen.
+
+**Bullet**
 ```python
 Bullet_Size = 10
 Bullet_Speed =5
@@ -22,7 +25,7 @@ class Bullet(object):
 ```
 In der Bullet-Klasse befinden sich alle wichtigen Methoden, die zum Zeichnen und Bewegen des Bullets nötig sind.  Da die Wirkungsweise fast identisch zu den Robo-Methoden ist, haben wir eine ähnliche Struktur verwendet, die sich nur in Parametern und Vorbedingungen unterscheidet. Die Kugel wird mit der Geschwindigkeit und Winkel des Robos abgeschossen (danach konstant).<br/>
 
-**Shoot**<br/>
+**Shoot methode**
 ```python
 #in Robots
     def shoot(self):
@@ -49,7 +52,7 @@ In der Bullet-Klasse befinden sich alle wichtigen Methoden, die zum Zeichnen und
 Wenn ein Roboter einen Schuss abfeuert werden aus dessen momentanen Koordinaten, Blickrichtung und Geschwindigkeit der entsprechende Geschwindigkeitsvektor des Projektils und dessen Starposition berechnet. </br>
 
 
-**Bullet List**<br/>
+**Bullet List**
 ```python
 class SpielFeld(QWidget):
 
@@ -114,7 +117,7 @@ Für den Anfang haben wir uns einen Teleportposition selbst ausgesucht, an denen
         robo.position = QVector2D(100,850)
 ```
 
-**<Bullet Barrier Collision**<br>
+**Bullet Barrier Collision**
 
 ```python
     def BulletBarrierCollision(self, bullet):
@@ -137,7 +140,8 @@ Für den Anfang haben wir uns einen Teleportposition selbst ausgesucht, an denen
 ```
 
 =======
-## Week5 - Field of View der Roboter
+## Week 6 - Field of View der Roboter
+
 Wir haben uns zuerst entschieden unsere Code so zu ändern, so dass der Server den größeren Teil der Roboterbefehle übernimmt (Da vorher alles auf der Spielfeldklasse vorkam). Wir haben auch die X/Y Koordinaten der Roboter in QVector2D-Form gebracht.
 ```python
 #Runner
@@ -183,13 +187,15 @@ Um das Sichtfeld besser darzustellen, haben wir in drawRobo die dazugehörigen L
 
 Zunächst suchten wir eine Idee, wie wir überhaupt prüfen können, ob sich andere Objekte im Sichtfeld befinden.
 
-## Roboter - Geschwindigkeitsvektor Update
+## Week 6  - Geschwindigkeitsvektor Update
+
 **Overlapping**
 ```python
 def is_overlapping (self, x1, y1, r1,x2, y2, r2):
     return self.distanceTwoPoints(x1, y1, x2, y2) <= (r1+r2)
 ```
 Prüfen, ob die zwei Roboter überlappen. Dazu wird mit distanceTwoPoints der Abstand zwischen den Beiden gemessen.
+
 **Distanz zw. Robos**
 ```python
 def distanceTwoPoints(self, x1, y1, x2, y2):
@@ -261,6 +267,7 @@ Es werden die neuen Geschwindigkeiten ausgerechnet, um die neue Position der Rob
                 elif int(round(target.position.x())) < 500 and int(round(target.position.y())) > 500:
                     robot.position = QVector2D(850,100)
 ```
+Hier werden die Roboter je nach auftreffen mit dem Target in eine bestimmte Position des Spielfelds teleportiert. Das Spielfeld wird dabei in 4 Quadranten unterteilt. Treffen sich Chaser und Target im Quadranten links unten, dann wird der Chaser in das Quadrant rechts oben teleportiert. Dabei wurden bestimmte Positionen in den jeweiligen Quadranten festgelegt.
 
 **Steuerungs Methoden** </br>
 ```python             
@@ -300,7 +307,8 @@ class RoboTypeRun(BaseRobot):
                     self.Stabilize()
             self.ReStart()
 ```
-**Die CheckChase Methode** </br>
+**Die CheckChase Methode**
+
 Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
 ```python             
     def checkChase(self, ID):
@@ -362,7 +370,7 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
             self.a_alpha = -0.7
 ```
 
-**Verfolgender Roboter 1** </br>
+**Verfolgender Roboter 1**
 ```python             
     def run(self):
         while True:
@@ -376,7 +384,7 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
             self.ReStart()
 ```
 
-**Die LookTarget Methode** </br>
+**Die LookTarget Methode** 
 Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden muss </br>
 ```python             
     def lookTarget(self, ID):
@@ -439,7 +447,7 @@ Diese Methode prüft wo der Verfolger ist, und in welche Richtung gelenkt werden
             self.a_alpha = -0.7
 ```
 
-## Week4 - ...
+## Week 5 - Interaktionen zwischen Server und Roboterklasse
 
 **Collision** </br>
 Um die Collision abzufragen wird wie bereits in einer vorherigen Version die umliegenden Felder des Roboters geprüft.</br>
@@ -507,8 +515,10 @@ In jedem Tick werden in die Liste die neuen Positionen aller Roboter eingefügt,
                 robot.RoboList = self.RobotList
 ```
 
-## Roboter und Threads 
+## Week 4 - Roboter und Threads 
+
 **Modifizierung der Roboterbasisklasse**
+
 Für die spätere Ausführung der Threads in den jeweiligen Robotern, wurde die Roboterbasisklasse in eine Subklasse von der threading.Threads Klasse umgewandelt. 
 
 ```python
@@ -542,6 +552,7 @@ class RoboType1(BaseRobot):
 ```
 
 **Erweiterung der Roboterbasisklasse**
+
 Für die Erweiterung der Roboterbasisklasse haben wir unsere alte Version mit den neuen Attributen umgeschrieben:
 ```python
 class BaseRobot(threading.Thread):
@@ -562,6 +573,7 @@ class BaseRobot(threading.Thread):
 ```
 
 **Roboterbewegung**
+
 Zuerst werden mit der accelerate Methode die neuen Beschleunigungen der Roboter berechnet:<br/>
 Dazu gibt es jeweils 3 Fälle zu prüfen:<br/>
 1)Beschleunigung unterschreiten den Minimalwert         -> Beschleunigung wird auf das Minimum gesetzt<br/>
@@ -645,6 +657,7 @@ Anschließend wir das Spielfeld mit den Robotern an ihren neuen Positionen neu g
 Die Move bzw. Draw Methoden werden über einen Timer in regelmäßigen Abständen aufgerufen.
 
 **Roboteraktionen**
+
 Roboter 1:<br/>
 Der Roboter fährt vor und zurück, ohne sich zu drehen
 ```python
@@ -778,6 +791,7 @@ und noch einige Hindernisse in der Mitte des Spielfelds zu platzieren.
 ![Grid2](/BlogIMG/03_Final_Spielfeld.png)
 
 **Entwurf des Roboters**
+
 Für die Implementierung des Robotors wurde zunächst eine Klasse BaseRobot erstellt. In dieser Klasse befinden sich folgende Attribute des Roboters: die x,y Positionen, der Radius und der Alpha-Wert für die Blickrichtung. Der Roboter startet an der Position (20, 30) im Spielfeld.
 ```python
 class BaseRobot (QWidget):
@@ -833,6 +847,7 @@ Für die selbständige Bewegung des Roboters im Feld haben wir dazu einen timer 
                 self.moveLeft()
 ```
 **Steuerung mit keypressEvent**
+
 Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die Tasten A und D führen hierbei Rotationsbewegen aus. Indem sie die Alpha-Werte des Roboters verändern und diese in den folgenden Methoden moveUp(), moveDown(), moveLeft() und moveRight() nutzen, bewegen sie den Robotor abhängig von dem veränderten Alpha-Wert in eine bestimmte Richtung. Dadurch sind dann auch 360° Bewegungen möglich.
 ```python
    def keyPressEvent(self, event):
@@ -871,6 +886,7 @@ Hier erfolgte die Steuerung des Robotors mithilfe der keypressEvent Methode. Die
 ```
 
 **Steuerung des Roboters mit WASD**
+
 Um den Roboter mit der Tastatur zu steuern haben wir das keyPressEvent verwendet.
 Wir wollen mit W nach oben fahren, mit S nach unten, A nach links und mit D nach rechts, d.h wir müssen jeweils die x bzw. y Koordinaten des Roboters anpassen.
 
