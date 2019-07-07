@@ -1,3 +1,142 @@
+
+## Einbauen der Bullet Class
+**Code Refactoring**<br/>
+Da die Menge an Elementen stark angestiegen ist, haben wir uns entschieden die Robos, den Server und dazu auch die Bullet-Klasse in separate .py Files zu packen, um Sachen zu veranschaulichen.<br/>
+**Bullet**<br/>
+```python
+Bullet_Size = 10
+Bullet_Speed =5
+
+class Bullet(object):
+    def __init__(self, position, velocity):
+        self.position = position
+        self.velocity = velocity
+
+
+    def drawBullet(self, br):
+        br.setBrush(QColor(255, 255, 250))
+        br.drawEllipse(self.position.x() - (0.5 * Bullet_Size),self.position.y() - (0.5 * Bullet_Size), Bullet_Size, Bullet_Size)
+
+    def moveBullet(self):
+        self.position.__iadd__(self.velocity)
+```
+In der Bullet-Klasse befinden sich alle wichtigen Methoden, die zum Zeichnen und Bewegen des Bullets nötig sind.  Da die Wirkungsweise fast identisch zu den Robo-Methoden ist, haben wir eine ähnliche Struktur verwendet, die sich nur in Parametern und Vorbedingungen unterscheidet. Die Kugel wird mit der Geschwindigkeit und Winkel des Robos abgeschossen (danach konstant).<br/>
+
+**Shoot**<br/>
+```python
+#in Robots
+    def shoot(self):
+        #StartPosition sollte um ein Offset in Blickrichtung verschoben werden
+        bulletpos = QVector2D(self.position.x(),self.position.y())
+        #velocity based on angle
+        GesX = math.cos(math.radians(self.alpha)) * Bullet.Bullet_Speed
+        GesY = - math.sin(math.radians(self.alpha)) * Bullet.Bullet_Speed
+        #set Bullet to middle of Robot
+        OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
+        bulletpos.__iadd__(OffsetVector)
+        #set bullet to edge in firing direction
+        OffsetX = math.cos(math.radians(self.alpha)) * (self.radius + 6)
+        OffsetY = - math.sin(math.radians(self.alpha)) * (self.radius + 6)
+        OffsetVector = QVector2D(OffsetX,OffsetY)
+        bulletpos.__iadd__(OffsetVector)
+        Vel = QVector2D(GesX,GesY)
+        Vel.__iadd__(self.v_vector)
+        Bullet1 = Bullet.Bullet(bulletpos, Vel)
+        self.BulList.append(Bullet1)
+        #print(self.BulList)
+
+```
+Wenn ein Roboter einen Schuss abfeuert werden aus dessen momentanen Koordinaten, Blickrichtung und Geschwindigkeit der entsprechende Geschwindigkeitsvektor des Projektils und dessen Starposition berechnet. </br>
+
+
+**Bullet List**<br/>
+```python
+class SpielFeld(QWidget):
+
+    #Array construction
+    PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
+    BarrierList = []
+    Bullets = []
+    ...
+```
+
+```python
+class Robot(object):
+    def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, color):
+    ...
+        self.BulList= []
+    ...
+```
+
+```python
+    #in SpielFeld
+    def fetchBullets(self,Robot):
+        SpielFeld.Bullets.extend(Robot.BulList)
+        #print(SpielFeld.Bullets)
+        Robot.BulList.clear()
+```
+```python
+    #in Timer
+        # move robots on the game field
+        for robot in self.robots:
+            self.fetchBullets(robot)
+            self.moveRobot(robot)
+            self.barrierCollision(robot)
+            self.roboCollision(robot, self.robots[0])
+            self.SightingData(robot)
+            
+```
+Um zu verfolgen welche Bullets sich gerade auf dem Spielfeld befinden, erstellen wir eine Liste, die alle Bulletinformationen abspeichert. Wenn eine Bullet im Spielfeld abgefeuert wird, wird diese in die Liste appended. Dazu verfügt jeder Roboter über eine eigene BulletList, welche in jedem Takt vom Server gefetched wird. Trifft eine Bullet einen anderen Robo oder eine Wand, so verschwindet die und wird auch aus der Liste gelöscht.<br/>
+```python
+    #in Timer
+            for bul in SpielFeld.Bullets:
+                bul.moveBullet()
+                if self.BulletBarrierCollision(bul):
+                    SpielFeld.Bullets.remove(bul)
+                elif bul.one_hit(robot):
+                    #robot.color = colors["yellow"]
+                    self.teleport_bullet(robot)
+                    SpielFeld.Bullets.remove(bul)
+```
+Wenn ein Bullet auf einen Roboter trifft, wird dieser Roboter auf eine andere Position transportiert und die Kugel von dem Spielfeld gelöscht. Mithilfe der Funktion on_hit() wird eine True oder ein False ausgegeben, dass anzeigt, ob eine Kugel auf dem Roboter trifft.
+
+```python
+
+    def one_hit(self, robo):
+        if self.bulletShape().intersects(robo.roboShape()):
+            return True
+        else: return False
+```
+Für den Anfang haben wir uns einen Teleportposition selbst ausgesucht, an denen die getroffenen Robotern spawnen.
+
+```python
+    def teleport_bullet(self, robo):
+        robo.position = QVector2D(100,850)
+```
+
+**<Bullet Barrier Collision**<br>
+
+```python
+    def BulletBarrierCollision(self, bullet):
+        #Collision with Obstacles
+        PosX = int(round(bullet.position.x()/ 10))
+        PosY = int(round(bullet.position.y()/ 10))
+        #oben
+        if (SpielFeld.PlayFieldAR[PosX][PosY-1] == 1):
+            return True
+        #unten
+        if (SpielFeld.PlayFieldAR[PosX][PosY + 1] == 1):
+            return True
+        #links
+        if (SpielFeld.PlayFieldAR[PosX - 1][PosY] == 1):
+            return True
+        #rechts
+        if (SpielFeld.PlayFieldAR[PosX + 1][PosY] == 1):
+            return True
+        return False
+```
+
+=======
 ## Week5 - Field of View der Roboter
 Wir haben uns zuerst entschieden unsere Code so zu ändern, so dass der Server den größeren Teil der Roboterbefehle übernimmt (Da vorher alles auf der Spielfeldklasse vorkam). Wir haben auch die X/Y Koordinaten der Roboter in QVector2D-Form gebracht.
 ```python
