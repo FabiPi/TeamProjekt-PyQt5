@@ -28,6 +28,7 @@ alpha_eps = 0.5 #velocity-stop breakpoint
 vMax = 5 #max velocity
 v_alpha_Max = 10 #max alpha velocity
 RELOAD_TIME = 100
+DEATH_TIME = 500
 
 
 class Robot(object):
@@ -59,6 +60,7 @@ class Robot(object):
         self.a_alpha_max = a_alpha_max
         
         self.reload = 0
+        self.deathTime = 0
 
         self.v_vector = QVector2D(0,0)
         self.v_alpha = 0
@@ -324,49 +326,27 @@ class TargetChase4(RobotControl):
             
 class Hunter(RobotControl):
     def run(self):
-# TODO: While Bedingungen anpassen
-# Idee: deathTimer wird auf 1000 gesetzt und runtergezahlt. Wenn == 0 => Bewegung wieder frei
-        
-        ## Count-Death-Time ##
-        while deathtimer != 0:
-                deathtimer -= 1
+      while True:
+          while self.deathTime == 0:
+                if keyboard.is_pressed('w'):
+                    print('W-Key')
+                    self.robot.v += 0.05
 
-                ## Keyboard_Control ##                
-        while deathTimer == 0:
-            if keyboard.is_pressed('w'):
-                print('W-Key')
-                self.robot.v += 0.05
+                if keyboard.is_pressed('s'):
+                    print('S-Key')
+                    self.robot.v -= 0.05
 
-            if keyboard.is_pressed('s'):
-                print('S-Key')
-                self.robot.v -= 0.05
+                if keyboard.is_pressed('a'):
+                    print('A-Key')
+                    self.robot.a_alpha += 0.1
 
-            if keyboard.is_pressed('a'):
-                print('A-Key')
-                self.robot.a_alpha += 0.1
+                if keyboard.is_pressed('d'):
+                    print('D-Key')
+                    self.robot.a_alpha -= 0.1
 
-            if keyboard.is_pressed('d'):
-                print('D-Key')
-                self.robot.a_alpha -= 0.1
-
-            if keyboard.is_pressed('j'):
-                print('J-Key')
-                self.robot.shoot()
-                
-
-            ## Death - Set deathTimer ##
-            ##      Check if Hit      ##
-            if bul.one_hit(self):
-                deathTimer = 1000
-
-        
-                    
-
-            '''        
-            self.robot.a_alpha = 1
-            self.msleep(100)
-            self.robot.shoot()
-            '''
+                if keyboard.is_pressed('j'):
+                    print('J-Key')
+                    self.robot.shoot()
             
             
 class CircleMap1(RobotControl):
