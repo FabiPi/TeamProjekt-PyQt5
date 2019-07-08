@@ -149,6 +149,7 @@ class SpielFeld(QWidget):
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
             self.reduceDelay(robot)
+            self.reduceDeathTime(Hunter)
             
             for bul in SpielFeld.Bullets:
                 bul.moveBullet()
@@ -158,6 +159,10 @@ class SpielFeld(QWidget):
                     #robot.color = colors["yellow"]
                     self.teleport_bullet(robot)
                     SpielFeld.Bullets.remove(bul)
+
+            #Set Death Timer when Hunter hit
+            if bul.one_hit(Hunter):
+                Hunter.deathTimer = DEATH_TIME
 
         self.update()
 
@@ -169,6 +174,11 @@ class SpielFeld(QWidget):
     def reduceDelay(self,Robot):
         if Robot.reload != 0:
             Robot.reload -= 1
+
+    # Death Counter (Down) {see Constants}
+    def reduceDeathTime(self,Robot):
+        if Robot.deathTime != 0:
+            Robot.deathTime -= 1
         
     def paintEvent(self, qp):
 
