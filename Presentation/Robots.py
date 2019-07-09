@@ -44,6 +44,7 @@ class Robot(object):
 
         self.reload = 0
         self.deathTime = 0
+        self.immuneTime = 0
         
         self.a = 0
         self.a_max = a_max
@@ -283,6 +284,13 @@ class TargetChase(RobotControl):
             self.msleep(100)
 
 
+class Stationary(RobotControl):
+    def run(self):
+        while True:
+            self.robot.shoot()
+            self.msleep(100)
+
+            
 class TargetChase2(RobotControl):
 
     def run(self):
