@@ -34,10 +34,8 @@ class Bullet(object):
         return shape
 
     def one_hit(self, robo):
-        if self.bulletShape().intersects(robo.roboShape()):
-            return True
-        else: pass
-        
+        return self.bulletShape().intersects(robo.roboShape())
+
         
         
 
