@@ -1,3 +1,34 @@
+## Robo-Keystrokes & Death-Timer
+**Keystrokes**
+```python
+while True:
+    self.msleep(100)
+    if keyboard.is_pressed('w'):
+        print('W-Key')
+        self.robot.a = 0.01
+
+    if keyboard.is_pressed('s'):
+        print('S-Key')
+        self.robot.a = -0.01
+
+    if keyboard.is_pressed('a'):
+        print('A-Key')
+        self.robot.a_alpha = 0.1
+
+    if keyboard.is_pressed('d'):
+        print('D-Key')
+        self.robot.a_alpha = -0.1
+
+    if keyboard.is_pressed('j'):
+        print('J-Key')
+        self.robot.shoot()
+```
+Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor.
+**Death-Timer**
+```python
+```
+
+
 
 ## Einbauen der Bullet Class
 **Code Refactoring**<br/>
