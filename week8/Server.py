@@ -155,13 +155,14 @@ class SpielFeld(QWidget):
         for bul in SpielFeld.Bullets:
             bul.moveBullet()
             if self.BulletBarrierCollision(bul):
-                SpielFeld.Bullets.remove(bul)
-            elif bul.one_hit(robot):
-                if robot.robotid == 1:
-                    robot.deathTimer = DEATH_TIME
-                else:
-                    self.teleport_bullet(robot)
-                SpielFeld.Bullets.remove(bul)
+               SpielFeld.Bullets.remove(bul)
+            for robot in self.robots:
+                if bul.one_hit(robot):
+                    if robot.robotid == 1:
+                        robot.deathTimer = DEATH_TIME
+                    else:
+                        self.teleport_bullet(robot)
+                    SpielFeld.Bullets.remove(bul)
 
         self.update()
 
