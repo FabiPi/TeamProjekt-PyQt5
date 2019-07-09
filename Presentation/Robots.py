@@ -223,8 +223,16 @@ class Hunter(RobotControl):
             if keyboard.is_pressed('j'):
                 print('J-Key')
                 self.robot.shoot()
-            
-    
+
+class TargetHunt(RobotControl):
+    def run(self):
+        while True:
+            self.robot.a = 1
+            target = 1
+            self.robot.aimTargetView(target)
+            self.msleep(100)
+            if self.robot.ViewList[target][3]:
+                self.robot.shoot()
 
 class CircleMap1(RobotControl):
     def run(self):
