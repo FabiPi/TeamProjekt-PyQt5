@@ -210,7 +210,7 @@ class Hunter(RobotControl):
 
             if keyboard.is_pressed('s'):
                 print('S-Key')
-                self.robot.a = 0.01
+                self.robot.a = -0.01
 
             if keyboard.is_pressed('a'):
                 print('A-Key')
@@ -218,7 +218,7 @@ class Hunter(RobotControl):
 
             if keyboard.is_pressed('d'):
                 print('D-Key')
-                self.robot.a_alpha = 0.1
+                self.robot.a_alpha = -0.1
 
             if keyboard.is_pressed('j'):
                 print('J-Key')
