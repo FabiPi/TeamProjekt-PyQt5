@@ -12,6 +12,7 @@ import time
 import Server
 import random
 import Bullet
+import keyboard
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
@@ -201,11 +202,27 @@ class RobotControl(QThread):
 
 class Hunter(RobotControl):
     def run(self):
-        self.robot.a_alpha = 1
         while True:
-            self.msleep(100)
-            self.robot.shoot()
+            if keyboard.is_pressed('w'):
+                print('W-Key')
+                self.robot.v += 0.05
 
+            if keyboard.is_pressed('s'):
+                print('S-Key')
+                self.robot.v -= 0.05
+
+            if keyboard.is_pressed('a'):
+                print('A-Key')
+                self.robot.a_alpha += 0.1
+
+            if keyboard.is_pressed('d'):
+                print('D-Key')
+                self.robot.a_alpha -= 0.1
+
+            if keyboard.is_pressed('j'):
+                print('J-Key')
+                self.robot.shoot()
+            
     
 
 class CircleMap1(RobotControl):
