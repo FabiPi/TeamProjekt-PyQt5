@@ -24,7 +24,9 @@ while True:
         self.robot.shoot()
 ```
 Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor. <br/>
+
 **Death-Timer**
+
 ```python
 for bul in SpielFeld.Bullets:
     bul.moveBullet()
@@ -53,6 +55,7 @@ def reduceImmuneTime(self,Robot):
         Robot.immuneTime -= 1
 ```
 **Target mit FOV**
+
 Für das targeting haben wir hier jetzt unser FOV genutzt. Dafür haben wir zunächst ein neues Attribut ViewList in Robots angelegt.
 
 ```python
