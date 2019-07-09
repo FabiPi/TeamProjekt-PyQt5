@@ -200,28 +200,29 @@ class RobotControl(QThread):
 
 #Roboter Steuerung
 
-class Hunter(RobotControl):
+class RunAwayKeyBoard(RobotControl):
     def run(self):
         while True:
             self.msleep(100)
+            
             if keyboard.is_pressed('w'):
-                print('W-Key')
-                self.robot.a = 0.01
+                #print('W-Key')
+                self.robot.a = 0.1
 
             if keyboard.is_pressed('s'):
-                print('S-Key')
-                self.robot.a = -0.01
+                #print('S-Key')
+                self.robot.a = -0.1
 
             if keyboard.is_pressed('a'):
-                print('A-Key')
-                self.robot.a_alpha = 0.1
+                #print('A-Key')
+                self.robot.a_alpha = 0.5
 
             if keyboard.is_pressed('d'):
-                print('D-Key')
-                self.robot.a_alpha = -0.1
-
+                #print('D-Key')
+                self.robot.a_alpha = -0.5
+                
             if keyboard.is_pressed('j'):
-                print('J-Key')
+                #print('J-Key')
                 self.robot.shoot()
 
 class TargetHunt(RobotControl):
