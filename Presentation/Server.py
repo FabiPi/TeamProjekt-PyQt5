@@ -251,7 +251,7 @@ class SpielFeld(QWidget):
         for id in ids:
             for robot in self.robots:
 
-                if robot.robotid == id and (robo.position - robot.position).length() < 400:
+                if robot.robotid == id and (robo.position - robot.position).length() < 200:
                     viewedRobo = robot.robotid
                     distance = (robo.position - robot.position).length()
                     viewedDirection = robot.alpha
