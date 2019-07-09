@@ -160,7 +160,8 @@ class SpielFeld(QWidget):
                         robot.deathTime = DEATH_TIME
                     elif robot.robotid != 1:
                         self.teleport_bullet(robot)
-                    SpielFeld.Bullets.remove(bul)
+                    if bul in SpielFeld.Bullets:
+                        SpielFeld.Bullets.remove(bul)
 
             
         self.update()
