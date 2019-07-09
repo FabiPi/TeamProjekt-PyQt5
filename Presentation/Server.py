@@ -330,8 +330,6 @@ class SpielFeld(QWidget):
 
                     tangent = math.atan2(dy, dx)
 
-                    robo.alpha = 2 * tangent - robo.alpha
-
                     angle = 0.5 * math.pi + tangent
 
                     overlap = distance - (robot.radius - robo.radius)
