@@ -158,6 +158,7 @@ class SpielFeld(QWidget):
                     if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
                         #print('oof')
                         robot.deathTime = DEATH_TIME
+                        robot.color = QColor(255, 0, 250, 50)
                     elif robot.robotid != 1:
                         self.teleport_bullet(robot)
                     if bul in SpielFeld.Bullets:
@@ -181,10 +182,13 @@ class SpielFeld(QWidget):
             Robot.deathTime -= 1
             if Robot.deathTime == 0:
                 Robot.immuneTime = IMMUNE_TIME
+                Robot.color = colors["yellow"]
             
     def reduceImmuneTime(self,Robot):
         if Robot.immuneTime != 0:
             Robot.immuneTime -= 1
+            if Robot.immuneTime == 0:
+                Robot.color = colors["pink"]
 
     def teleport_bullet(self, robo):
         robo.position = QVector2D(100,850) 
