@@ -26,8 +26,32 @@ while True:
 Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor. <br/>
 **Death-Timer**
 ```python
+for bul in SpielFeld.Bullets:
+    bul.moveBullet()
+    if self.BulletBarrierCollision(bul):
+       SpielFeld.Bullets.remove(bul)
+    for robot in self.robots:
+        if bul.one_hit(robot):
+            if robot.robotid == 1 and robot.immuneTime == 0:
+                robot.deathTime = DEATH_TIME
+            elif robot.robotid != 1:
+                self.teleport_bullet(robot)
+            SpielFeld.Bullets.remove(bul)
 ```
+Jeder Roboter besitzt eine deathTime, die auf die Konstante DEATH_TIME gesetzt werden kann, sobald er getroffen wird. Obwohl alle Robos dieses Attribut haben, nutzt diese zurzeit nur der Hunter. <br/>
+Um es zu vermeiden, dass die deathTime wieder hochgezählt wird, obwohl der Robo außerkraftgesetzt ist, haben wir auch eine immuneTime implementiert. immuneTime und deathTime werden auf gleiche Weise runtergezählt per:
+```python
+# Death Counter (Down) {see Constants}
+def reduceDeathTime(self,Robot):
+    if Robot.deathTime != 0:
+        Robot.deathTime -= 1
+        if Robot.deathTime == 0:
+            Robot.immuneTime = IMMUNE_TIME
 
+def reduceImmuneTime(self,Robot):
+    if Robot.immuneTime != 0:
+        Robot.immuneTime -= 1
+```
 
 
 ## Einbauen der Bullet Class
