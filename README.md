@@ -1,5 +1,5 @@
 ## Week 8 - Steuerung durch Tastatur
-see Week 8 Branch
+see Week 8 Branch, Presentation contains newest version </br>
 **Keyboard**
 
 **Chasing Robots Shoot**
