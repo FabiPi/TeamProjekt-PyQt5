@@ -324,30 +324,29 @@ class SpielFeld(QWidget):
                 distance = self.distance(robot, robo)
 
                 if distance <= robot.radius + robo.radius :
-
-                    # with elastic collision, does not apply to the reality because of spin, friction etc.
-                    # our only concern is the mass of the robots
-                    # new velocity of robo1
-                    newVelX1 = (int(round(robo.v_vector.x())) * (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.x())))) / (
-                            robo.mass + robot.mass)
-                    newVelY1 = (int(round(robo.v_vector.y()))* (robo.mass - robot.mass) + (2 * robot.mass * int(round(robot.v_vector.y())))) / (
-                            robo.mass + robot.mass)
-
-                    # new velocity of robo2
-                    newVelX2 = (int(round(robot.v_vector.x())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.x())))) / (
-                            robo.mass + robot.mass)
-                    newVelY2 = (int(round(robot.v_vector.y())) * (robot.mass - robo.mass) + (2 * robo.mass * int(round(robo.v_vector.y())))) / (
-                            robo.mass + robot.mass)
-
-                    newV_1 = QVector2D(newVelX1, newVelY1)
-                    newV_2 = QVector2D(newVelX2, newVelY2)
                     
+                    dx = (robot.position - robo.position).x()
+                    dy = (robot.position - robo.position).y()
+
+                    tangent = math.atan2(dy, dx)
+
+                    robo.alpha = 2 * tangent - robo.alpha
+
+                    angle = 0.5 * math.pi + tangent
+
+                    overlap = distance - (robot.radius - robo.radius)
+
+                    roboX = math.sin(angle)*overlap
+                    roboY = math.cos(angle)*overlap
+
+                    newVel = QVector2D(roboX, roboY).normalized()
+
                     
+                    robo.position.__iadd__(newVel)
 
-                    robo.position.__iadd__(newV_1)
+                    robot.position.__iadd__(newVel*(-1))
 
-                    robot.position.__iadd__(newV_2)
-
+                
 
             else: self.teleport(target, robo)
 
