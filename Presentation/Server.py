@@ -22,6 +22,7 @@ vMax = 3
 v_alpha_Max = 2
 count = 0
 DEATH_TIME = 100
+IMMUNE_TIME = 150
 
 
 # color librarys
@@ -57,7 +58,7 @@ class SpielFeld(QWidget):
 
 
         Robot1.setProgram(Robots.Hunter(Robot1))
-        Robot2.setProgram(Robots.CircleMap1(Robot2))
+        Robot2.setProgram(Robots.Stationary(Robot2))
         Robot3.setProgram(Robots.CircleMap2(Robot3))
         Robot4.setProgram(Robots.CircleMap3(Robot4))
 
@@ -144,6 +145,8 @@ class SpielFeld(QWidget):
             self.SightingData(robot)
             self.reduceDelay(robot)
             self.reduceDeathTime(robot)
+            self.reduceImmuneTime(robot)
+
             
 
         for bul in SpielFeld.Bullets:
@@ -152,10 +155,10 @@ class SpielFeld(QWidget):
                SpielFeld.Bullets.remove(bul)
             for robot in self.robots:
                 if bul.one_hit(robot):
-                    if robot.robotid == 1:
+                    if robot.robotid == 1 and robot.immuneTime == 0:
                         #print('oof')
                         robot.deathTime = DEATH_TIME
-                    else:
+                    elif robot.robotid != 1:
                         self.teleport_bullet(robot)
                     SpielFeld.Bullets.remove(bul)
 
@@ -175,6 +178,12 @@ class SpielFeld(QWidget):
     def reduceDeathTime(self,Robot):
         if Robot.deathTime != 0:
             Robot.deathTime -= 1
+            if Robot.deathTime == 0:
+                Robot.immuneTime = IMMUNE_TIME
+            
+    def reduceImmuneTime(self,Robot):
+        if Robot.immuneTime != 0:
+            Robot.immuneTime -= 1
 
     def teleport_bullet(self, robo):
         robo.position = QVector2D(100,850) 
