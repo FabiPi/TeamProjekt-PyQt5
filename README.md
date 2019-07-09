@@ -32,7 +32,7 @@ for bul in SpielFeld.Bullets:
        SpielFeld.Bullets.remove(bul)
     for robot in self.robots:
         if bul.one_hit(robot):
-            if robot.robotid == 1 and robot.immuneTime == 0:
+            if robot.robotid == 1 and robot.immuneTime == 0 robot.deathTime == 0:
                 robot.deathTime = DEATH_TIME
             elif robot.robotid != 1:
                 self.teleport_bullet(robot)
