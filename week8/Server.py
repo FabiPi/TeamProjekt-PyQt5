@@ -150,7 +150,7 @@ class SpielFeld(QWidget):
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
             self.reduceDelay(robot)
-            self.reduceDeathTime(Hunter)
+            self.reduceDeathTime(robot)
             
         for bul in SpielFeld.Bullets:
             bul.moveBullet()
