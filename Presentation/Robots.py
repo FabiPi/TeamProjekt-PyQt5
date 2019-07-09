@@ -203,6 +203,7 @@ class RobotControl(QThread):
 class Hunter(RobotControl):
     def run(self):
         while True:
+            self.msleep(100)
             if keyboard.is_pressed('w'):
                 print('W-Key')
                 self.robot.v += 0.05
