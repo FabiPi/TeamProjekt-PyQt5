@@ -155,7 +155,7 @@ class SpielFeld(QWidget):
                SpielFeld.Bullets.remove(bul)
             for robot in self.robots:
                 if bul.one_hit(robot):
-                    if robot.robotid == 1 and robot.immuneTime == 0:
+                    if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
                         #print('oof')
                         robot.deathTime = DEATH_TIME
                     elif robot.robotid != 1:
