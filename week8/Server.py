@@ -144,12 +144,13 @@ class SpielFeld(QWidget):
 
         # move robots on the game field
         for robot in self.robots:
-            self.fetchBullets(robot)
-            self.moveRobot(robot)
+            if robot.deathTime == 0:
+                self.fetchBullets(robot)
+                self.moveRobot(robot)
+                self.reduceDelay(robot)
             self.barrierCollision(robot)
             self.roboCollision(robot, self.robots[0])
             self.SightingData(robot)
-            self.reduceDelay(robot)
             self.reduceDeathTime(robot)
             
         for bul in SpielFeld.Bullets:
