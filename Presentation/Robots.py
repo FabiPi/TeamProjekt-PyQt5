@@ -206,11 +206,11 @@ class Hunter(RobotControl):
             self.msleep(100)
             if keyboard.is_pressed('w'):
                 print('W-Key')
-                self.robot.v += 0.05
+                self.robot.a += 0.01
 
             if keyboard.is_pressed('s'):
                 print('S-Key')
-                self.robot.v -= 0.05
+                self.robot.a -= 0.01
 
             if keyboard.is_pressed('a'):
                 print('A-Key')
