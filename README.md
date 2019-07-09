@@ -1,3 +1,9 @@
+## Week 7 - Steuerung durch Tastatur
+**Keyboard**
+
+**Chasing Robots Shoot**
+
+**Death Timmer and Immunity**
 
 ## Week 7 - Einbauen der Bullet Class
 
