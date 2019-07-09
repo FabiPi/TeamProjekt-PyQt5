@@ -1,4 +1,4 @@
-## Week 7 - Steuerung durch Tastatur
+## Week 8 - Steuerung durch Tastatur
 **Keyboard**
 
 **Chasing Robots Shoot**
