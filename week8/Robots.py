@@ -210,7 +210,7 @@ class Robot(object):
             # self.aimTarget(self.findTarget_pos())
             
     def shoot(self):
-        if self.reload == 0:
+        if self.reload == 0 and self.deathTime == 0:
             #StartPosition sollte um ein Offset in Blickrichtung verschoben werden
             bulletpos = QVector2D(self.position.x(),self.position.y())
             #velocity based on angle
