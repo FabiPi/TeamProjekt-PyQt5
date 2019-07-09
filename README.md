@@ -3,7 +3,7 @@
 
 **Chasing Robots Shoot**
 
-**Death Timmer and Immunity**
+**Death Timer and Immunity**
 
 ## Week 7 - Einbauen der Bullet Class
 
