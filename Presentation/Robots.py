@@ -27,7 +27,7 @@ class Robot(object):
         self.position = position
         self.alpha = alpha % 360
         self.radius = radius
-        self.mass = radius ** 2
+        
         self.color = color
         self.RobotList = {1 : QVector2D(0,0),
                           2 : QVector2D(0,0),
