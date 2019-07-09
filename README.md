@@ -23,7 +23,7 @@ while True:
         print('J-Key')
         self.robot.shoot()
 ```
-Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor.
+Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor. <br/>
 **Death-Timer**
 ```python
 ```
