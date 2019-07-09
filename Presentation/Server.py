@@ -58,9 +58,9 @@ class SpielFeld(QWidget):
 
 
         Robot1.setProgram(Robots.Hunter(Robot1))
-        Robot2.setProgram(Robots.Stationary(Robot2))
-        Robot3.setProgram(Robots.CircleMap2(Robot3))
-        Robot4.setProgram(Robots.CircleMap3(Robot4))
+        Robot2.setProgram(Robots.TargetHunt(Robot2))
+        Robot3.setProgram(Robots.TargetHunt(Robot3))
+        Robot4.setProgram(Robots.TargetHunt(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
         
