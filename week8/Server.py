@@ -21,6 +21,7 @@ alpha_eps = 0.5
 vMax = 3
 v_alpha_Max = 3
 count = 0
+DEATH_TIME = 500
 
 # color library
 colors = {
@@ -156,13 +157,11 @@ class SpielFeld(QWidget):
                 if self.BulletBarrierCollision(bul):
                     SpielFeld.Bullets.remove(bul)
                 elif bul.one_hit(robot):
-                    #robot.color = colors["yellow"]
-                    self.teleport_bullet(robot)
+                    if robot.robotid == 1:
+                        robot.deathTimer = DEATH_TIME
+                    else:
+                        self.teleport_bullet(robot)
                     SpielFeld.Bullets.remove(bul)
-
-            #Set Death Timer when Hunter hit
-            if bul.one_hit(Hunter):
-                Hunter.deathTimer = DEATH_TIME
 
         self.update()
 
