@@ -318,7 +318,7 @@ class SpielFeld(QWidget):
                 distance = self.distance(robot, robo)
 
                 if distance <= robot.radius + robo.radius :
-
+                    '''
                     # with elastic collision, does not apply to the reality because of spin, friction etc.
                     # our only concern is the mass of the robots
                     # new velocity of robo1
@@ -341,6 +341,28 @@ class SpielFeld(QWidget):
                     robo.position.__iadd__(newV_1)
 
                     robot.position.__iadd__(newV_2)
+                    '''
+                    
+                    dx = (robot.position - robo.position).x()
+                    dy = (robot.position - robo.position).y()
+
+                    tangent = math.atan2(dy, dx)
+
+                    robo.alpha = 2 * tangent - robo.alpha
+
+                    angle = 0.5 * math.pi + tangent
+
+                    overlap = distance - (robot.radius - robo.radius)
+
+                    roboX = math.sin(angle)*overlap
+                    roboY = math.cos(angle)*overlap
+
+                    newVel = QVector2D(roboX, roboY)
+
+
+                    robo.position.__iadd__(newVel)
+
+                    robot.position.__iadd__(newVel*(-1))
 
 
             else: self.teleport(target, robo)
