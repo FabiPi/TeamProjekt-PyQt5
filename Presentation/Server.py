@@ -320,7 +320,7 @@ class SpielFeld(QWidget):
 
     def roboCollision(self, robo, target):
         for robot in self.robots:
-            if robot != robo and robot != target and robo != target :
+            if robot != robo:
                 distance = self.distance(robot, robo)
 
                 if distance <= robot.radius + robo.radius :
@@ -343,10 +343,6 @@ class SpielFeld(QWidget):
                     robo.position.__iadd__(newVel)
 
                     robot.position.__iadd__(newVel*(-1))
-
-                
-
-            else: self.teleport(target, robo)
 
 
 
