@@ -379,23 +379,23 @@ class SpielFeld(QWidget):
         PosY = int(round(robo.position.y()/ 10))
         Rad = int(round((robo.radius *2)/10))
         for i in range(0, Rad, 1):
-            #oben
-            if 0< PosX+i < 100 and 0 < PosY+i < 100:
+            if 0 <= PosX + i < 100 and 0 <= PosX - i < 100 and 0 <= PosY + i < 100 and 0 <= PosY - i < 100:
+                #oben
                 if (SpielFeld.PlayFieldAR[PosX + i][PosY-1] == 1) & (robo.v_vector.y()<0):
                     robo.position.__isub__(robo.v_vector)
                     robo.v_vector = QVector2D(0,0)
                     robo.a = 0
-            #unten
+                #unten
                 if (SpielFeld.PlayFieldAR[PosX + i][PosY + Rad] == 1) & (robo.v_vector.y()>0):
                     robo.position.__isub__(robo.v_vector)
                     robo.v_vector = QVector2D(0,0)
                     robo.a = 0
-            #links
+                #links
                 if (SpielFeld.PlayFieldAR[PosX - 1][PosY + i] == 1) & (robo.v_vector.x()<0):
                     robo.position.__isub__(robo.v_vector)
                     robo.v_vector = QVector2D(0,0)
                     robo.a = 0
-            #rechts
+                #rechts
                 if (SpielFeld.PlayFieldAR[PosX + Rad][PosY + i] == 1) & (robo.v_vector.x()>0):
                     robo.position.__isub__(robo.v_vector)
                     robo.v_vector = QVector2D(0,0)
@@ -406,17 +406,20 @@ class SpielFeld(QWidget):
         PosX = int(round(bullet.position.x()/ 10))
         PosY = int(round(bullet.position.y()/ 10))
         #oben
-        if (SpielFeld.PlayFieldAR[PosX][PosY-1] == 1):
-            return True
-        #unten
-        if (SpielFeld.PlayFieldAR[PosX][PosY + 1] == 1):
-            return True
-        #links
-        if (SpielFeld.PlayFieldAR[PosX - 1][PosY] == 1):
-            return True
-        #rechts
-        if (SpielFeld.PlayFieldAR[PosX + 1][PosY] == 1):
-            return True
+        if 0 <= PosX + 1 < 100 and 0 <= PosX - 1 < 100 and 0 <= PosY + 1 < 100 and 0 <= PosY - 1 < 100:
+            if (SpielFeld.PlayFieldAR[PosX][PosY-1] == 1):
+                return True
+            #unten
+            if (SpielFeld.PlayFieldAR[PosX][PosY + 1] == 1):
+                return True
+            #links
+            if (SpielFeld.PlayFieldAR[PosX - 1][PosY] == 1):
+                return True
+            #rechts
+            if (SpielFeld.PlayFieldAR[PosX + 1][PosY] == 1):
+                return True
+        else:
+            SpielFeld.Bullets.remove(bullet)   
         return False
 
 
