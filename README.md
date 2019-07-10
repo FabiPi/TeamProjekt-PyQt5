@@ -101,6 +101,10 @@ Diese Methode schaut zunächst, wer mein Target ist. Dann schaut sie in die View
                 # turn left
                 self.a_alpha = 0.5
 
+## Week 8 - Steuerung durch Tastatur
+see Week 8 Branch, Presentation contains newest version </br>
+**Keyboard**
+
             else:
                 # turn right
                 self.a_alpha = -0.5
