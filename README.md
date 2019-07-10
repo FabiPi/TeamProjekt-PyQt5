@@ -1,10 +1,124 @@
+## Week 8 - Robo-Keystrokes & Death-Timer
+**Keystrokes**
+```python
+while True:
+    self.msleep(100)
+    if keyboard.is_pressed('w'):
+        print('W-Key')
+        self.robot.a = 0.01
+
+    if keyboard.is_pressed('s'):
+        print('S-Key')
+        self.robot.a = -0.01
+
+    if keyboard.is_pressed('a'):
+        print('A-Key')
+        self.robot.a_alpha = 0.1
+
+    if keyboard.is_pressed('d'):
+        print('D-Key')
+        self.robot.a_alpha = -0.1
+
+    if keyboard.is_pressed('j'):
+        print('J-Key')
+        self.robot.shoot()
+```
+Per 'keyboard'-packet sind wir in der Lage die Keystrokes an den zu steuernden Robo weiter zu geben. Für jeden möglichen Key besitzt die Robo-Methode ein if-Fall, der bestimmte zugeordnete Befehle per Knopf ausführen kann. Der Sleep-Befehl liegt aus Performanz-Gründen vor. <br/>
+
+**Death-Timer**
+
+```python
+for bul in SpielFeld.Bullets:
+    bul.moveBullet()
+    if self.BulletBarrierCollision(bul):
+       SpielFeld.Bullets.remove(bul)
+    for robot in self.robots:
+        if bul.one_hit(robot):
+            if robot.robotid == 1 and robot.immuneTime == 0:
+                robot.deathTime = DEATH_TIME
+            elif robot.robotid != 1:
+                self.teleport_bullet(robot)
+            SpielFeld.Bullets.remove(bul)
+```
+Jeder Roboter besitzt eine deathTime, die auf die Konstante DEATH_TIME gesetzt werden kann, sobald er getroffen wird. Obwohl alle Robos dieses Attribut haben, nutzt diese zurzeit nur der Hunter. <br/>
+Um es zu vermeiden, dass die deathTime wieder hochgezählt wird, obwohl der Robo außerkraftgesetzt ist, haben wir auch eine immuneTime implementiert. immuneTime und deathTime werden auf gleiche Weise runtergezählt per:
+```python
+# Death Counter (Down) {see Constants}
+def reduceDeathTime(self,Robot):
+    if Robot.deathTime != 0:
+        Robot.deathTime -= 1
+        if Robot.deathTime == 0:
+            Robot.immuneTime = IMMUNE_TIME
+
+def reduceImmuneTime(self,Robot):
+    if Robot.immuneTime != 0:
+        Robot.immuneTime -= 1
+```
+**Target mit FOV**
+
+Für das targeting haben wir hier jetzt unser FOV genutzt. Dafür haben wir zunächst ein neues Attribut ViewList in Robots angelegt.
+
+```python
+                            # Position, Distanz zueinander, Blickwinkel, seen
+        self.ViewList = {1 : [ QVector2D(0,0), 0, 0, False],
+                         2 : [ QVector2D(0,0), 0, 0, False],
+                         3 : [ QVector2D(0,0), 0, 0, False],
+                         4 : [ QVector2D(0,0), 0, 0, False]}
+ ```
+ 
+Diese Liste gibt uns die aktuelle Position des gesichteten Roboters wieder, die Distanz zueinander, den Blickwinkel des gesichteten Roboters und ob wir den Roboter noch im Blickfeld haben oder nicht.
+ 
+Mithilfe dieser ViewList können wir nun unser Target ausmachen. Dafür konstruieren wir uns die Methode:
+
+```python
+    def aimTargetView(self, target):
+        # who is my target
+        target_id = target
+
+        # is my target in my FOV?
+        if self.ViewList[target_id][3]:
+
+            # Yes, chase him
+            target_alpha = self.ViewList[target_id][2]
+
+            self.moveChase(target_alpha)
+
+        # no, turn around and wait
+        else:
+            self.v = 0
+            self.a_alpha = 2
+```
+
+Diese Methode schaut zunächst, wer mein Target ist. Dann schaut sie in die ViewList, ob das Target im Sichtfeld ist. Wenn ja, dann ist es in der Liste bei seen mit True gekennzeichnet und wenn nicht, dann mit False. Bei gesichtetem Target wird auf dessen Alpha-Wert zugegriffen und mithilfe der moveChase Methode die Target-Position ermittelt und es bewegt sich darauf zu und schießt in die Richtung. Wird nichts gesichtet, dann dreht sich der Roboter im Kreis und wartet auf sein Ziel.
+
+```python
+
+    def moveChase(self, tarAlpha):
+        target_alpha = tarAlpha
+
+        if target_alpha < 180:
+            if  target_alpha+180 < self.alpha or target_alpha > self.alpha:
+                # turn left
+                self.a_alpha = 0.5
+
 ## Week 8 - Steuerung durch Tastatur
 see Week 8 Branch, Presentation contains newest version </br>
 **Keyboard**
 
-**Chasing Robots Shoot**
+            else:
+                # turn right
+                self.a_alpha = -0.5
+        else:
+            if  target_alpha > self.alpha >= ((target_alpha+180)% 360):
+                # turn left
+                self.a_alpha = 0.5
 
-**Death Timer and Immunity**
+            else:
+                # turn right
+                self.a_alpha = -0.5
+                
+ ```
+
 
 ## Week 7 - Einbauen der Bullet Class
 
