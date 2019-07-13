@@ -189,25 +189,23 @@ class Robot(object):
             #Create Bullets
             # i = repetitions (change name later)
             for i in range(0, 10, 1):
-                self.BulList.append(self.createBullet(1,90, i*4, alpha1))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha2))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha3))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha4))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha5))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha6))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha7))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha8))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha1,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha2,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha3,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha4,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha5,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha6,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha7,0))
+                self.BulList.append(self.createBullet(1,90, i*4, alpha8,0))
 
-                self.BulList.append(self.createBullet(4,90, i*4, alpha1))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha2))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha3))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha4))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha5))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha6))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha7))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha8))
-
-            self.coolDown = COOL_DOWN
+                self.BulList.append(self.createBullet(4,90, i*4, alpha1,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha2,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha3,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha4,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha5,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha6,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha7,0))
+                self.BulList.append(self.createBullet(4,90, i*4, alpha8,0))
 
 
     def special2(self):
@@ -235,12 +233,14 @@ class Robot(object):
 
             self.coolDown = COOL_DOWN
             
-    def createBullet(self, bulletType, life, delayT, alpha):
+    def createBullet(self, bulletType, life, delayT, alpha, addSpeed):
             #Position
             bulletpos = QVector2D(self.position.x(),self.position.y())
+            #velocity
+            speed = Bullet.Bullet_Speed + addSpeed
             #velocity based on angle
-            GesX = math.cos(math.radians(alpha)) * Bullet.Bullet_Speed
-            GesY = - math.sin(math.radians(alpha)) * Bullet.Bullet_Speed
+            GesX = math.cos(math.radians(alpha)) * speed
+            GesY = - math.sin(math.radians(alpha)) * speed
             #set Bullet to middle of Robot
             OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
             bulletpos.__iadd__(OffsetVector)
@@ -254,7 +254,7 @@ class Robot(object):
             Vel.__iadd__(self.v_vector)            
 
             #create Bullet
-            Bullet1 = Bullet.Bullet(bulletpos, Vel, Bullet.Bullet_Speed, alpha, life, delayT, bulletType)
+            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, alpha, life, delayT, bulletType)
             return Bullet1
 
 
