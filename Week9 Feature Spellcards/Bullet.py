@@ -61,7 +61,12 @@ class Bullet(object):
                                2:QPixmap('textures/bullet02.png'), #Blue 1
                                3:QPixmap('textures/bullet03.png'), #Red
                                4:QPixmap('textures/bullet01.png'), #Green 2
-                               5:QPixmap('textures/bullet02.png')} #Blue 2
+                               5:QPixmap('textures/bullet02.png'), #Blue 2
+
+                               6:QPixmap('textures/bullet01.png'), #Green
+                               7:QPixmap('textures/bullet02.png'), #Blue
+                               8:QPixmap('textures/bullet03.png'), #Red
+                               }
         
         
     def drawBullet(self, br):
