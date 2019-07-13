@@ -20,11 +20,18 @@ Change-List
 
     update tick-event for bullet
     add Cooldown to reduceDelay
+    
+    *** first upload***
+
+    change moveBullet
+    add spellcard2
+    import random
 
 """
 
 
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
+import random
 import math
 import Server
 import Robots
@@ -57,49 +64,52 @@ class Bullet(object):
                                5:QPixmap('textures/bullet02.png')} #Blue 2
 
 
-    def drawBullet(self, br):
-        br.setBrush(QColor(255, 255, 250))
-        texture = self.BulletTextures[self.bulType]
-        br.drawPixmap(self.position.x() - (0.5 * Bullet_Size),self.position.y() - (0.5 * Bullet_Size), texture)
-
-    def moveBullet(self):
+    def moveBullet(self): #export Spellcards later in extra Method
+        #Spellcard 1                     
         if self.bulType == 1:
             if self.time == 60:
                 self.alpha =  (self.alpha - 90) % 360
                 self.bulType = 2            
-            GesX = math.cos(math.radians(self.alpha)) * self.speed
-            GesY = - math.sin(math.radians(self.alpha)) * self.speed
             
-        if self.bulType == 2:
+        elif self.bulType == 2:
             if self.time == 30:
                 self.alpha =  (self.alpha + 90) % 360
                 self.bulType = 3
-            
-            GesX = math.cos(math.radians(self.alpha)) * self.speed
-            GesY = - math.sin(math.radians(self.alpha)) * self.speed
 
-
-        if self.bulType == 4:
+        elif self.bulType == 4:
             if self.time == 60:
                 self.alpha =  (self.alpha + 90) % 360
                 self.bulType = 5            
-            GesX = math.cos(math.radians(self.alpha)) * self.speed
-            GesY = - math.sin(math.radians(self.alpha)) * self.speed
             
-        if self.bulType == 5:
+        elif self.bulType == 5:
             if self.time == 30:
                 self.alpha =  (self.alpha - 90) % 360
                 self.bulType = 3
-            
-            GesX = math.cos(math.radians(self.alpha)) * self.speed
-            GesY = - math.sin(math.radians(self.alpha)) * self.speed
 
-        else:   #equals normal shot
-            GesX = math.cos(math.radians(self.alpha)) * self.speed
-            GesY = - math.sin(math.radians(self.alpha)) * self.speed
             
+        #Spellcard 2
+        elif self.bulType == 6:
+            if self.speed > 0:
+                self.speed -= 0.08
+        
+            else:
+                self.speed = 3
+                self.bulType = 7
+
+        elif self.bulType == 7:
+            self.alpha = (self.alpha + 2.5) % 360
+            if self.time == 100:
+                self.bulType = 0
+                self.alpha = random.randint(0,360)
+                
+
+
+        #if standart shot dont change anything
+        GesX = math.cos(math.radians(self.alpha)) * self.speed
+        GesY = - math.sin(math.radians(self.alpha)) * self.speed  
         SpeedVector = QVector2D(GesX,GesY)
         self.position.__iadd__(SpeedVector)
+        #print(self.speed)
 
 
     def bulletShape(self):
