@@ -169,7 +169,7 @@ class Robot(object):
        
     def shoot(self):
         if self.reload == 0 and self.deathTime == 0:
-            Bullet1 = self.createBullet(0,100, 0, self.alpha)
+            Bullet1 = self.createBullet(0,100, 0, self.alpha,0)
 
             self.BulList.append(Bullet1)
             self.reload = RELOAD_TIME
