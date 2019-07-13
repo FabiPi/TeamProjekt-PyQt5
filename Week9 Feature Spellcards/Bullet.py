@@ -62,7 +62,12 @@ class Bullet(object):
                                3:QPixmap('textures/bullet03.png'), #Red
                                4:QPixmap('textures/bullet01.png'), #Green 2
                                5:QPixmap('textures/bullet02.png')} #Blue 2
-
+        
+        
+    def drawBullet(self, br):
+        br.setBrush(QColor(255, 255, 250))
+        texture = self.BulletTextures[self.bulType]
+        br.drawPixmap(self.position.x() - (0.5 * Bullet_Size),self.position.y() - (0.5 * Bullet_Size), texture)
 
     def moveBullet(self): #export Spellcards later in extra Method
         #Spellcard 1                     
