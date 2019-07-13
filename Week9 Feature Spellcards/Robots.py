@@ -210,6 +210,31 @@ class Robot(object):
             self.coolDown = COOL_DOWN
 
 
+    def special2(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+  
+            #Calculate Angles
+            alpha1 = self.alpha
+            alpha2 = (self.alpha + 45) % 360
+            alpha3 = (self.alpha + 95) % 360
+            alpha4 = (self.alpha + 135) % 360
+            alpha5 = (self.alpha + 180) % 360
+            alpha6 = (self.alpha + 225) % 360
+            alpha7 = (self.alpha + 270) % 360
+            alpha8 = (self.alpha + 315) % 360
+
+            for delay in range(0, 10, 1):
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha1,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha2,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha3,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha4,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha5,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha6,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha7,0))
+                self.BulList.append(self.createBullet(6,450, delay*4, alpha8,0))
+
+            self.coolDown = COOL_DOWN
+            
     def createBullet(self, bulletType, life, delayT, alpha):
             #Position
             bulletpos = QVector2D(self.position.x(),self.position.y())
@@ -268,10 +293,15 @@ class RunAwayKeyBoard(RobotControl):
                 #print('J-Key')
                 self.robot.shoot()
 
-            #Special Attack
-            if keyboard.is_pressed('l'):
+            #Special Attack1
+            if keyboard.is_pressed('1'):
                 #print('J-Key')
                 self.robot.special()
+                
+            #Special Attack2
+            if keyboard.is_pressed('2'):
+                #print('J-Key')
+                self.robot.special2()
 
             #temporary Stop key    
             if keyboard.is_pressed('q'):
