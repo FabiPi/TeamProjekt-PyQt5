@@ -36,7 +36,6 @@ class Star(object):
 
     
 
-
     
         
 

@@ -364,4 +364,3 @@ class CircleMap(RobotControl):
             self.msleep(100)
             self.robot.shoot()
 
-
