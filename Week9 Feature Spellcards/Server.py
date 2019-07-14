@@ -1,7 +1,4 @@
 """
-Roboter Feld
-von B-Dome, JangJang3, FabiPi
-"""
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF
@@ -453,3 +450,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = SpielFeld()
     sys.exit(app.exec_())
+
