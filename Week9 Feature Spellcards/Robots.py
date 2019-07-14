@@ -13,7 +13,6 @@ import time
 import Server
 import random
 import Bullet
-from playsound import playsound
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
@@ -208,10 +207,6 @@ class Robot(object):
                 self.BulList.append(self.createBullet(4,90, i*4, alpha7,0))
                 self.BulList.append(self.createBullet(4,90, i*4, alpha8,0))
 
-            playsound('sounds/special1.wav')
-
-                
-
 
     def special2(self):
         if self.coolDown == 0 and self.deathTime == 0:
@@ -237,8 +232,6 @@ class Robot(object):
                 self.BulList.append(self.createBullet(6,450, delay*4, alpha8,0))
 
             self.coolDown = COOL_DOWN
-
-            playsound('sounds/special2.wav')
             
     def createBullet(self, bulletType, life, delayT, alpha, addSpeed):
             #Position
@@ -317,19 +310,6 @@ class RunAwayKeyBoard(RobotControl):
                 self.robot.a = 0
                 self.robot.v_alpha = 0
                 self.robot.a_alpha = 0
-
-            #if star.starIntersect(self):
-               # getPowerUp(self)
-
-    def getPowerUp(self):
-        pass
-        #Hier PowerUp Optionen
-         #Ideas:
-            # Set Reload-Time lower
-            # allow Spellcard
-            # Invincibility for certain Time
-
-            
 
             
 
