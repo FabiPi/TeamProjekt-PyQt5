@@ -206,6 +206,8 @@ class Robot(object):
                 self.BulList.append(self.createBullet(4,90, i*4, alpha6,0))
                 self.BulList.append(self.createBullet(4,90, i*4, alpha7,0))
                 self.BulList.append(self.createBullet(4,90, i*4, alpha8,0))
+                
+            self.coolDown = 500
 
 
     def special2(self):
@@ -231,7 +233,7 @@ class Robot(object):
                 self.BulList.append(self.createBullet(6,450, delay*4, alpha7,0))
                 self.BulList.append(self.createBullet(6,450, delay*4, alpha8,0))
 
-            self.coolDown = COOL_DOWN
+            self.coolDown = 500
             
     def createBullet(self, bulletType, life, delayT, alpha, addSpeed):
             #Position
