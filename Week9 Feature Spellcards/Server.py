@@ -12,6 +12,7 @@ import threading
 import time
 import Robots
 import Bullet
+import PowerUp
 
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
@@ -49,6 +50,9 @@ class SpielFeld(QWidget):
         self.wallTexture = QPixmap('textures/wall.png')
         self.floorTexture = QPixmap('textures/floor.png')
         self.createBoard()
+
+        #init Star
+        self.Star1 = PowerUp.Star(QVector2D(250, 300))
 
         #init Robots
         Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, colors["pink"])
@@ -206,12 +210,21 @@ class SpielFeld(QWidget):
         qp = QPainter()
         qp.begin(self)
         self.drawField(qp)
+        
+        #draw Star
+        self.drawPowerUp(self.Star1, qp)
         # draw Robots on the game field
         for robot in self.robots:
             self.drawRobo(robot,qp)
             #qp.drawPath(self.FOV(robot))
         for bul in SpielFeld.Bullets:
             bul.drawBullet(qp)
+
+        
+    def drawPowerUp(self, star, br):
+        br.setBrush(QColor(255, 255, 255))
+        texture = star.texture
+        br.drawPixmap(star.position.x(), star.position.y(), texture)
         
     def drawRobo(self, Robo, br):
         br.setBrush(Robo.color)
