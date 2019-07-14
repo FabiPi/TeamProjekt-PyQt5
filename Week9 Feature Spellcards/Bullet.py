@@ -132,8 +132,3 @@ class Bullet(object):
             return True
         else: pass
         
-        
-        
-
-        
- 
