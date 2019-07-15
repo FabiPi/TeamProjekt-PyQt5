@@ -120,8 +120,13 @@ class pause_Menu(start_Menu):
     def InitUI(self):
         self.setWindowTitle('Pause Menu')
 
-        self.button1.setText('Continue')
-        self.button1.clicked.connect(self.back2Game)
+        self.button6 = QPushButton('Continue', self)
+        self.button6.clicked.connect(self.back2Game)
+        self.button6.move(XPosStart, YPosStart)
+        
+        #overwrite button1
+        self.button1.hide()
+        self.button6.show()
 
         self.show()
 
