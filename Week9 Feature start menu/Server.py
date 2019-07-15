@@ -35,6 +35,13 @@ colors = {
     "yellow": QColor(255,255,0)
 }
 
+def center(self):
+    '''centers the window on the screen'''
+
+    screen = QDesktopWidget().screenGeometry()
+    size = self.geometry()
+    self.move((screen.width() - size.width()) / 2,
+              (screen.height() - size.height()) / 2)
 
 class SpielFeld(QWidget):
 
@@ -70,7 +77,6 @@ class SpielFeld(QWidget):
         Robot4.executeProgram()
 
         self.timer = QBasicTimer()
-        #self.timer.start(FPS, self)
         self.tickCount = 0
 
         self.initUI()
@@ -78,20 +84,20 @@ class SpielFeld(QWidget):
     def initUI(self):
         self.setGeometry(0, 0, SCREENWIDTH, SCREENHEIGHT)
         self.setWindowTitle('Game.exe')
-        self.center()
+        center(self)
 
         self.isStarted = False
         self.isPaused = False
 
         self.show()
 
-
+    
     def start(self):
         if self.isPaused:
             return
-
+        
+        # start GameBoard
         self.isStarted = True
-
         self.timer.start(FPS, self)
 
     def createBoard(self):
@@ -129,14 +135,6 @@ class SpielFeld(QWidget):
             SpielFeld.PlayFieldAR[10][i+50] = 1
             SpielFeld.PlayFieldAR[11][i+50] = 1
 
-
-    def center(self):
-        '''centers the window on the screen'''
-
-        screen = QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2,
-                  (screen.height() - size.height()) / 2)
 
     def timerEvent(self, Event):
         #Count
