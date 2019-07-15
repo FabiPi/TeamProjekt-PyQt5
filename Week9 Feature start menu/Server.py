@@ -87,6 +87,9 @@ class SpielFeld(QWidget):
 
 
     def start(self):
+        if self.isPaused:
+            return
+
         self.isStarted = True
 
         self.timer.start(FPS, self)
