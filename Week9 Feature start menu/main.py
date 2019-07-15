@@ -2,13 +2,11 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMainWindow, QPushButton, QMessageBox, QLabel, \
-    QVBoxLayout, QGridLayout
-from PyQt5.QtGui import QPainter, QColor, QVector2D, QPixmap, QPainterPath, QPolygonF
-from PyQt5.QtCore import Qt, QBasicTimer, QPoint
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QPushButton, QMessageBox, QLabel, \
+    QVBoxLayout
+
+from PyQt5.QtCore import Qt
 import sys
-import math
 
 import Server
 
@@ -18,6 +16,10 @@ HEIGHT = 500
 
 XPosStart = 25
 YPosStart = 75
+
+PAUSE_STATE = False
+START_STATE = False
+
 
 class Game (QMainWindow):
 
@@ -29,7 +31,7 @@ class Game (QMainWindow):
 
     def initUI(self):
         self.resize(WIDTH, HEIGHT)
-        Server.SpielFeld.center(self)
+        Server.center(self)
         self.setWindowTitle('Intro')
         #
         self.enter = QPushButton('enter', self)
@@ -56,7 +58,8 @@ class start_Menu(QWidget):
 
         self.resize(WIDTH, HEIGHT)
         self.setWindowTitle('Start Menu')
-        Server.SpielFeld.center(self)
+        Server.center(self)
+
 
         # switch to gameboard
         self.button1 = QPushButton('Start Game', self)
@@ -83,13 +86,21 @@ class start_Menu(QWidget):
         self.button5.clicked.connect(self.closeGame)
         self.button5.move(XPosStart, 5 * YPosStart)
 
+        # State: Start
+        global START_STATE
+        START_STATE = True
+
         self.show()
 
 
-    def startGame(self):
+    def Instance(self):
         self.gBoard = Server.SpielFeld()
-        self.gBoard.start()
+        return self.gBoard
+
+    def startGame(self):
+        self.Instance().start()
         self.close()
+
 
     def Options(self):
         self.opt = OptionField()
@@ -104,6 +115,7 @@ class start_Menu(QWidget):
         self.close()
 
     def closeGame(self):
+
         self.close()
 
     def Back2Menu(self):
@@ -113,7 +125,7 @@ class start_Menu(QWidget):
 class pause_Menu(start_Menu):
 
     def __init__(self):
-        start_Menu.__init__(self)
+        super().__init__()
 
         self.InitUI()
 
@@ -123,16 +135,25 @@ class pause_Menu(start_Menu):
         self.button6 = QPushButton('Continue', self)
         self.button6.clicked.connect(self.back2Game)
         self.button6.move(XPosStart, YPosStart)
-        
-        #overwrite button1
+
+        # overwrite button1
         self.button1.hide()
         self.button6.show()
 
-        self.show()
+        # State: Pause
+        global START_STATE
+        START_STATE = False
+
 
 
     def back2Game(self):
+        Server.SpielFeld.PAUSE = False
         self.close()
+
+    def Back2Menu(self):
+        self.pMenu = pause_Menu()
+        self.close()
+
 
 
 
@@ -147,7 +168,7 @@ class OptionField(QWidget):
     def InitUI(self):
         self.resize(WIDTH, HEIGHT)
         self.setWindowTitle('Keyboard')
-        Server.SpielFeld.center(self)
+        Server.center(self)
 
         self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
@@ -157,7 +178,11 @@ class OptionField(QWidget):
 
 
     def Back2Menu(self):
-        start_Menu.Back2Menu(self)
+        if START_STATE:
+            start_Menu.Back2Menu(self)
+        else:
+            pause_Menu.Back2Menu(self)
+
 
 
 class CreditText(QWidget):
@@ -178,7 +203,7 @@ class CreditText(QWidget):
     def initUI(self):
         self.resize(WIDTH, HEIGHT)
         self.setWindowTitle('Credits')
-        Server.SpielFeld.center(self)
+        Server.center(self)
 
         self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
@@ -187,7 +212,10 @@ class CreditText(QWidget):
         self.show()
 
     def Back2Menu(self):
-        start_Menu.Back2Menu(self)
+        if START_STATE:
+            start_Menu.Back2Menu(self)
+        else:
+           pause_Menu.Back2Menu(self)
 
 
 class How2PlayText(QWidget):
@@ -208,7 +236,7 @@ class How2PlayText(QWidget):
     def initUI(self):
         self.resize(WIDTH, HEIGHT)
         self.setWindowTitle('How to Play')
-        Server.SpielFeld.center(self)
+        Server.center(self)
 
         self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
@@ -217,7 +245,10 @@ class How2PlayText(QWidget):
         self.show()
 
     def Back2Menu(self):
-        start_Menu.Back2Menu(self)
+        if START_STATE:
+            start_Menu.Back2Menu(self)
+        else:
+           pause_Menu.Back2Menu(self)
 
 
 
