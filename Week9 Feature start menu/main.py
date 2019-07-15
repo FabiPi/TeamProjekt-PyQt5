@@ -215,7 +215,7 @@ class CreditText(QWidget):
         if START_STATE:
             start_Menu.Back2Menu(self)
         else:
-           pause_Menu.Back2Menu(self)
+            pause_Menu.Back2Menu(self)
 
 
 class How2PlayText(QWidget):
@@ -243,12 +243,12 @@ class How2PlayText(QWidget):
         self.back.move(200,400)
 
         self.show()
-
+        
     def Back2Menu(self):
         if START_STATE:
             start_Menu.Back2Menu(self)
         else:
-           pause_Menu.Back2Menu(self)
+            pause_Menu.Back2Menu(self)
 
 
 
