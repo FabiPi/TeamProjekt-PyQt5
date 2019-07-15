@@ -298,18 +298,16 @@ class SpielFeld(QWidget):
             return
 
         self.isPaused = not self.isPaused
-
-        ''' improvement '''
+        
         if self.isPaused:
             self.timer.stop()
             self.pMenu = main.pause_Menu()
-            self.close()
         else:
-            self.pMenu.Back2Game()
             self.timer.start(FPS, self)
 
         self.update()
 
+        
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
         # Draw the PlayField
