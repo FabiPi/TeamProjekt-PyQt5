@@ -5,7 +5,7 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF
-from PyQt5.QtCore import Qt, QBasicTimer, QPoint
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint, QRectF
 import sys
 import math
 import threading
@@ -24,18 +24,6 @@ count = 0
 DEATH_TIME = 100
 IMMUNE_TIME = 150
 
-
-# color librarys
-colors = {
-    "pink":     QColor(255, 0, 250),
-    "darkblue": QColor(0, 0, 250),
-    "lightblue": QColor(0, 145, 250),
-    "orange": QColor(245, 120, 0),
-    "black": QColor(0,0,0),
-    "yellow": QColor(255,255,0)
-}
-
-
 class SpielFeld(QWidget):
 
     #Array construction
@@ -48,13 +36,20 @@ class SpielFeld(QWidget):
 
         self.wallTexture = QPixmap('textures/wall.png')
         self.floorTexture = QPixmap('textures/floor.png')
+        
+        self.RoboTextures = {0:QPixmap('textures/Robot01.png'), #MainRobot
+                             1:QPixmap('textures/Robot_Dead.png'), #Dead
+                             2:QPixmap('textures/Robot_In.png'), #Ivincible
+                             3:QPixmap('textures/Robot02.png') #EnemyRobot
+                             }
+
         self.createBoard()
 
         #init Robots
-        Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, colors["pink"])
-        Robot2 = Robots.Robot(2, QVector2D(100,900), 90, 2, 2, 15, 90, colors["darkblue"])  
-        Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, colors["lightblue"])
-        Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, colors["orange"])
+        Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, 0)
+        Robot2 = Robots.Robot(2, QVector2D(100,900), 90, 2, 2, 15, 90, 3)  
+        Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, 3)
+        Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
 
 
         Robot1.setProgram(Robots.RunAwayKeyBoard(Robot1))
@@ -160,7 +155,7 @@ class SpielFeld(QWidget):
                     if bul.one_hit(robot):
                         if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
                             robot.deathTime = DEATH_TIME
-                            robot.color = QColor(255, 0, 250, 50)
+                            robot.texture = 1
                         elif robot.robotid != 1:
                             self.teleport_bullet(robot)
                         if bul in SpielFeld.Bullets:
@@ -188,7 +183,7 @@ class SpielFeld(QWidget):
             Robot.deathTime -= 1
             if Robot.deathTime == 0:
                 Robot.immuneTime = IMMUNE_TIME
-                Robot.color = colors["yellow"]
+                Robot.texture = 2
 
     def teleport_bullet(self, robo):
         robo.position = QVector2D(100,850) 
@@ -198,7 +193,7 @@ class SpielFeld(QWidget):
         if Robot.immuneTime != 0:
             Robot.immuneTime -= 1
             if Robot.immuneTime == 0:
-                Robot.color = colors["pink"]
+                Robot.texture = 0
 
             
     def paintEvent(self, qp):
@@ -215,17 +210,20 @@ class SpielFeld(QWidget):
                 bul.drawBullet(qp)
         
     def drawRobo(self, Robo, br):
-        br.setBrush(Robo.color)
-        br.setPen(colors["black"])
-        br.drawEllipse(int(round(Robo.position.x())), int(round(Robo.position.y())) , 2* Robo.radius, 2*Robo.radius)
 
-        # Berechnung der neuen xPos und yPos für die Blickausrichtung
-        xPos = math.cos(math.radians(Robo.alpha)) * Robo.radius
-        yPos = math.sin(math.radians(Robo.alpha)) * Robo.radius
 
-        br.drawLine(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius,
-                    (int(round(Robo.position.x())) + Robo.radius) + xPos, (int(round(Robo.position.y())) + Robo.radius) - yPos)
-
+        #Set Rotation, place etc
+        texture = self.RoboTextures[Robo.texture]
+        br.save()
+        br.translate(Robo.position.x() + Robo.radius, Robo.position.y() + Robo.radius)
+        br.rotate(-Robo.alpha)
+        source = QRectF(0, 0, 2*Robo.radius, 2* Robo.radius)
+        target = QRectF(-Robo.radius, -Robo.radius,
+               2* Robo.radius, 2* Robo.radius)
+        #Draw
+        br.drawPixmap(target, texture, source)
+        br.restore()
+        
 
     def FOV(self, Robo):
         view = QPainterPath()

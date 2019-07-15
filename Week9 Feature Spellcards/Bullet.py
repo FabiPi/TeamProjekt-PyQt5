@@ -29,10 +29,21 @@ Change-List
     add spellcard2
     import random
 
+    add Spellcard3
+    refactor other Spellcards, shoot, create Bullet
+
+    *** second Upload***
+
+    update Draw Method to include Rotation
+    update Robot Visual
+
+    *** third Upload ***
+
 """
 
 
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
+from PyQt5.QtCore import QRectF
 import random
 import math
 import Server
@@ -40,7 +51,7 @@ import Robots
 
 #####  BULLET   ######
 
-Bullet_Size = 10
+Bullet_Size = 18
 Bullet_Speed =5
 
                   
@@ -73,9 +84,18 @@ class Bullet(object):
 
 
     def drawBullet(self, br):
-        br.setBrush(QColor(255, 255, 250))
+
+        #Set Rotation, place etc
         texture = self.BulletTextures[self.bulType]
-        br.drawPixmap(self.position.x() - (0.5 * Bullet_Size),self.position.y() - (0.5 * Bullet_Size), texture)
+        br.save()
+        br.translate(self.position.x() + 0.5 * Bullet_Size, self.position.y() + 0.5 * Bullet_Size)
+        br.rotate(-self.alpha)
+        source = QRectF(0, 0, Bullet_Size, Bullet_Size)
+        target = QRectF(-Bullet_Size/2, -Bullet_Size/2,
+                Bullet_Size, Bullet_Size)
+        #Draw
+        br.drawPixmap(target, texture, source)
+        br.restore()
 
     def moveBullet(self): #export Spellcards later in extra Method
         #Spellcard 1                     

@@ -22,13 +22,13 @@ RELOAD_TIME = 50
 
 
 class Robot(object):
-    def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, color):
+    def __init__(self, robotid, position, alpha, a_max, a_alpha_max, radius, FOV, texture):
 
         self.robotid = robotid
         self.position = position
         self.alpha = alpha % 360
         self.radius = radius
-        self.color = color
+        self.texture = texture
         self.RobotList = {1 : QVector2D(0,0),
                           2 : QVector2D(0,0),
                           3 : QVector2D(0,0),
@@ -187,8 +187,8 @@ class Robot(object):
             #Create Bullets
             for delay in range(0, Repetitions, 1):
                 for n in range(0, 8, 1):
-                    self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,0,0))
-                    self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,0,0))
+                    self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
+                    self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
 
             self.coolDown = 100
 
@@ -203,7 +203,7 @@ class Robot(object):
             #Create Bullets
             for delay in range(0, Repetitions, 1):
                 for i in range(0, 8, 1):
-                    self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,0,0))
+                    self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
 
             self.coolDown = 500
 
@@ -257,7 +257,7 @@ class Robot(object):
             GesX = math.cos(math.radians(alpha)) * speed
             GesY = - math.sin(math.radians(alpha)) * speed
             #set Bullet to middle of Robot
-            OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
+            OffsetVector = QVector2D((self.radius-2)/2,(self.radius-2)/2)
             bulletpos.__iadd__(OffsetVector)
             #set bullet to edge in firing direction
             OffsetX = math.cos(math.radians(alpha)) * (self.radius + offset)
