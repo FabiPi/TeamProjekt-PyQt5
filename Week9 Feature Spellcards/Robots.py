@@ -19,7 +19,6 @@ alpha_eps = 0.5 #velocity-stop breakpoint
 vMax = 5 #max velocity
 v_alpha_Max = 10 #max alpha velocity
 RELOAD_TIME = 50
-COOL_DOWN = 100
 
 
 class Robot(object):
@@ -168,74 +167,131 @@ class Robot(object):
             # self.aimTarget(self.findTarget_pos())
        
     def shoot(self):
+        #Values
+        LifeTime = 100
+        
         if self.reload == 0 and self.deathTime == 0:
-            Bullet1 = self.createBullet(0,100, 0, self.alpha,0)
+            Bullet1 = self.createBullet(0,LifeTime, 0, self.alpha, self.v,0,0)
 
             self.BulList.append(Bullet1)
             self.reload = RELOAD_TIME
 
     def special(self):
         if self.coolDown == 0 and self.deathTime == 0:
-            #Calculate Angles
+            #Values
+            Repetitions = 10
+            LifeTime = 90
             alpha1 = self.alpha
-            alpha2 = (self.alpha + 45) % 360
-            alpha3 = (self.alpha + 95) % 360
-            alpha4 = (self.alpha + 135) % 360
-            alpha5 = (self.alpha + 180) % 360
-            alpha6 = (self.alpha + 225) % 360
-            alpha7 = (self.alpha + 270) % 360
-            alpha8 = (self.alpha + 315) % 360
-
+            alphaStep = 45
+                  
             #Create Bullets
-            # i = repetitions (change name later)
-            for i in range(0, 10, 1):
-                self.BulList.append(self.createBullet(1,90, i*4, alpha1,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha2,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha3,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha4,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha5,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha6,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha7,0))
-                self.BulList.append(self.createBullet(1,90, i*4, alpha8,0))
+            for delay in range(0, Repetitions, 1):
+                for n in range(0, 8, 1):
+                    self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,0,0))
+                    self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,0,0))
 
-                self.BulList.append(self.createBullet(4,90, i*4, alpha1,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha2,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha3,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha4,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha5,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha6,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha7,0))
-                self.BulList.append(self.createBullet(4,90, i*4, alpha8,0))
-                
-            self.coolDown = 500
-
+            self.coolDown = 100
 
     def special2(self):
-        if self.coolDown == 0 and self.deathTime == 0:
-  
-            #Calculate Angles
+        if self.coolDown == 0 and self.deathTime == 0:  
+            #Values
+            Repetitions = 10
+            LifeTime = 450
             alpha1 = self.alpha
-            alpha2 = (self.alpha + 45) % 360
-            alpha3 = (self.alpha + 95) % 360
-            alpha4 = (self.alpha + 135) % 360
-            alpha5 = (self.alpha + 180) % 360
-            alpha6 = (self.alpha + 225) % 360
-            alpha7 = (self.alpha + 270) % 360
-            alpha8 = (self.alpha + 315) % 360
+            alphaStep = 45
 
-            for delay in range(0, 10, 1):
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha1,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha2,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha3,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha4,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha5,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha6,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha7,0))
-                self.BulList.append(self.createBullet(6,450, delay*4, alpha8,0))
+            #Create Bullets
+            for delay in range(0, Repetitions, 1):
+                for i in range(0, 8, 1):
+                    self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,0,0))
 
             self.coolDown = 500
+
+
+    def special3(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            BulletAmmount = 30
+            Repetitions = int(round(BulletAmmount/2))
+            LifeTime = 400 + 4*Repetitions
             
-    def createBullet(self, bulletType, life, delayT, alpha, addSpeed):
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+            
+            #Calculate Target
+            DistTo2 = QVector2D(self.position.x() - self.RobotList[2].x(), self.position.y() - self.RobotList[2].y())
+            DistTo3 = QVector2D(self.position.x() - self.RobotList[3].x(), self.position.y() - self.RobotList[3].y())
+            DistTo4 = QVector2D(self.position.x() - self.RobotList[4].x(), self.position.y() - self.RobotList[4].y())
+            Distance2 = DistTo2.x()*DistTo2.x() + DistTo2.y() * DistTo2.y()
+            Distance3 = DistTo3.x()*DistTo3.x() + DistTo3.y() * DistTo3.y()
+            Distance4 = DistTo4.x()*DistTo4.x() + DistTo4.y() * DistTo4.y()
+            
+            closest = min(Distance2, Distance3, Distance4)
+
+            if closest == Distance2:
+                #print("darkBlue")
+                target = 2
+            elif closest == Distance3:
+                #print("lightBlue")
+                target = 3
+            elif closest == Distance4:
+                #print("orange")
+                target = 4
+                
+            #Create Bullets
+            for i in range(0,Repetitions,1):
+                self.BulList.append(self.createBullet(8,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+                self.BulList.append(self.createBullet(8,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+
+
+            self.coolDown = 150
+
+
+    def createBullet(self, bulletType, life, delayT, alpha, addSpeed, offset, target):
+            #Position
+            bulletpos = QVector2D(self.position.x(),self.position.y())
+            #velocity
+            speed = Bullet.Bullet_Speed + addSpeed
+            #velocity based on angle
+            GesX = math.cos(math.radians(alpha)) * speed
+            GesY = - math.sin(math.radians(alpha)) * speed
+            #set Bullet to middle of Robot
+            OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
+            bulletpos.__iadd__(OffsetVector)
+            #set bullet to edge in firing direction
+            OffsetX = math.cos(math.radians(alpha)) * (self.radius + offset)
+            OffsetY = - math.sin(math.radians(alpha)) * (self.radius + offset)
+            OffsetVector = QVector2D(OffsetX,OffsetY)
+            bulletpos.__iadd__(OffsetVector)
+            #set Bullet Speed
+            Vel = QVector2D(GesX,GesY)
+            Vel.__iadd__(self.v_vector)
+
+            if target != 0:
+                #Calculate Target Alpha
+                target_x = target.x()
+                target_y = target.y()
+
+                pos_x = bulletpos.x()
+                pos_y = bulletpos.y()
+
+
+                #Berechnung Blickrichtung
+                delta_x = target_x - pos_x
+                delta_y = target_y - pos_y
+                target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
+
+            else:
+                target_alpha = alpha
+
+            #create Bullet
+            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, target_alpha, life, delayT, bulletType)
+            return Bullet1
+
+
+    """
+    def createBullet_old(self, bulletType, life, delayT, alpha, addSpeed):
             #Position
             bulletpos = QVector2D(self.position.x(),self.position.y())
             #velocity
@@ -258,7 +314,8 @@ class Robot(object):
             #create Bullet
             Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, alpha, life, delayT, bulletType)
             return Bullet1
-
+    """
+    
 
 class RobotControl(QThread):
 
@@ -299,11 +356,16 @@ class RunAwayKeyBoard(RobotControl):
             if keyboard.is_pressed('1'):
                 #print('J-Key')
                 self.robot.special()
-                
+
             #Special Attack2
             if keyboard.is_pressed('2'):
                 #print('J-Key')
                 self.robot.special2()
+
+            #Special Attack2
+            if keyboard.is_pressed('3'):
+                #print('J-Key')
+                self.robot.special3()
 
             #temporary Stop key    
             if keyboard.is_pressed('q'):
@@ -323,10 +385,11 @@ class TargetHunt(RobotControl):
             target = 1
             self.robot.aimTargetView(target)
             self.msleep(100)
-            if self.robot.ViewList[target][3]:
-                self.robot.shoot()
+            #if self.robot.ViewList[target][3]:
+                #self.robot.shoot()
 
 class CircleMap(RobotControl):
+    
     def run(self):
         self.robot.a = 1
         targetnum = 0

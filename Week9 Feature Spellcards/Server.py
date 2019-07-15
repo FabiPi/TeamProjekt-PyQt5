@@ -211,7 +211,8 @@ class SpielFeld(QWidget):
             self.drawRobo(robot,qp)
             #qp.drawPath(self.FOV(robot))
         for bul in SpielFeld.Bullets:
-            bul.drawBullet(qp)
+            if bul.delay == 0:
+                bul.drawBullet(qp)
         
     def drawRobo(self, Robo, br):
         br.setBrush(Robo.color)

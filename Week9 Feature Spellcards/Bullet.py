@@ -20,8 +20,10 @@ Change-List
 
     update tick-event for bullet
     add Cooldown to reduceDelay
-    
+
     *** first upload***
+
+    adjusted speed in spellcards / shoot
 
     change moveBullet
     add spellcard2
@@ -56,7 +58,7 @@ class Bullet(object):
         self.bulType = bulType
         self.time = time
         self.delay = delay
-        self.BulletTextures = {0:QPixmap('textures/bullet.png'), #Standart
+        self.BulletTextures = {0:QPixmap('textures/bullet00.png'), #Standart
                                1:QPixmap('textures/bullet01.png'), #Green 1
                                2:QPixmap('textures/bullet02.png'), #Blue 1
                                3:QPixmap('textures/bullet03.png'), #Red
@@ -65,10 +67,11 @@ class Bullet(object):
 
                                6:QPixmap('textures/bullet01.png'), #Green
                                7:QPixmap('textures/bullet02.png'), #Blue
-                               8:QPixmap('textures/bullet03.png'), #Red
+                               8:QPixmap('textures/bullet04.png'), #Kunai
+                               
                                }
-        
-        
+
+
     def drawBullet(self, br):
         br.setBrush(QColor(255, 255, 250))
         texture = self.BulletTextures[self.bulType]
@@ -113,8 +116,15 @@ class Bullet(object):
                 self.alpha = random.randint(0,360)
                 
 
+        #Spellcard 3
+        elif self.bulType == 8:
+            if self.time > 400:
+                self.speed = 0
+            elif self.time == 400:
+                self.speed = 5
 
-        #if standart shot dont change anything
+
+        #if standart shot, dont change anything
         GesX = math.cos(math.radians(self.alpha)) * self.speed
         GesY = - math.sin(math.radians(self.alpha)) * self.speed  
         SpeedVector = QVector2D(GesX,GesY)
