@@ -118,7 +118,7 @@ class pause_Menu(start_Menu):
         self.InitUI()
 
     def InitUI(self):
-        self.setWindowTitle('Break Menu')
+        self.setWindowTitle('Pause Menu')
 
         self.button1.setText('Continue')
         self.button1.clicked.connect(self.back2Game)
