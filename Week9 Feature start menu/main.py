@@ -2,8 +2,9 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
-from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QPushButton, QMessageBox, QLabel, \
-    QVBoxLayout
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QPushButton, QLabel, \
+    QVBoxLayout, QTabWidget
 
 from PyQt5.QtCore import Qt
 import sys
@@ -33,7 +34,8 @@ class Game (QMainWindow):
         self.resize(WIDTH, HEIGHT)
         Server.center(self)
         self.setWindowTitle('Intro')
-        #
+        
+        # create start button
         self.enter = QPushButton('enter', self)
         self.enter.move(50,400)
         self.enter.resize(400, 50)
@@ -60,7 +62,6 @@ class start_Menu(QWidget):
         self.setWindowTitle('Start Menu')
         Server.center(self)
 
-
         # switch to gameboard
         self.button1 = QPushButton('Start Game', self)
         self.button1.move(XPosStart, YPosStart)
@@ -81,7 +82,7 @@ class start_Menu(QWidget):
         self.button4.clicked.connect(self.Credits)
         self.button4.move(XPosStart, 4 * YPosStart)
 
-
+        # quite game
         self.button5 = QPushButton('Quit', self)
         self.button5.clicked.connect(self.closeGame)
         self.button5.move(XPosStart, 5 * YPosStart)
@@ -101,7 +102,6 @@ class start_Menu(QWidget):
         self.Instance().start()
         self.close()
 
-
     def Options(self):
         self.opt = OptionField()
         self.close()
@@ -115,6 +115,9 @@ class start_Menu(QWidget):
         self.close()
 
     def closeGame(self):
+        if not START_STATE:
+            app = QtGui.QGuiApplication.instance()
+            app.closeAllWindows()
 
         self.close()
 
