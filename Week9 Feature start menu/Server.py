@@ -5,7 +5,7 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5.QtWidgets import QWidget, QDesktopWidget
 from PyQt5.QtGui import QPainter, QColor, QVector2D, QPixmap, QPainterPath, QPolygonF
-from PyQt5.QtCore import Qt, QBasicTimer, QPoint, pyqtSignal
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint
 import math
 
 import Robots
@@ -25,7 +25,7 @@ DEATH_TIME = 100
 IMMUNE_TIME = 150
 
 
-# color libraries
+# color library
 colors = {
     "pink":     QColor(255, 0, 250),
     "darkblue": QColor(0, 0, 250),
@@ -33,6 +33,12 @@ colors = {
     "orange": QColor(245, 120, 0),
     "black": QColor(0,0,0),
     "yellow": QColor(255,255,0)
+}
+
+# wall library
+floorTextures = {
+    "wood": 'textures/wood_Board.png',
+    "floor": 'textures/floor.png'
 }
 
 def center(self):
