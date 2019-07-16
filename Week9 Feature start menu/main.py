@@ -84,7 +84,7 @@ class start_Menu(QWidget):
 
         # quite game
         self.button5 = QPushButton('Quit', self)
-        self.button5.clicked.connect(self.closeGame)
+        self.button5.clicked.connect(self.closeEvent)
         self.button5.move(XPosStart, 5 * YPosStart)
 
         # State: Start
@@ -114,7 +114,7 @@ class start_Menu(QWidget):
         self.authors = CreditText()
         self.close()
 
-    def closeGame(self):
+    def closeEvent(self, event):
         if not START_STATE:
             app = QtGui.QGuiApplication.instance()
             app.closeAllWindows()
