@@ -187,6 +187,7 @@ class OptionField(QWidget):
 
 
 
+
 class TableWidget(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
@@ -220,10 +221,33 @@ class TableWidget(QWidget):
         self.tab2.setLayout(self.tab2.layout)
 
 
-        # create content graphic tab
-        self.tab3.layout = QVBoxLayout()
+        # create content grafic tab
+        self.tab3.layout = QHBoxLayout()
 
-        #self.wallG = wallTexture()
+        # add wallG to tab3
+        self.wallG = wallTexture()
+        self.tab3.layout.addWidget(self.wallG)
+
+
+        # add floorG to tab3
+        self.floorG = floorTexture()
+        self.tab3.layout.addWidget(self.floorG)
+
+
+        self.tab3.setLayout(self.tab3.layout)
+
+        # Add tabs to widget
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
+
+
+class wallTexture(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.iniUt()
+
+    def iniUt(self):
 
         # set wall texture layout
         self.wallG = QGroupBox(self)
@@ -237,10 +261,17 @@ class TableWidget(QWidget):
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
 
+        # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
 
-        # add wallG to tab3
-        self.tab3.layout.addWidget(self.wallG)
+
+class floorTexture(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.iniUt()
+
+    def iniUt(self):
 
         # set floor texture layout
         self.floorG = QGroupBox(self)
@@ -255,14 +286,6 @@ class TableWidget(QWidget):
 
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
-
-        # add floorG to tab3
-        self.tab3.layout.addWidget(self.floorG)
-        self.tab3.setLayout(self.tab3.layout)
-
-        # Add tabs to widget
-        self.layout.addWidget(self.tabs)
-        self.setLayout(self.layout)
 
 
 
