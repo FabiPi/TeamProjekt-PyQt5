@@ -61,7 +61,7 @@ class Bullet(object):
     #-Velocity (non vector)
     #-type
     #-time
-    def __init__(self, position, velocity, speed, alpha, time, delay, bulType):
+    def __init__(self, position, velocity, speed, alpha, time, delay, bulType, owner):
         self.position = position
         self.velocity = velocity
         self.speed = speed
@@ -69,6 +69,7 @@ class Bullet(object):
         self.bulType = bulType
         self.time = time
         self.delay = delay
+        self.owner = owner
         self.BulletTextures = {0:QPixmap('textures/bullet00.png'), #Standart
                                1:QPixmap('textures/bullet01.png'), #Green 1
                                2:QPixmap('textures/bullet02.png'), #Blue 1
@@ -158,7 +159,7 @@ class Bullet(object):
         return shape
 
     def one_hit(self, robo):
-        if self.bulletShape().intersects(robo.roboShape()):
+        if self.bulletShape().intersects(robo.roboShape()) and self.owner != robo.robotid:
             return True
         else: pass
         

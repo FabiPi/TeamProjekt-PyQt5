@@ -286,7 +286,7 @@ class Robot(object):
                 target_alpha = alpha
 
             #create Bullet
-            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, target_alpha, life, delayT, bulletType)
+            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, target_alpha, life, delayT, bulletType, self.robotid)
             return Bullet1
 
 
