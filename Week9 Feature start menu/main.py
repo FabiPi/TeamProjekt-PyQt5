@@ -207,17 +207,17 @@ class TableWidget(QWidget):
 
         # Create first tab
         self.tab1.layout = QGridLayout(self)
-        self.pushButton1 = QPushButton("PyQt5 button")
+        #self.pushButton1 = QPushButton("PyQt5 button")
 
-        self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
+        #self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
         self.tab1.setLayout(self.tab1.layout)
 
         # create second tab
         self.tab2.layout = QGridLayout(self)
 
-        self.pushButton2 = QPushButton("Test")
+        #self.pushButton2 = QPushButton("Test")
 
-        self.tab2.layout.addWidget(self.pushButton2)
+        #self.tab2.layout.addWidget(self.pushButton2)
         self.tab2.setLayout(self.tab2.layout)
 
 
