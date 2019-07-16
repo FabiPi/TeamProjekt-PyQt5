@@ -292,6 +292,9 @@ class SpielFeld(QWidget):
         if self.isPaused:
             return
 
+    def closeEvent(self, event):
+        app = QtGui.QGuiApplication.instance()
+        app.closeAllWindows()        
 
 
     def pause(self):
