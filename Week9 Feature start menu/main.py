@@ -170,21 +170,61 @@ class OptionField(QWidget):
 
     def InitUI(self):
         self.resize(WIDTH, HEIGHT)
-        self.setWindowTitle('Keyboard')
+        self.setWindowTitle('Options')
         Server.center(self)
 
         self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
         self.back.move(200, 400)
 
-        self.show()
+        self.table_widget = TableWidget()
+        self.table_widget.resize(500,400)
 
+        self.show()
 
     def Back2Menu(self):
         if START_STATE:
             start_Menu.Back2Menu(self)
         else:
             pause_Menu.Back2Menu(self)
+
+
+
+class TableWidget(QWidget):
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+
+        # Initialize tab screen
+        self.tabs = QTabWidget()
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tab3 = QWidget()
+
+        # Add tabs
+        self.tabs.addTab(self.tab1, "Keyboard")
+        self.tabs.addTab(self.tab2, "Audio")
+        self.tabs.addTab(self.tab3, "Grafik")
+
+        # Create first tab
+        self.tab1.layout = QVBoxLayout(self)
+        self.pushButton1 = QPushButton("PyQt5 button")
+
+        self.tab1.layout.addWidget(self.pushButton1)
+        self.tab1.setLayout(self.tab1.layout)
+
+        # create second tab
+        self.tab2.layout = QVBoxLayout(self)
+        self.pushButton2 = QPushButton("Test")
+
+        self.tab2.layout.addWidget(self.pushButton2)
+        self.tab2.setLayout(self.tab2.layout)
+
+        # Add tabs to widget
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
+
 
 
 
