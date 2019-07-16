@@ -34,13 +34,13 @@ class SpielFeld(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.wallTexture = QPixmap('textures/wall.png')
-        self.floorTexture = QPixmap('textures/floor.png')
+        self.wallTexture = QPixmap('textures/Board/wall00.png')
+        self.floorTexture = QPixmap('textures/Board/floor00.png')
         
-        self.RoboTextures = {0:QPixmap('textures/Robot01.png'), #MainRobot
-                             1:QPixmap('textures/Robot_Dead.png'), #Dead
-                             2:QPixmap('textures/Robot_In.png'), #Ivincible
-                             3:QPixmap('textures/Robot02.png') #EnemyRobot
+        self.RoboTextures = {0:QPixmap('textures/Robots/Robot01.png'), #MainRobot
+                             1:QPixmap('textures/Robots/Robot_Dead.png'), #Dead
+                             2:QPixmap('textures/Robots/Robot_In.png'), #Ivincible
+                             3:QPixmap('textures/Robots/Robot02.png') #EnemyRobot
                              }
 
         self.createBoard()

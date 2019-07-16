@@ -190,7 +190,7 @@ class Robot(object):
                     self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
                     self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
 
-            self.coolDown = 100
+            self.coolDown = 150
 
     def special2(self):
         if self.coolDown == 0 and self.deathTime == 0:  
@@ -205,7 +205,7 @@ class Robot(object):
                 for i in range(0, 8, 1):
                     self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
 
-            self.coolDown = 500
+            self.coolDown = 550
 
 
     def special3(self):
@@ -241,12 +241,30 @@ class Robot(object):
                 
             #Create Bullets
             for i in range(0,Repetitions,1):
-                self.BulList.append(self.createBullet(8,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
-                self.BulList.append(self.createBullet(8,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+                self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+                self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
 
 
-            self.coolDown = 150
+            self.coolDown = 250
 
+    def spellcard4(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            BulletAmmount = 5
+            Repetitions = 15
+
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+
+            for i in range(0,Repetitions,1):
+                LifeTime = random.randint(250,350)
+                for step in range(0,BulletAmmount,1):
+                    self.BulList.append(self.createBullet(15,LifeTime, 0,(alpha1 + step*alphaStep) % 360,0,6,0))
+
+            self.coolDown = 400
+            
+        
 
     def createBullet(self, bulletType, life, delayT, alpha, addSpeed, offset, target):
             #Position
@@ -362,10 +380,15 @@ class RunAwayKeyBoard(RobotControl):
                 #print('J-Key')
                 self.robot.special2()
 
-            #Special Attack2
+            #Special Attack3
             if keyboard.is_pressed('3'):
                 #print('J-Key')
                 self.robot.special3()
+
+            #Special Attack4
+            if keyboard.is_pressed('4'):
+                #print('J-Key')
+                self.robot.spellcard4()
 
             #temporary Stop key    
             if keyboard.is_pressed('q'):

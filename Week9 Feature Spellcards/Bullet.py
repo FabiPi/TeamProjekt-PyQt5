@@ -36,8 +36,16 @@ Change-List
 
     update Draw Method to include Rotation
     update Robot Visual
+    update RoboBullet Colission so Robot cant hit himself
+        -added owner Attribute to Bullet
 
     *** third Upload ***
+
+    Change Textures
+    Add Spellcard 4
+    adjust CDs for other Spellcards
+    update Texture Paths
+    export Spellcards from MoveBullet to Spellcard Methods
 
 """
 
@@ -61,6 +69,7 @@ class Bullet(object):
     #-Velocity (non vector)
     #-type
     #-time
+    #-owner
     def __init__(self, position, velocity, speed, alpha, time, delay, bulType, owner):
         self.position = position
         self.velocity = velocity
@@ -70,17 +79,27 @@ class Bullet(object):
         self.time = time
         self.delay = delay
         self.owner = owner
-        self.BulletTextures = {0:QPixmap('textures/bullet00.png'), #Standart
-                               1:QPixmap('textures/bullet01.png'), #Green 1
-                               2:QPixmap('textures/bullet02.png'), #Blue 1
-                               3:QPixmap('textures/bullet03.png'), #Red
-                               4:QPixmap('textures/bullet01.png'), #Green 2
-                               5:QPixmap('textures/bullet02.png'), #Blue 2
-
-                               6:QPixmap('textures/bullet01.png'), #Green
-                               7:QPixmap('textures/bullet02.png'), #Blue
-                               8:QPixmap('textures/bullet04.png'), #Kunai
-                               
+        self.BulletTextures = {0:QPixmap('textures/Bullets/Standart.png'), #Standart
+                               #Spellcard1
+                               1:QPixmap('textures/Bullets/GreenOrb.png'), #Green 1
+                               2:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 1
+                               3:QPixmap('textures/Bullets/RedOrb.png'), #Red
+                               4:QPixmap('textures/Bullets/GreenOrb.png'), #Green 2
+                               5:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 2
+                               #Spellcard2
+                               6:QPixmap('textures/Bullets/GreenOrb.png'), #GreenOrb
+                               7:QPixmap('textures/Bullets/BlueOrb.png'), #BlueOrb
+                               8:QPixmap('textures/Bullets/Star01.png'), #Star1
+                               9:QPixmap('textures/Bullets/Star02.png'), #Star2
+                               10:QPixmap('textures/Bullets/Star03.png'), #Star3
+                               11:QPixmap('textures/Bullets/Star04.png'), #Star4
+                               12:QPixmap('textures/Bullets/Star05.png'), #Star5
+                               13:QPixmap('textures/Bullets/Star06.png'), #Star6                               
+                               #Spellcard3
+                               14:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               #Spellcard4
+                               15:QPixmap('textures/Bullets/BlackCircle.png'), #BlackMain
+                               16:QPixmap('textures/Bullets/PurpleBullet.png'), #Purple Splits
                                }
 
 
@@ -99,7 +118,45 @@ class Bullet(object):
         br.restore()
 
     def moveBullet(self): #export Spellcards later in extra Method
-        #Spellcard 1                     
+        
+        #Spellcard 1    (Star Pattern)
+        if  1<= self.bulType <= 5:
+            self.Spellcard01()
+
+            
+        #Spellcard 2    (Circles into Random Stars)
+        elif  6<= self.bulType <= 7:
+            self.Spellcard02()
+
+        #Spellcard 3    (Circle into Target Aim)
+        elif self.bulType == 14:
+            self.Spellcard03()
+
+
+        #Spellcard 4    (Random Delay Split)
+        elif 15 <= self.bulType <= 16:
+            self.Spellcard04()
+
+        #Standart Behavior does not change speed/angle
+        #=> if shot not defined, or Standart dont change anything
+        GesX = math.cos(math.radians(self.alpha)) * self.speed
+        GesY = - math.sin(math.radians(self.alpha)) * self.speed  
+        SpeedVector = QVector2D(GesX,GesY)
+        self.position.__iadd__(SpeedVector)
+
+
+    def bulletShape(self):
+        shape = QPainterPath()
+        shape.addEllipse(self.position.x() - (0.5 * Bullet_Size) , self.position.y() - (0.5 * Bullet_Size), Bullet_Size, Bullet_Size)
+        return shape
+
+    def one_hit(self, robo):
+        if self.bulletShape().intersects(robo.roboShape()) and self.owner != robo.robotid:
+            return True
+        else: pass
+
+
+    def Spellcard01(self):
         if self.bulType == 1:
             if self.time == 60:
                 self.alpha =  (self.alpha - 90) % 360
@@ -119,10 +176,10 @@ class Bullet(object):
             if self.time == 30:
                 self.alpha =  (self.alpha - 90) % 360
                 self.bulType = 3
+        
 
-            
-        #Spellcard 2
-        elif self.bulType == 6:
+    def Spellcard02(self):
+        if self.bulType == 6:
             if self.speed > 0:
                 self.speed -= 0.08
         
@@ -133,38 +190,26 @@ class Bullet(object):
         elif self.bulType == 7:
             self.alpha = (self.alpha + 2.5) % 360
             if self.time == 100:
-                self.bulType = 0
+                self.bulType = random.randint(8,13)
                 self.alpha = random.randint(0,360)
-                
+                #BulletType 8 to 13 are not defined in move -> use standart Behavior
 
-        #Spellcard 3
-        elif self.bulType == 8:
+    def Spellcard03(self):
+        if self.bulType == 14:
             if self.time > 400:
                 self.speed = 0
             elif self.time == 400:
                 self.speed = 5
-
-
-        #if standart shot, dont change anything
-        GesX = math.cos(math.radians(self.alpha)) * self.speed
-        GesY = - math.sin(math.radians(self.alpha)) * self.speed  
-        SpeedVector = QVector2D(GesX,GesY)
-        self.position.__iadd__(SpeedVector)
-        #print(self.speed)
-
-
-    def bulletShape(self):
-        shape = QPainterPath()
-        shape.addEllipse(self.position.x() - (0.5 * Bullet_Size) , self.position.y() - (0.5 * Bullet_Size), Bullet_Size, Bullet_Size)
-        return shape
-
-    def one_hit(self, robo):
-        if self.bulletShape().intersects(robo.roboShape()) and self.owner != robo.robotid:
-            return True
-        else: pass
-        
-        
         
 
+    def Spellcard04(self):
+        if self.bulType == 15:
+            if self.time == 100:
+                self.speed = 4
+                self.alpha = random.randint(0,360)
+                self.bulType = 16
+            elif self.time > 100:
+                if self.speed >0:
+                    self.speed -= 0.05
         
  
