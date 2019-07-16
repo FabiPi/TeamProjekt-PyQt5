@@ -3,14 +3,13 @@ Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
 from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QPushButton, QLabel, \
-    QVBoxLayout, QTabWidget
+    QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
-from PyQt5.QtCore import Qt
 import sys
 
 import Server
-
 
 WIDTH = 500
 HEIGHT = 500
@@ -278,7 +277,13 @@ class floorTexture(QWidget):
         self.floorG.setTitle("Texture Floor")
 
         self.button_layout2 = QVBoxLayout()
-        self.texture3 = QRadioButton("Texture 3")
+
+        # creat button brown floor
+        self.texture3 = QRadioButton("Brown Floor")
+        self.texture3.setIcon(QIcon(Server.floorTextures["floor"]))
+        self.texture3.setChecked(True)
+
+        self.texture3.toggled.connect(self.onClicked)
         self.texture4 = QRadioButton("Texture 4")
 
         self.button_layout2.addWidget(self.texture3)
@@ -287,6 +292,8 @@ class floorTexture(QWidget):
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
 
+    def onClicked(self):
+        Server.SpielFeld.floorTexture = Server.floorTextures["floor"]
 
 
 class CreditText(QWidget):
