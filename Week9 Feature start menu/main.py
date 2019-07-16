@@ -159,9 +159,6 @@ class pause_Menu(start_Menu):
 
 
 
-
-
-
 class OptionField(QWidget):
     def __init__(self):
         super().__init__()
@@ -194,7 +191,7 @@ class TableWidget(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
 
-        self.layout = QVBoxLayout()
+        self.layout = QGridLayout()
 
         # Initialize tab screen
         self.tabs = QTabWidget()
@@ -208,23 +205,64 @@ class TableWidget(QWidget):
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
-        self.tab1.layout = QVBoxLayout(self)
+        self.tab1.layout = QGridLayout(self)
         self.pushButton1 = QPushButton("PyQt5 button")
 
-        self.tab1.layout.addWidget(self.pushButton1)
+        self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
         self.tab1.setLayout(self.tab1.layout)
 
         # create second tab
-        self.tab2.layout = QVBoxLayout(self)
+        self.tab2.layout = QGridLayout(self)
+
         self.pushButton2 = QPushButton("Test")
 
         self.tab2.layout.addWidget(self.pushButton2)
         self.tab2.setLayout(self.tab2.layout)
 
+
+        # create content graphic tab
+        self.tab3.layout = QVBoxLayout()
+
+        #self.wallG = wallTexture()
+
+        # set wall texture layout
+        self.wallG = QGroupBox(self)
+        self.wallG.setTitle("Texture Wall")
+
+        self.button_layout1 = QVBoxLayout()
+        self.texture1 = QRadioButton("Texture 1")
+
+        self.texture2 = QRadioButton("Texture 2")
+
+        self.button_layout1.addWidget(self.texture1)
+        self.button_layout1.addWidget(self.texture2)
+
+        self.wallG.setLayout(self.button_layout1)
+
+        # add wallG to tab3
+        self.tab3.layout.addWidget(self.wallG)
+
+        # set floor texture layout
+        self.floorG = QGroupBox(self)
+        self.floorG.setTitle("Texture Floor")
+
+        self.button_layout2 = QVBoxLayout()
+        self.texture3 = QRadioButton("Texture 3")
+        self.texture4 = QRadioButton("Texture 4")
+
+        self.button_layout2.addWidget(self.texture3)
+        self.button_layout2.addWidget(self.texture4)
+
+        # add button layout in floor layout
+        self.floorG.setLayout(self.button_layout2)
+
+        # add floorG to tab3
+        self.tab3.layout.addWidget(self.floorG)
+        self.tab3.setLayout(self.tab3.layout)
+
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
-
 
 
 
