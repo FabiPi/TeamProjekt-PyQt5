@@ -177,7 +177,7 @@ class OptionField(QWidget):
         self.back.clicked.connect(self.Back2Menu)
         self.back.move(200, 400)
 
-        self.table_widget = TableWidget()
+        self.table_widget = TableWidget(self)
         self.table_widget.resize(500,400)
 
         self.show()
