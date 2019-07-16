@@ -5,7 +5,7 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5.QtWidgets import QWidget, QDesktopWidget
 from PyQt5.QtGui import QPainter, QColor, QVector2D, QPixmap, QPainterPath, QPolygonF
-from PyQt5.QtCore import Qt, QBasicTimer, QPoint
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint, pyqtSignal
 import math
 
 import Robots
