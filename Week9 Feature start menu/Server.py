@@ -326,8 +326,8 @@ class SpielFeld(QWidget):
         msgBox.setText("Your in the pause screen. \n Do you want to continue? \n")
 
         #set Buttons
-        msgBox.addButton(QPushButton(" Yes "), QMessageBox.YesRole)
-        msgBox.addButton(QPushButton(" No "), QMessageBox.NoRole)
+        msgBox.addButton(QMessageBox.Yes)
+        msgBox.addButton(QMessageBox.No)
         
         # change backgroundstyle 
         p = self.palette()
@@ -350,7 +350,7 @@ class SpielFeld(QWidget):
             self.timer.stop()
             
             # switch to pause screen
-            self.msgBox = self.Message()
+            self.msgBox = self.Message().result()
             if self.msgBox == QMessageBox.No:
                 self.startMenu = main.start_Menu()
                 self.close()
