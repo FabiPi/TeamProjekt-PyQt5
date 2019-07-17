@@ -8,10 +8,12 @@ from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPa
 from PyQt5.QtCore import Qt, QBasicTimer, QPoint, QRectF
 import sys
 import math
+import random
 import threading
 import time
 import Robots
 import Bullet
+import Control
 
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
@@ -52,10 +54,10 @@ class SpielFeld(QWidget):
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
 
 
-        Robot1.setProgram(Robots.RunAwayKeyBoard(Robot1))
-        Robot2.setProgram(Robots.TargetHunt(Robot2))
-        Robot3.setProgram(Robots.TargetHunt(Robot3))
-        Robot4.setProgram(Robots.TargetHunt(Robot4))
+        Robot1.setProgram(Control.RunAwayKeyBoard(Robot1))
+        Robot2.setProgram(Control.TargetHunt(Robot2))
+        Robot3.setProgram(Control.TargetHunt(Robot3))
+        Robot4.setProgram(Control.TargetHunt(Robot4))
 
         self.robots = [Robot1, Robot2, Robot3, Robot4]
         
@@ -186,7 +188,18 @@ class SpielFeld(QWidget):
                 Robot.texture = 2
 
     def teleport_bullet(self, robo):
-        robo.position = QVector2D(100,850) 
+        spot = random.randint(1,5)
+        if spot == 1:
+            robo.position = QVector2D(100,100)
+        elif spot == 2:
+            robo.position = QVector2D(100,850)
+        elif spot == 3:
+            robo.position = QVector2D(850,100)
+        elif spot == 4:
+            robo.position = QVector2D(850,850)
+        elif spot == 5:
+            robo.position = QVector2D(500,500)
+
 
 
     def reduceImmuneTime(self,Robot):

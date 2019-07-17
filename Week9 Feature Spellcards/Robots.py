@@ -10,9 +10,10 @@ import sys
 import math
 import threading
 import time
-import Server
 import random
+import Server
 import Bullet
+import Control
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
@@ -176,7 +177,7 @@ class Robot(object):
             self.BulList.append(Bullet1)
             self.reload = RELOAD_TIME
 
-    def special(self):
+    def spellcard1(self):
         if self.coolDown == 0 and self.deathTime == 0:
             #Values
             Repetitions = 10
@@ -192,7 +193,7 @@ class Robot(object):
 
             self.coolDown = 150
 
-    def special2(self):
+    def spellcard2(self):
         if self.coolDown == 0 and self.deathTime == 0:  
             #Values
             Repetitions = 10
@@ -208,7 +209,7 @@ class Robot(object):
             self.coolDown = 550
 
 
-    def special3(self):
+    def spellcard3(self):
         if self.coolDown == 0 and self.deathTime == 0:
             #Values
             BulletAmmount = 30
@@ -263,77 +264,86 @@ class Robot(object):
                     self.BulList.append(self.createBullet(15,LifeTime, 0,(alpha1 + step*alphaStep) % 360,0,6,0))
 
             self.coolDown = 400
+
+
+    def spellcard5(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            BulletAmmount = 5
+            Repetitions = 20
+            LifeTime = 350
+
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+
+            #Create Bullets
+            for delay in range(0, Repetitions, 1):
+                for i in range(0, BulletAmmount, 1):
+                    self.BulList.append(self.createBullet(17,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
+
+            self.coolDown = 450
+
+    def spellcard6(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #add More!!!
+            #Values
+            BulletAmmount = 4
+            Repetitions = 25
+            LifeTime = 600
+
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+            alphaWindow = ((360 / BulletAmmount)/ 5) * 1.5
             
+
+            #Create Bullets
+            for delay in range(0, Repetitions, 1):
+                for i in range(0, BulletAmmount, 1):
+                    self.BulList.append(self.createBullet(22,LifeTime, delay*4,((alpha1 + i*alphaStep) + alphaWindow * delay) % 360,0,6,0))
+
+            self.coolDown = 450 
         
 
     def createBullet(self, bulletType, life, delayT, alpha, addSpeed, offset, target):
-            #Position
-            bulletpos = QVector2D(self.position.x(),self.position.y())
-            #velocity
-            speed = Bullet.Bullet_Speed + addSpeed
-            #velocity based on angle
-            GesX = math.cos(math.radians(alpha)) * speed
-            GesY = - math.sin(math.radians(alpha)) * speed
-            #set Bullet to middle of Robot
-            OffsetVector = QVector2D((self.radius-2)/2,(self.radius-2)/2)
-            bulletpos.__iadd__(OffsetVector)
-            #set bullet to edge in firing direction
-            OffsetX = math.cos(math.radians(alpha)) * (self.radius + offset)
-            OffsetY = - math.sin(math.radians(alpha)) * (self.radius + offset)
-            OffsetVector = QVector2D(OffsetX,OffsetY)
-            bulletpos.__iadd__(OffsetVector)
-            #set Bullet Speed
-            Vel = QVector2D(GesX,GesY)
-            Vel.__iadd__(self.v_vector)
+        
+        #Position
+        bulletpos = QVector2D(self.position.x(),self.position.y())
+        #velocity
+        speed = Bullet.Bullet_Speed + addSpeed
+        #velocity based on angle
+        GesX = math.cos(math.radians(alpha)) * speed
+        GesY = - math.sin(math.radians(alpha)) * speed
+        #set Bullet to middle of Robot
+        OffsetVector = QVector2D((self.radius-2)/2,(self.radius-2)/2)
+        bulletpos.__iadd__(OffsetVector)
+        #set bullet to edge in firing direction
+        OffsetX = math.cos(math.radians(alpha)) * (self.radius + offset)
+        OffsetY = - math.sin(math.radians(alpha)) * (self.radius + offset)
+        OffsetVector = QVector2D(OffsetX,OffsetY)
+        bulletpos.__iadd__(OffsetVector)
 
-            if target != 0:
-                #Calculate Target Alpha
-                target_x = target.x()
-                target_y = target.y()
+        if target != 0:
+            #Calculate Target Alpha
+            target_x = target.x()
+            target_y = target.y()
 
-                pos_x = bulletpos.x()
-                pos_y = bulletpos.y()
+            pos_x = bulletpos.x()
+            pos_y = bulletpos.y()
 
 
-                #Berechnung Blickrichtung
-                delta_x = target_x - pos_x
-                delta_y = target_y - pos_y
-                target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
+            #Berechnung Blickrichtung
+            delta_x = target_x - pos_x
+            delta_y = target_y - pos_y
+            target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
 
-            else:
-                target_alpha = alpha
+        else:
+            target_alpha = alpha
 
-            #create Bullet
-            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, target_alpha, life, delayT, bulletType, self.robotid)
-            return Bullet1
-
-
-    """
-    def createBullet_old(self, bulletType, life, delayT, alpha, addSpeed):
-            #Position
-            bulletpos = QVector2D(self.position.x(),self.position.y())
-            #velocity
-            speed = Bullet.Bullet_Speed + addSpeed
-            #velocity based on angle
-            GesX = math.cos(math.radians(alpha)) * speed
-            GesY = - math.sin(math.radians(alpha)) * speed
-            #set Bullet to middle of Robot
-            OffsetVector = QVector2D((self.radius + Bullet.Bullet_Size)/2,(self.radius + Bullet.Bullet_Size)/2)
-            bulletpos.__iadd__(OffsetVector)
-            #set bullet to edge in firing direction
-            OffsetX = math.cos(math.radians(alpha)) * (self.radius + 6)
-            OffsetY = - math.sin(math.radians(alpha)) * (self.radius + 6)
-            OffsetVector = QVector2D(OffsetX,OffsetY)
-            bulletpos.__iadd__(OffsetVector)
-            #set Bullet Speed
-            Vel = QVector2D(GesX,GesY)
-            Vel.__iadd__(self.v_vector)            
-
-            #create Bullet
-            Bullet1 = Bullet.Bullet(bulletpos, Vel, speed, alpha, life, delayT, bulletType)
-            return Bullet1
-    """
-    
+        #create Bullet
+        Bullet1 = Bullet.Bullet(bulletpos, speed, target_alpha, life, delayT, bulletType, self.robotid)
+        return Bullet1
 
 class RobotControl(QThread):
 
@@ -351,48 +361,46 @@ class RunAwayKeyBoard(RobotControl):
             self.msleep(100)
             
             if keyboard.is_pressed('w'):
-                #print('W-Key')
                 self.robot.a = 0.1
 
             if keyboard.is_pressed('s'):
-                #print('S-Key')
                 self.robot.a = -0.1
 
             if keyboard.is_pressed('a'):
-                #print('A-Key')
                 self.robot.a_alpha = 0.5
 
             if keyboard.is_pressed('d'):
-                #print('D-Key')
                 self.robot.a_alpha = -0.5
                 
             if keyboard.is_pressed('j'):
-                #print('J-Key')
                 self.robot.shoot()
 
             #Special Attack1
             if keyboard.is_pressed('1'):
-                #print('J-Key')
-                self.robot.special()
+                self.robot.spellcard1()
 
             #Special Attack2
             if keyboard.is_pressed('2'):
-                #print('J-Key')
-                self.robot.special2()
+                self.robot.spellcard2()
 
             #Special Attack3
             if keyboard.is_pressed('3'):
-                #print('J-Key')
-                self.robot.special3()
+                self.robot.spellcard3()
 
             #Special Attack4
             if keyboard.is_pressed('4'):
-                #print('J-Key')
                 self.robot.spellcard4()
+
+            #Special Attack5
+            if keyboard.is_pressed('5'):
+                self.robot.spellcard5()
+
+            #Special Attack6
+            if keyboard.is_pressed('6'):
+                self.robot.spellcard6()
 
             #temporary Stop key    
             if keyboard.is_pressed('q'):
-                #print('J-Key')
                 self.robot.v = 0
                 self.robot.a = 0
                 self.robot.v_alpha = 0
