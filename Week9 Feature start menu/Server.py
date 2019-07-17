@@ -3,9 +3,9 @@ Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
 
-from PyQt5.QtWidgets import QWidget, QDesktopWidget
+from PyQt5.QtWidgets import QWidget, QDesktopWidget, QMessageBox, QPushButton
 from PyQt5.QtGui import QPainter, QColor, QVector2D, QPixmap, QPainterPath, QPolygonF
-from PyQt5.QtCore import Qt, QBasicTimer, QPoint
+from PyQt5.QtCore import Qt, QBasicTimer, QPoint, QEvent
 import math
 
 import Robots
@@ -24,22 +24,24 @@ count = 0
 DEATH_TIME = 100
 IMMUNE_TIME = 150
 
+# wall libraries
+floorTextures = {
+    "wood": 'textures/wood_Board.png',
+    "floor": 'textures/floor.png'
+}
 
-# color library
+# color libraries
 colors = {
     "pink":     QColor(255, 0, 250),
     "darkblue": QColor(0, 0, 250),
     "lightblue": QColor(0, 145, 250),
     "orange": QColor(245, 120, 0),
     "black": QColor(0,0,0),
-    "yellow": QColor(255,255,0)
+    "yellow": QColor(255,255,0),
+    "light cyan":  	QColor(224,255,255),
+    "white smoke":  QColor(245,245,245)
 }
 
-# wall library
-floorTextures = {
-    "wood": 'textures/wood_Board.png',
-    "floor": 'textures/floor.png'
-}
 
 def center(self):
     '''centers the window on the screen'''
@@ -49,7 +51,11 @@ def center(self):
     self.move((screen.width() - size.width()) / 2,
               (screen.height() - size.height()) / 2)
 
+
+
+
 class SpielFeld(QWidget):
+
 
     #Array construction
     PlayFieldAR = [[0 for x in range(100)] for y in range(100)]
@@ -71,7 +77,7 @@ class SpielFeld(QWidget):
 
 
         Robot1.setProgram(Controller.RunAwayKeyBoard(Robot1))
-        Robot2.setProgram(Controller.TargetHunt(Robot2))
+        Robot2.setProgram(Controller.CircleMap1(Robot2))
         Robot3.setProgram(Controller.TargetHunt(Robot3))
         Robot4.setProgram(Controller.TargetHunt(Robot4))
 
@@ -86,8 +92,10 @@ class SpielFeld(QWidget):
         self.tickCount = 0
 
         self.initUI()
+        
 
     def initUI(self):
+
         self.setGeometry(0, 0, SCREENWIDTH, SCREENHEIGHT)
         self.setWindowTitle('Game.exe')
         center(self)
@@ -97,13 +105,14 @@ class SpielFeld(QWidget):
 
         self.show()
 
-    
+
     def start(self):
+
         if self.isPaused:
             return
-        
-        # start GameBoard
+
         self.isStarted = True
+
         self.timer.start(FPS, self)
 
     def createBoard(self):
@@ -140,49 +149,55 @@ class SpielFeld(QWidget):
         for i in range(0, 10, 1):
             SpielFeld.PlayFieldAR[10][i+50] = 1
             SpielFeld.PlayFieldAR[11][i+50] = 1
-
-
-    def timerEvent(self, Event):
-        #Count
-        self.tickCount += 1
-
-        #update RobotLists of each Robot
-        if self.tickCount % 5 == 0:
-            for y in self.robots:
-                for x in self.robots:
-                    y.RobotList[x.robotid] = x.position
-
-        # move robots on the game field
-        for robot in self.robots:
-            if robot.deathTime == 0:
-                self.fetchBullets(robot)
-                self.moveRobot(robot)
-            self.barrierCollision(robot)
-            self.roboCollision(robot)
-            self.SightingData(robot)
-            self.reduceDelay(robot)
-            self.reduceDeathTime(robot)
-            self.reduceImmuneTime(robot)
-
             
 
-        for bul in SpielFeld.Bullets:
-            bul.moveBullet()
-            if self.BulletBarrierCollision(bul):
-               SpielFeld.Bullets.remove(bul)
+    def timerEvent(self, event):
+
+
+        if event.timerId() == self.timer.timerId():
+
+            # Count
+            self.tickCount += 1
+
+            # update RobotLists of each Robot
+            if self.tickCount % 5 == 0:
+                for y in self.robots:
+                    for x in self.robots:
+                        y.RobotList[x.robotid] = x.position
+
+            # move robots on the game field
             for robot in self.robots:
-                if bul.one_hit(robot):
-                    if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
-                        #print('oof')
-                        robot.deathTime = DEATH_TIME
-                        robot.color = QColor(255, 0, 250, 50)
-                    elif robot.robotid != 1:
-                        self.teleport_bullet(robot)
-                    if bul in SpielFeld.Bullets:
-                        SpielFeld.Bullets.remove(bul)
+                if robot.deathTime == 0:
+                    self.fetchBullets(robot)
+                    self.moveRobot(robot)
+                self.barrierCollision(robot)
+                self.roboCollision(robot)
+                self.SightingData(robot)
+                self.reduceDelay(robot)
+                self.reduceDeathTime(robot)
+                self.reduceImmuneTime(robot)
 
-            
-        self.update()
+            for bul in SpielFeld.Bullets:
+                bul.moveBullet()
+                if self.BulletBarrierCollision(bul):
+                    SpielFeld.Bullets.remove(bul)
+                for robot in self.robots:
+                    if bul.one_hit(robot):
+                        if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
+                            # print('oof')
+                            robot.deathTime = DEATH_TIME
+                            robot.color = QColor(255, 0, 250, 50)
+                        elif robot.robotid != 1:
+                            self.teleport_bullet(robot)
+                        if bul in SpielFeld.Bullets:
+                            SpielFeld.Bullets.remove(bul)
+
+            self.update()
+
+        else:
+            super(SpielFeld, self).timerEvent(event)
+
+
 
     def fetchBullets(self,Robot):
         SpielFeld.Bullets.extend(Robot.BulList)
@@ -287,37 +302,67 @@ class SpielFeld(QWidget):
                     #print(robo.robotid, robo.ViewList)
 
 
-
     def keyPressEvent(self, event):
-        key = event.key()
-
-        if key == Qt.Key_P:
-            self.pause()
+        if not self.isStarted:
+            super(SpielFeld, self).keyPressEvent(event)
             return
 
-        if self.isPaused:
-            return
+        if event.type() == QEvent.KeyPress:
+            key = event.key()
 
-    def closeEvent(self, event):
-        app = QtGui.QGuiApplication.instance()
-        app.closeAllWindows()        
+            if key == Qt.Key_P:
+                self.pause()
+                return
 
+        else:
+            super(SpielFeld, self).keyPressEvent(event)
 
+            
+    def Message(self):
+        msgBox = QMessageBox()
+
+        msgBox.setWindowTitle("Pause Screen")
+        msgBox.setIconPixmap(QPixmap('textures/pauseEmoji.png'))
+        msgBox.setText("Your in the pause screen. \n Do you want to continue? \n")
+
+        #set Buttons
+        msgBox.addButton(QPushButton(" Yes "), QMessageBox.YesRole)
+        msgBox.addButton(QPushButton(" No "), QMessageBox.NoRole)
+        
+        # change backgroundstyle 
+        p = self.palette()
+        p.setColor(self.backgroundRole(), colors["white smoke"])
+        msgBox.setPalette(p)
+        msgBox.exec_()
+
+        return msgBox
+
+    
     def pause(self):
+
         if not self.isStarted:
             return
 
         self.isPaused = not self.isPaused
-        
+        print(self.isPaused)
+
         if self.isPaused:
             self.timer.stop()
-            self.pMenu = main.pause_Menu()
+            
+            # switch to pause screen
+            self.msgBox = self.Message()
+            if self.msgBox == QMessageBox.No:
+                self.startMenu = main.start_Menu()
+                self.close()
+            else:
+                self.isPaused = False
+                self.timer.start(FPS, self)
         else:
             self.timer.start(FPS, self)
 
         self.update()
 
-        
+
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
         # Draw the PlayField
@@ -329,6 +374,8 @@ class SpielFeld(QWidget):
                 else:
                     texture = self.floorTexture
                 qp.drawPixmap(i * 10, j * 10, texture)
+
+
 
     def moveRobot(self, Robo):
         # berechne neue Lenkrichtung
