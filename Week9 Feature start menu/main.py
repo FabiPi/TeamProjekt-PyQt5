@@ -2,14 +2,16 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
-from PyQt5 import QtGui
-from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QPushButton, QLabel, \
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
 import sys
 
 import Server
+
 
 WIDTH = 500
 HEIGHT = 500
@@ -17,11 +19,8 @@ HEIGHT = 500
 XPosStart = 25
 YPosStart = 75
 
-PAUSE_STATE = False
-START_STATE = False
 
-
-class Game (QMainWindow):
+class Game (QWidget):
 
     def __init__(self):
         super().__init__()
@@ -33,19 +32,17 @@ class Game (QMainWindow):
         self.resize(WIDTH, HEIGHT)
         Server.center(self)
         self.setWindowTitle('Intro')
-        
-        # create start button
         self.enter = QPushButton('enter', self)
         self.enter.move(50,400)
         self.enter.resize(400, 50)
-        self.enter.clicked.connect(self.GAME_Menu)
+        self.enter.clicked.connect(self.gameMenu)
 
         self.show()
 
-
-    def GAME_Menu(self):
+    def gameMenu(self):
         self.startM = start_Menu()
         self.close()
+
 
 
 class start_Menu(QWidget):
@@ -83,15 +80,10 @@ class start_Menu(QWidget):
 
         # quite game
         self.button5 = QPushButton('Quit', self)
-        self.button5.clicked.connect(self.closeGame)
+        self.button5.clicked.connect(self.close)
         self.button5.move(XPosStart, 5 * YPosStart)
 
-        # State: Start
-        global START_STATE
-        START_STATE = True
-
         self.show()
-
 
     def Instance(self):
         self.gBoard = Server.SpielFeld()
@@ -113,17 +105,13 @@ class start_Menu(QWidget):
         self.authors = CreditText()
         self.close()
 
-    def closeGame(self):
-        if not START_STATE:
-            app = QtGui.QGuiApplication.instance()
-            app.closeAllWindows()
-
+    def closeEvent(self, event):
         self.close()
 
     def Back2Menu(self):
         Game.GAME_Menu(self)
 
-
+'''
 class pause_Menu(start_Menu):
 
     def __init__(self):
@@ -147,16 +135,15 @@ class pause_Menu(start_Menu):
         START_STATE = False
 
 
-
     def back2Game(self):
-        Server.SpielFeld.PAUSE = False
+
         self.close()
 
     def Back2Menu(self):
         self.pMenu = pause_Menu()
         self.close()
 
-
+'''
 
 class OptionField(QWidget):
     def __init__(self):
@@ -179,10 +166,7 @@ class OptionField(QWidget):
         self.show()
 
     def Back2Menu(self):
-        if START_STATE:
             start_Menu.Back2Menu(self)
-        else:
-            pause_Menu.Back2Menu(self)
 
 
 
@@ -240,22 +224,28 @@ class TableWidget(QWidget):
         self.setLayout(self.layout)
 
 
+
 class wallTexture(QWidget):
     def __init__(self):
         super().__init__()
+
+        # set wall texture layout
+        self.wallG = QGroupBox(self)
+
+        # set button layout
+        self.button_layout1 = QVBoxLayout()
+
+        self.texture1 = QRadioButton("Texture 1")
+        self.texture2 = QRadioButton("Texture 2")
 
         self.iniUt()
 
     def iniUt(self):
 
-        # set wall texture layout
-        self.wallG = QGroupBox(self)
         self.wallG.setTitle("Texture Wall")
 
-        self.button_layout1 = QVBoxLayout()
-        self.texture1 = QRadioButton("Texture 1")
+        self.texture1.toggled.connect(self.onClicked)
 
-        self.texture2 = QRadioButton("Texture 2")
 
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
@@ -263,37 +253,57 @@ class wallTexture(QWidget):
         # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
 
+    def onClicked(self):
+        pass
+
+
 
 class floorTexture(QWidget):
     def __init__(self):
         super().__init__()
 
+        # set floor texture layout
+        self.floorG = QGroupBox(self)
+
+        # set button layout
+        self.button_layout2 = QVBoxLayout()
+
+        self.texture3 = QRadioButton("Brown Floor")
+        self.texture4 = QRadioButton("Wood Floor")
+
         self.iniUt()
 
     def iniUt(self):
 
-        # set floor texture layout
-        self.floorG = QGroupBox(self)
+
         self.floorG.setTitle("Texture Floor")
 
-        self.button_layout2 = QVBoxLayout()
 
         # creat button brown floor
-        self.texture3 = QRadioButton("Brown Floor")
         self.texture3.setIcon(QIcon(Server.floorTextures["floor"]))
         self.texture3.setChecked(True)
-
         self.texture3.toggled.connect(self.onClicked)
-        self.texture4 = QRadioButton("Texture 4")
 
+        # create button wood floor
+        self.texture4.setIcon(QIcon(Server.floorTextures["wood"]))
+        #self.texture4.setChecked(True)
         self.button_layout2.addWidget(self.texture3)
         self.button_layout2.addWidget(self.texture4)
+
 
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
 
     def onClicked(self):
-        Server.SpielFeld.floorTexture = Server.floorTextures["floor"]
+        button = self.sender()
+
+        if button.isChecked():
+            pass
+
+
+
+
+
 
 
 class CreditText(QWidget):
@@ -323,10 +333,8 @@ class CreditText(QWidget):
         self.show()
 
     def Back2Menu(self):
-        if START_STATE:
             start_Menu.Back2Menu(self)
-        else:
-            pause_Menu.Back2Menu(self)
+
 
 
 class How2PlayText(QWidget):
@@ -341,7 +349,6 @@ class How2PlayText(QWidget):
         self.label.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
-
         self.initUI()
 
     def initUI(self):
@@ -354,12 +361,9 @@ class How2PlayText(QWidget):
         self.back.move(200,400)
 
         self.show()
-        
+
     def Back2Menu(self):
-        if START_STATE:
             start_Menu.Back2Menu(self)
-        else:
-            pause_Menu.Back2Menu(self)
 
 
 
