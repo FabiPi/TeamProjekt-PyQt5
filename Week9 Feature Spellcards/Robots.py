@@ -286,7 +286,6 @@ class Robot(object):
 
     def spellcard6(self):
         if self.coolDown == 0 and self.deathTime == 0:
-            #add More!!!
             #Values
             BulletAmmount = 4
             Repetitions = 25
@@ -303,7 +302,25 @@ class Robot(object):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(22,LifeTime, delay*4,((alpha1 + i*alphaStep) + alphaWindow * delay) % 360,0,6,0))
 
-            self.coolDown = 450 
+            self.coolDown = 450
+
+    def spellcard7(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            BulletAmmount = 5
+            Repetitions = 20
+            LifeTime = 350
+
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+
+            #Create Bullets
+            for delay in range(0, Repetitions, 1):
+                for i in range(0, BulletAmmount, 1):
+                    self.BulList.append(self.createBullet(27,LifeTime-delay*4, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
+
+            self.coolDown = 700
         
 
     def createBullet(self, bulletType, life, delayT, alpha, addSpeed, offset, target):
@@ -354,7 +371,7 @@ class RobotControl(QThread):
 
 
 #Roboter Steuerung
-
+# Is in another file
 class RunAwayKeyBoard(RobotControl):
     def run(self):
         while True:
@@ -399,44 +416,15 @@ class RunAwayKeyBoard(RobotControl):
             if keyboard.is_pressed('6'):
                 self.robot.spellcard6()
 
+            #Special Attack6
+            if keyboard.is_pressed('7'):
+                print('hi')
+                self.robot.spellcard7()
+
             #temporary Stop key    
             if keyboard.is_pressed('q'):
                 self.robot.v = 0
                 self.robot.a = 0
                 self.robot.v_alpha = 0
                 self.robot.a_alpha = 0
-
-            
-
-class TargetHunt(RobotControl):
-
-    def run(self):
-        while True:
-            self.robot.a = 1
-            target = 1
-            self.robot.aimTargetView(target)
-            self.msleep(100)
-            #if self.robot.ViewList[target][3]:
-                #self.robot.shoot()
-
-class CircleMap(RobotControl):
-    
-    def run(self):
-        self.robot.a = 1
-        targetnum = 0
-        while True:
-            if targetnum == 0:
-                target= QVector2D(950,950)
-            elif targetnum == 1:
-                target= QVector2D(950,50)
-            elif targetnum == 2:
-                target= QVector2D(50,50)
-            elif targetnum == 3:
-                target= QVector2D(50,950)
-                
-            if self.robot.inVicinity(target):
-                targetnum = (targetnum +1) % 4
-            self.robot.aimTarget(target)
-            self.msleep(100)
-            self.robot.shoot()
 

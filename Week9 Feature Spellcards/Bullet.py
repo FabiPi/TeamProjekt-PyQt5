@@ -46,9 +46,12 @@ Change-List
     adjust CDs for other Spellcards
     update Texture Paths
     export Spellcards from MoveBullet to Spellcard Methods
+    
+    *** fourth Upload ***
     add Spellcard 5
     update Spawnpositions
     add Spellcard 6
+    add Spellcard 7 (dosnt really work with collision since its to large
 
 """
 
@@ -108,12 +111,16 @@ class Bullet(object):
                                19:QPixmap('textures/Bullets/RedSeal.png'), #RedSeal
                                20:QPixmap('textures/Bullets/BlueSeal.png'), #BlueSeal
                                21:QPixmap('textures/Bullets/GreenSeal.png'), #GreenSeal
-                               #Spellcard5
+                               #Spellcard6
                                22:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
                                23:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
                                24:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
                                25:QPixmap('textures/Bullets/BlueOrb.png'), #BlueOrb
                                26:QPixmap('textures/Bullets/RedOrb.png'), #RedOrb
+                               #Spellcard7
+                               27:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               28:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               29:QPixmap('textures/Bullets/Star05.png'), #purpleStar
                                }
 
 
@@ -158,6 +165,10 @@ class Bullet(object):
         #Spellcard 6    (Spiral)
         elif 22 <= self.bulType <= 26:
             self.Spellcard06()
+
+        #Spellcard 7    (Star - sweep - Star)
+        elif 27 <= self.bulType <= 29:
+            self.Spellcard07()
 
         #Standart Behavior does not change speed/angle
         #=> if shot not defined, or Standart dont change anything
@@ -277,4 +288,24 @@ class Bullet(object):
                 self.alpha += 180
                 self.speed = 3
 
+    def Spellcard07(self):
+        if self.bulType == 27:
+            if self.time == 300:
+                self.alpha += 162
+                self.speed = 3
+            if self.time == 200:
+                self.bulType = 28
+                self.time = 370
+        elif self.bulType == 28:
+            self.alpha += 1
+            if self.time == 77:
+                self.time = 200
+                self.speed = 0
+                self.alpha -= 162
+                self.bulType = 29
+        elif self.bulType == 29:
+            if self.time == 150:
+                self.alpha += random.randint(0,360)
+                self.bulType = random.randint(8,13)
+                self.speed = 4
 

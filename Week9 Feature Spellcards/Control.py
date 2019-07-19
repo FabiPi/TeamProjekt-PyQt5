@@ -58,6 +58,10 @@ class RunAwayKeyBoard(RobotControl):
             if keyboard.is_pressed('6'):
                 self.robot.spellcard6()
 
+            #Special Attack6
+            if keyboard.is_pressed('7'):
+                self.robot.spellcard7()
+
             #temporary Stop key    
             if keyboard.is_pressed('q'):
                 self.robot.v = 0
