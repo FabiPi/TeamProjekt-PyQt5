@@ -437,7 +437,7 @@ class SpielFeld(QWidget):
         msgBox = QMessageBox()
 
         msgBox.setWindowTitle("Pause Screen")
-        msgBox.setIconPixmap(QPixmap('textures/pauseEmoji.png'))
+        msgBox.setIconPixmap(QPixmap('textures/Board/pauseEmoji.png'))
         msgBox.setText("Your in the pause screen. \n Do you want to continue? \n")
 
         #set Buttons
