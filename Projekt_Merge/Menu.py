@@ -36,7 +36,7 @@ class Game (QWidget):
         self.enter.setStyleSheet('background-color: rgb(240,255,255); font: bold 15px; color: black;')
 
         # create background animated gif
-        self.movie = QMovie('textures/Red.gif')
+        self.movie = QMovie('textures/Background/Red.gif')
         self.movie.frameChanged.connect(self.repaint)
         self.movie.start()
 
@@ -78,12 +78,6 @@ class start_Menu(QWidget):
         self.setWindowTitle('Start Menu')
         Server.center(self)
 
-
-        #create animated background
-        self.movie = QMovie('textures/Red2.gif')
-        self.movie.frameChanged.connect(self.repaint)
-        self.movie.start()
-
         # switch to gameboard
         self.button1 = QPushButton('Start Game', self)
         self.button1.move(self.XPosStart, self.YPosStart)
@@ -108,6 +102,11 @@ class start_Menu(QWidget):
         self.button5 = QPushButton('Quit', self)
         self.button5.clicked.connect(self.close)
         self.button5.move(self.XPosStart, 5 * self.YPosStart)
+
+        #create animated background
+        self.movie = QMovie('textures/Background/Red2.gif')
+        self.movie.frameChanged.connect(self.repaint)
+        self.movie.start()
 
         self.show()
 
@@ -154,20 +153,25 @@ class OptionField(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.background = QLabel(self)
+        self.image = QPixmap('textures/Background/NightRoad.jpg')
+        self.background.setPixmap(self.image)
+
         self.InitUI()
 
     def InitUI(self):
-        self.resize(500, 500)
+        self.resize(800, 500)
         self.setWindowTitle('Options')
         Server.center(self)
 
         self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
-        self.back.move(200, 400)
+        self.back.move(200, 450)
 
         self.table_widget = TableWidget(self)
         QtGui.QGuiApplication.processEvents()
-        self.table_widget.resize(500,400)
+        self.table_widget.move(380, 150)
+        self.table_widget.resize(450,300)
 
         self.show()
 
@@ -214,11 +218,13 @@ class TableWidget(QWidget):
 
         # add wallG to tab3
         self.wallG = wallTexture()
+        #self.wallG.setStyleSheet('background-color: rgb(240,255,255);')
         self.tab3.layout.addWidget(self.wallG)
 
 
         # add floorG to tab3
         self.floorG = floorTexture()
+        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
         self.tab3.layout.addWidget(self.floorG)
 
         # add all layouts to tab3
@@ -276,6 +282,7 @@ class wallTexture(QWidget):
 
         # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
+        self.wallG.setStyleSheet('background-color: rgb(240,255,255);')
 
         # click buttons
         self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
@@ -412,6 +419,7 @@ class floorTexture(QWidget):
 
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
+        self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
 
 
     # show new setting, after returing to options
@@ -494,14 +502,15 @@ class CreditText(QWidget):
         super(CreditText, self).__init__()
 
         self.label = QLabel(self)
-        self.label.setPixmap(QPixmap('textures/CreditBackground.jpg'))
+        self.image = QPixmap('textures/Background/CreditBackground.jpg')
+        self.label.setPixmap(self.image)
 
         self.back = QPushButton('back', self)
 
         self.initUI()
 
     def initUI(self):
-        self.resize(800, 375)
+        self.resize(self.image.width(), self.image.height())
         self.setWindowTitle('Credits')
         Server.center(self)
 
@@ -551,5 +560,4 @@ if __name__ == '__main__':
 
 
     sys.exit(app.exec_())
-
 
