@@ -13,12 +13,6 @@ import sys
 import Server
 
 
-WIDTH = 500
-HEIGHT = 500
-
-XPosStart = 25
-YPosStart = 75
-
 #default setting
 CurFloor = "Brown floor "
 CurWall = "Metall wall"
@@ -41,7 +35,7 @@ class Game (QWidget):
         self.enter.clicked.connect(self.gameMenu)
         self.enter.setStyleSheet('background-color: rgb(240,255,255); font: bold 15px; color: black;')
 
-        # load movie
+        # create background animated gif
         self.movie = QMovie('textures/Red.gif')
         self.movie.frameChanged.connect(self.repaint)
         self.movie.start()
@@ -54,17 +48,23 @@ class Game (QWidget):
 
     # reproduce movie
     def paintEvent(self, event):
-        currentFrame = self.movie.currentPixmap()
-        frameRect = currentFrame.rect()
-        frameRect.moveCenter(self.rect().center())
+
+        # https://wiki.python.org/moin/PyQt/Movie%20splash%20screen
         # after every changed image, refresh the background with the currentPixmap
-        if frameRect.intersects(event.rect()):
-            painter = QPainter(self)
-            painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
+        painter = QPainter(self)
+        pixmap = self.movie.currentPixmap()
+        self.setMask(pixmap.mask())
+        painter.drawPixmap(0, 0, pixmap)
 
 
 
 class start_Menu(QWidget):
+
+    WIDTH = 500
+    HEIGHT = 666
+
+    XPosStart = 70
+    YPosStart = 60
 
     def __init__(self):
         super().__init__()
@@ -73,36 +73,54 @@ class start_Menu(QWidget):
 
     def initUI(self):
 
-        self.resize(WIDTH, HEIGHT)
+
+        self.resize(self.WIDTH, self.HEIGHT)
         self.setWindowTitle('Start Menu')
         Server.center(self)
 
+
+        #create animated background
+        self.movie = QMovie('textures/Red2.gif')
+        self.movie.frameChanged.connect(self.repaint)
+        self.movie.start()
+
         # switch to gameboard
         self.button1 = QPushButton('Start Game', self)
-        self.button1.move(XPosStart, YPosStart)
+        self.button1.move(self.XPosStart, self.YPosStart)
         self.button1.clicked.connect(self.startGame)
 
         # switch to options
         self.button2 = QPushButton('Options', self)
         self.button2.clicked.connect(self.Options)
-        self.button2.move(XPosStart, 2 * YPosStart)
+        self.button2.move(self.XPosStart, 2 * self.YPosStart)
 
         # switch to manuel
         self.button3 = QPushButton('How to Play', self)
         self.button3.clicked.connect(self.How2Play)
-        self.button3.move(XPosStart, 3 * YPosStart)
+        self.button3.move(self.XPosStart, 3 * self.YPosStart)
 
         # switch to credits
         self.button4 = QPushButton('Credits', self)
         self.button4.clicked.connect(self.Credits)
-        self.button4.move(XPosStart, 4 * YPosStart)
+        self.button4.move(self.XPosStart, 4 * self.YPosStart)
 
         # quite game
         self.button5 = QPushButton('Quit', self)
         self.button5.clicked.connect(self.close)
-        self.button5.move(XPosStart, 5 * YPosStart)
+        self.button5.move(self.XPosStart, 5 * self.YPosStart)
 
         self.show()
+
+    # reproduce movie
+    def paintEvent(self, event):
+
+        # https://wiki.python.org/moin/PyQt/Movie%20splash%20screen
+        # after every changed image, refresh the background with the currentPixmap
+        painter = QPainter(self)
+        pixmap = self.movie.currentPixmap()
+        self.setMask(pixmap.mask())
+        painter.drawPixmap(0, 0, pixmap)
+
 
     def Instance(self):
         self.gBoard = Server.SpielFeld()
@@ -139,7 +157,7 @@ class OptionField(QWidget):
         self.InitUI()
 
     def InitUI(self):
-        self.resize(WIDTH, HEIGHT)
+        self.resize(500, 500)
         self.setWindowTitle('Options')
         Server.center(self)
 
@@ -155,7 +173,6 @@ class OptionField(QWidget):
 
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
-
 
 
 
@@ -291,6 +308,7 @@ class wallTexture(QWidget):
             self.texture1.setChecked(True)
 
         self.label.setText('currently used\n' + CurWall)
+        self.label.update()
 
 
     def rBtn_clk(self, button):
@@ -316,6 +334,7 @@ class wallTexture(QWidget):
             pass
 
         self.label.setText("You selected: \n" + button.text())
+        QtGui.QGuiApplication.processEvents()
 
 
 class floorTexture(QWidget):
@@ -332,7 +351,7 @@ class floorTexture(QWidget):
         # create floor texture buttons
         self.texture1 = QRadioButton("Brown floor")
         self.texture2 = QRadioButton("Wood floor")
-        self.texture3 = QRadioButton("Blue floor")
+        self.texture3 = QRadioButton("Grass floor")
         self.texture4 = QRadioButton("Pink floor")
         self.texture5 = QRadioButton("Whitestone floor")
         self.texture6 = QRadioButton("Brownstone floor")
@@ -357,11 +376,10 @@ class floorTexture(QWidget):
 
         self.floorG.setTitle("Texture Floor")
 
-
         # add button icons
         self.texture1.setIcon(QIcon(Server.floorTextures["Brown floor"]))
         self.texture2.setIcon(QIcon(Server.floorTextures["Wood floor"]))
-        self.texture3.setIcon(QIcon(Server.floorTextures["Blue floor"]))
+        self.texture3.setIcon(QIcon(Server.floorTextures["Grass floor"]))
         self.texture4.setIcon(QIcon(Server.floorTextures["Pink floor"]))
         self.texture5.setIcon(QIcon(Server.floorTextures["Whitestone floor"]))
         self.texture6.setIcon(QIcon(Server.floorTextures["Brownstone floor"]))
@@ -395,6 +413,7 @@ class floorTexture(QWidget):
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
 
+
     # show new setting, after returing to options
     def chk_RBtn(self):
         global CurFloor
@@ -413,7 +432,7 @@ class floorTexture(QWidget):
         elif CurFloor == "Brown floor":
             self.texture1.setChecked(True)
 
-        elif CurFloor == "Blue floor":
+        elif CurFloor == "Grass floor":
             self.texture3.setChecked(True)
 
         elif CurFloor == "Pink floor":
@@ -434,6 +453,7 @@ class floorTexture(QWidget):
     def rBtn_clk(self, button):
         self.currentRBtn = button
 
+
     def btn_clk(self, button):
         global CurFloor
 
@@ -446,8 +466,8 @@ class floorTexture(QWidget):
             CurFloor = "Wood floor"
 
         elif button == self.texture3:
-            Server.ftexture = "Blue floor"
-            CurFloor = "Blue floor"
+            Server.ftexture = "Grass floor"
+            CurFloor = "Grass floor"
 
         elif button == self.texture4:
             Server.ftexture = "Pink floor"
@@ -463,9 +483,8 @@ class floorTexture(QWidget):
 
         else:
             pass
-        
-        self.label.setText("You selected: \n" + button.text())
 
+        self.label.setText("You selected: \n" + button.text())
 
 
 
@@ -474,24 +493,20 @@ class CreditText(QWidget):
     def __init__(self):
         super(CreditText, self).__init__()
 
-        self.layout = QVBoxLayout()
-        self.label = QLabel("")
-        self.label.setText("CREATED BY \n \n Dominik \t aka B-Dome \n \n Jang Jang \t aka JangJang3 \n \n Fabian \t aka FabiPi"
-                           "\n \n \n \n ")
-        self.label.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label)
-        self.setLayout(self.layout)
+        self.label = QLabel(self)
+        self.label.setPixmap(QPixmap('textures/test.jpg'))
+
+        self.back = QPushButton('back', self)
 
         self.initUI()
 
     def initUI(self):
-        self.resize(WIDTH, HEIGHT)
+        self.resize(800, 375)
         self.setWindowTitle('Credits')
         Server.center(self)
 
-        self.back = QPushButton('Back', self)
         self.back.clicked.connect(self.Back2Menu)
-        self.back.move(200,400)
+        self.back.move(350,330)
 
         self.show()
 
@@ -515,7 +530,7 @@ class How2PlayText(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.resize(WIDTH, HEIGHT)
+        self.resize(500, 500)
         self.setWindowTitle('How to Play')
         Server.center(self)
 
@@ -533,9 +548,8 @@ class How2PlayText(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
+
+
     sys.exit(app.exec_())
-
-
-
 
 
