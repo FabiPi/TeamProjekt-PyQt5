@@ -494,7 +494,7 @@ class CreditText(QWidget):
         super(CreditText, self).__init__()
 
         self.label = QLabel(self)
-        self.label.setPixmap(QPixmap('textures/test.jpg'))
+        self.label.setPixmap(QPixmap('textures/CreditBackground.jpg'))
 
         self.back = QPushButton('back', self)
 
