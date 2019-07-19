@@ -14,7 +14,7 @@ class RobotControl(QThread):
 
 #Roboter Steuerung
 
-class RunAwayKeyBoard(RobotControl):
+class PlayerRobot_All_Abilities(RobotControl):
     def run(self):
         while True:
             self.msleep(100)
@@ -58,7 +58,7 @@ class RunAwayKeyBoard(RobotControl):
             if keyboard.is_pressed('6'):
                 self.robot.spellcard6()
 
-            #Special Attack6
+            #Special Attack7
             if keyboard.is_pressed('7'):
                 self.robot.spellcard7()
 
@@ -69,7 +69,224 @@ class RunAwayKeyBoard(RobotControl):
                 self.robot.v_alpha = 0
                 self.robot.a_alpha = 0
 
+class PlayerRobot_Ability01(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
             
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard1()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+            
+
+class PlayerRobot_Ability02(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard2()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+
+class PlayerRobot_Ability03(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard3()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+
+class PlayerRobot_Ability04(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard4()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+
+
+class PlayerRobot_Ability05(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard5()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+
+class PlayerRobot_Ability06(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard6()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+
+class PlayerRobot_Ability07(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack
+            if keyboard.is_pressed('l'):
+                self.robot.spellcard7()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
 
 class TargetHunt(RobotControl):
 
