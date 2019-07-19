@@ -20,7 +20,8 @@ XPosStart = 25
 YPosStart = 75
 
 #default setting
-CurRBtn = "Brown floor "
+CurFloor = "Brown floor "
+CurWall = "Metall wall"
 
 class Game (QWidget):
 
@@ -176,7 +177,7 @@ class TableWidget(QWidget):
 
 
         # create content grafic tab
-        self.tab3.layout = QVBoxLayout()
+        self.tab3.layout = QHBoxLayout()
 
         # add wallG to tab3
         self.wallG = wallTexture()
@@ -205,9 +206,22 @@ class wallTexture(QWidget):
         # set button layout
         self.button_layout1 = QVBoxLayout()
 
-        self.texture1 = QRadioButton("Texture 1")
-        self.texture2 = QRadioButton("Texture 2")
+        # create buttons
+        self.texture1 = QRadioButton("Metall wall")
+        self.texture2 = QRadioButton("Pink wall")
         self.btn = QPushButton("Select")
+
+        self.currentRBtn = self.texture1
+
+        # set texture choice
+        self.label = QLabel(self)
+
+        # change style of lettering
+        self.style = QFont()
+        self.style.setBold(True)
+        self.label.setFont(self.style)
+
+        self.chk_RBtn()
 
         self.iniUt()
 
@@ -215,19 +229,61 @@ class wallTexture(QWidget):
 
         self.wallG.setTitle("Texture Wall")
 
-        self.btn.clicked.connect(self.onClicked)
-
+        # adjust icons on buttons
+        self.texture1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
+        self.texture2.setIcon(QIcon(Server.wallTextures["Pink wall"]))
 
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
         self.button_layout1.addWidget(self.btn)
+        self.button_layout1.addWidget(self.label)
 
         # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
 
-    def onClicked(self):
-        print("why")
+        # click buttons
+        self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
+        self.texture2.clicked.connect(lambda: self.rBtn_clk(self.texture2))
 
+        #self.label.setText('currently used\n' + CurWall)
+
+        self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
+
+
+    # show new setting, after returing to options
+    def chk_RBtn(self):
+        global CurWall
+
+        if CurWall == "Metall wall":
+            self.texture2.setChecked(False)
+            self.texture1.setChecked(True)
+
+        elif CurWall == "Pink wall":
+            self.texture1.setChecked(False)
+            self.texture2.setChecked(True)
+        else:
+            self.texture1.setChecked(True)
+        self.label.setText('currently used\n' + CurWall)
+
+
+    def rBtn_clk(self, button):
+        self.currentRBtn = button
+
+
+    def btn_clk(self, button):
+        global CurWall
+
+        if button == self.texture1:
+            Server.wtexture = "Metall wall"
+            CurWall = "Metall wall"
+
+        elif button == self.texture2:
+            Server.wtexture = "Pink wall"
+            CurWall = "Pink wall"
+        else:
+            pass
+
+        self.label.setText("You selected: \n" + button.text())
 
 
 class floorTexture(QWidget):
@@ -241,10 +297,9 @@ class floorTexture(QWidget):
         # set button layout
         self.button_layout2 = QVBoxLayout()
 
-
         # create floor texture buttons
-        self.texture3 = QRadioButton("Brown Floor")
-        self.texture4 = QRadioButton("Wood Floor")
+        self.texture3 = QRadioButton("Brown floor")
+        self.texture4 = QRadioButton("Wood floor")
         # create selector
         self.btn = QPushButton("Select")
 
@@ -259,7 +314,6 @@ class floorTexture(QWidget):
         self.label.setFont(self.style)
 
         self.chk_RBtn()
-        print(CurRBtn)
 
         self.iniUt()
 
@@ -272,14 +326,11 @@ class floorTexture(QWidget):
         self.texture3.setIcon(QIcon(Server.floorTextures["Brown floor"]))
         self.texture3.clicked.connect(lambda: self.rBtn_clk(self.texture3))
 
-        # default texture
-
 
         # create button wood floor
         self.texture4.setIcon(QIcon(Server.floorTextures["Wood floor"]))
         self.texture4.clicked.connect(lambda: self.rBtn_clk(self.texture4))
 
-        self.label.setText('currently used\n' + CurRBtn )
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
 
@@ -294,39 +345,38 @@ class floorTexture(QWidget):
 
     # show new setting, after returing to options
     def chk_RBtn(self):
-        if CurRBtn == "Wood floor":
+        global CurFloor
+
+        if CurFloor == "Wood floor":
             self.texture3.setChecked(False)
             self.texture4.setChecked(True)
 
-
-        elif CurRBtn == "Brown floor":
+        elif CurFloor == "Brown floor":
             self.texture4.setChecked(False)
             self.texture3.setChecked(True)
-            print('testing branch')
         else:
             self.texture3.setChecked(True)
+
+        self.label.setText('currently used\n' + CurFloor)
 
 
     def rBtn_clk(self, button):
         self.currentRBtn = button
-        #print("nach dem Klick", self.currentRBtn.text())
 
     def btn_clk(self, button):
-        global CurRBtn
+        global CurFloor
 
         if button == self.texture3:
             Server.ftexture = "Brown floor"
-            CurRBtn = "Brown floor"
+            CurFloor = "Brown floor"
 
         elif button == self.texture4:
             Server.ftexture = "Wood floor"
-            CurRBtn = "Wood floor"
+            CurFloor = "Wood floor"
         else:
             pass
 
         self.label.setText("You selected: \n" + button.text())
-
-
 
 
 
@@ -395,4 +445,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
     sys.exit(app.exec_())
+
+
+
+
 
