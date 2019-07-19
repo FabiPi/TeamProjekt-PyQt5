@@ -158,8 +158,10 @@ class SpielFeld(QWidget):
                         if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
                             robot.deathTime = DEATH_TIME
                             robot.texture = 1
-                        elif robot.robotid != 1:
+                        elif robot.robotid != 1 and robot.immuneTime == 0:
                             self.teleport_bullet(robot)
+                            robot.immuneTime = IMMUNE_TIME
+                            robot.texture = 2
                         if bul in SpielFeld.Bullets:
                             SpielFeld.Bullets.remove(bul)
             else:
@@ -206,7 +208,10 @@ class SpielFeld(QWidget):
         if Robot.immuneTime != 0:
             Robot.immuneTime -= 1
             if Robot.immuneTime == 0:
-                Robot.texture = 0
+                if Robot.robotid ==1:
+                    Robot.texture = 0
+                else:
+                    Robot.texture = 3
 
             
     def paintEvent(self, qp):
