@@ -24,10 +24,13 @@ count = 0
 DEATH_TIME = 100
 IMMUNE_TIME = 150
 
+# selected floor texture
+ftexture = "Brown floor"
+
 # wall libraries
 floorTextures = {
-    "wood": 'textures/wood_Board.png',
-    "floor": 'textures/floor.png'
+    "Wood floor": 'textures/wood_Board.png',
+    "Brown floor": 'textures/floor.png'
 }
 
 # color libraries
@@ -65,8 +68,10 @@ class SpielFeld(QWidget):
     def __init__(self):
         super().__init__()
 
+       # change texture preferences
         self.wallTexture = QPixmap('textures/wall.png')
-        self.floorTexture = QPixmap('textures/floor.png')
+        self.floorTexture = self.changeFloor(ftexture)
+
         self.createBoard()
 
         #init Robots
@@ -104,6 +109,18 @@ class SpielFeld(QWidget):
         self.isPaused = False
 
         self.show()
+        
+        
+    def changeFloor(self, name):
+
+        if name == "Brown floor":
+            return QPixmap(floorTextures["Brown floor"])
+
+        elif name == "Wood floor":
+            return QPixmap(floorTextures["Wood floor"])
+
+        else:
+            pass
 
 
     def start(self):
