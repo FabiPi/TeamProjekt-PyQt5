@@ -4,7 +4,7 @@ von B-Dome, JangJang3, FabiPi
 """
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QPixmap, QFont
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
@@ -32,19 +32,35 @@ class Game (QWidget):
 
 
     def initUI(self):
-        self.resize(WIDTH, HEIGHT)
+        self.resize(800, 336)
         Server.center(self)
-        self.setWindowTitle('Intro')
+        self.setWindowTitle('Welcome')
         self.enter = QPushButton('enter', self)
-        self.enter.move(50,400)
-        self.enter.resize(400, 50)
+        self.enter.move(360,280)
+        self.enter.resize(80, 25)
         self.enter.clicked.connect(self.gameMenu)
+        self.enter.setStyleSheet('background-color: rgb(240,255,255); font: bold 15px; color: black;')
+
+        # load movie
+        self.movie = QMovie('textures/Red.gif')
+        self.movie.frameChanged.connect(self.repaint)
+        self.movie.start()
 
         self.show()
 
     def gameMenu(self):
         self.startM = start_Menu()
         self.close()
+
+    # reproduce movie
+    def paintEvent(self, event):
+        currentFrame = self.movie.currentPixmap()
+        frameRect = currentFrame.rect()
+        frameRect.moveCenter(self.rect().center())
+        # after every changed image, refresh the background with the currentPixmap
+        if frameRect.intersects(event.rect()):
+            painter = QPainter(self)
+            painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
 
 
 
