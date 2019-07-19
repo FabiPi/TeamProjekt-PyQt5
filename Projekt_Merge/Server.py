@@ -107,7 +107,7 @@ class SpielFeld(QWidget):
         Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, 3)
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
 
-        Robot1.setProgram(Control.RunAwayKeyBoard(Robot1))
+        Robot1.setProgram(Control.PlayerRobot_All_Abilities(Robot1))
         Robot2.setProgram(Control.TargetHunt(Robot2))
         Robot3.setProgram(Control.TargetHunt(Robot3))
         Robot4.setProgram(Control.TargetHunt(Robot4))
