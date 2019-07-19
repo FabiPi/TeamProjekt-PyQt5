@@ -37,13 +37,18 @@ wtexture = "Metall wall"
 
 # wall libraries
 floorTextures = {
-    "Wood floor": 'textures/wood_Board.png',
-    "Brown floor": 'textures/floor.png'
+    "Brown floor": 'textures/Board/floor00.png',
+    "Blue floor": 'textures/Board/floor02.png',
+    "Pink floor": 'textures/Board/floor03.png',
+    "Whitestone floor": 'textures/Board/floor04.png',
+    "Brownstone floor": 'textures/Board/floor05.png',
+    "Wood floor": 'textures/Board/floor06.png',
 }
 # wall libraries
 wallTextures = {
-    "Metall wall": 'textures/wall.png',
-    "Pink wall": 'textures/Pink.png'
+    "Metall wall": 'textures/Board/wall00.png',
+    "Red wall": 'textures/Board/wall01.png',
+    "Mosaik wall": 'textures/Board/wall02.png'
 
 }
 
@@ -84,6 +89,7 @@ class SpielFeld(QWidget):
 
        # change texture preferences
         self.wallTexture = self.changeWall(wtexture)
+        print(wtexture)
         self.floorTexture = self.changeFloor(ftexture)
 
 
@@ -136,9 +142,14 @@ class SpielFeld(QWidget):
         if name == "Metall wall":
             Menu.CurWall = "Metall wall"
             return QPixmap(wallTextures["Metall wall"])
-        elif name == "Pink wall":
-            Menu.CurWall = "Pink wall"
-            return QPixmap(wallTextures["Pink wall"])
+
+        elif name == "Red wall":
+            Menu.CurWall = "Red wall"
+            return QPixmap(wallTextures["Red wall"])
+
+        elif name == "Mosaik wall":
+            Menu.CurWall = "Mosaik wall"
+            return QPixmap(wallTextures["Mosaik wall"])
         else:
             pass
 
@@ -148,6 +159,22 @@ class SpielFeld(QWidget):
         if name == "Brown floor":
             Menu.CurFloor = "Brown floor"
             return QPixmap(floorTextures["Brown floor"])
+
+        elif name == "Blue floor":
+            Menu.CurFloor = "Blue floor"
+            return QPixmap(floorTextures["Blue floor"])
+
+        elif name == "Pink floor":
+            Menu.CurFloor = "Pink floor"
+            return QPixmap(floorTextures["Pink floor"])
+
+        elif name == "Whitestone floor":
+            Menu.CurFloor = "Whitestone floor"
+            return QPixmap(floorTextures["Whitestone floor"])
+
+        elif name == "Brownstone floor":
+            Menu.CurFloor = "Brownstone floor"
+            return QPixmap(floorTextures["Brownstone floor"])
 
         elif name == "Wood floor":
             Menu.CurFloor = "Wood floor"
