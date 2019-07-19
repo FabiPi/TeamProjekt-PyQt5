@@ -38,7 +38,7 @@ wtexture = "Metall wall"
 # wall libraries
 floorTextures = {
     "Brown floor": 'textures/Board/floor00.png',
-    "Blue floor": 'textures/Board/floor02.png',
+    "Grass floor": 'textures/Board/floor02.png',
     "Pink floor": 'textures/Board/floor03.png',
     "Whitestone floor": 'textures/Board/floor04.png',
     "Brownstone floor": 'textures/Board/floor05.png',
@@ -160,7 +160,7 @@ class SpielFeld(QWidget):
             Menu.CurFloor = "Brown floor"
             return QPixmap(floorTextures["Brown floor"])
 
-        elif name == "Blue floor":
+        elif name == "Grass floor":
             Menu.CurFloor = "Blue floor"
             return QPixmap(floorTextures["Blue floor"])
 
