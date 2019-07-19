@@ -2,9 +2,9 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
-
+from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
@@ -19,6 +19,8 @@ HEIGHT = 500
 XPosStart = 25
 YPosStart = 75
 
+#default setting
+CurRBtn = "Brown floor "
 
 class Game (QWidget):
 
@@ -109,41 +111,9 @@ class start_Menu(QWidget):
         self.close()
 
     def Back2Menu(self):
-        Game.GAME_Menu(self)
-
-'''
-class pause_Menu(start_Menu):
-
-    def __init__(self):
-        super().__init__()
-
-        self.InitUI()
-
-    def InitUI(self):
-        self.setWindowTitle('Pause Menu')
-
-        self.button6 = QPushButton('Continue', self)
-        self.button6.clicked.connect(self.back2Game)
-        self.button6.move(XPosStart, YPosStart)
-
-        # overwrite button1
-        self.button1.hide()
-        self.button6.show()
-
-        # State: Pause
-        global START_STATE
-        START_STATE = False
+        Game.gameMenu(self)
 
 
-    def back2Game(self):
-
-        self.close()
-
-    def Back2Menu(self):
-        self.pMenu = pause_Menu()
-        self.close()
-
-'''
 
 class OptionField(QWidget):
     def __init__(self):
@@ -161,6 +131,7 @@ class OptionField(QWidget):
         self.back.move(200, 400)
 
         self.table_widget = TableWidget(self)
+        #QtGui.QGuiApplication.processEvents()
         self.table_widget.resize(500,400)
 
         self.show()
@@ -175,17 +146,17 @@ class TableWidget(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
 
-        self.layout = QGridLayout()
+        self.layout = QVBoxLayout()
 
         # Initialize tab screen
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
-        self.tab2 = QWidget()
+        #self.tab2 = QWidget()
         self.tab3 = QWidget()
 
         # Add tabs
         self.tabs.addTab(self.tab1, "Keyboard")
-        self.tabs.addTab(self.tab2, "Audio")
+        #self.tabs.addTab(self.tab2, "Audio")
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
@@ -196,16 +167,16 @@ class TableWidget(QWidget):
         self.tab1.setLayout(self.tab1.layout)
 
         # create second tab
-        self.tab2.layout = QGridLayout(self)
+        #self.tab2.layout = QGridLayout(self)
 
         #self.pushButton2 = QPushButton("Test")
 
         #self.tab2.layout.addWidget(self.pushButton2)
-        self.tab2.setLayout(self.tab2.layout)
+        #self.tab2.setLayout(self.tab2.layout)
 
 
         # create content grafic tab
-        self.tab3.layout = QHBoxLayout()
+        self.tab3.layout = QVBoxLayout()
 
         # add wallG to tab3
         self.wallG = wallTexture()
@@ -216,13 +187,12 @@ class TableWidget(QWidget):
         self.floorG = floorTexture()
         self.tab3.layout.addWidget(self.floorG)
 
-
+        # add all layouts to tab3
         self.tab3.setLayout(self.tab3.layout)
 
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
-
 
 
 class wallTexture(QWidget):
@@ -237,6 +207,7 @@ class wallTexture(QWidget):
 
         self.texture1 = QRadioButton("Texture 1")
         self.texture2 = QRadioButton("Texture 2")
+        self.btn = QPushButton("Select")
 
         self.iniUt()
 
@@ -244,21 +215,23 @@ class wallTexture(QWidget):
 
         self.wallG.setTitle("Texture Wall")
 
-        self.texture1.toggled.connect(self.onClicked)
+        self.btn.clicked.connect(self.onClicked)
 
 
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
+        self.button_layout1.addWidget(self.btn)
 
         # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
 
     def onClicked(self):
-        pass
+        print("why")
 
 
 
 class floorTexture(QWidget):
+
     def __init__(self):
         super().__init__()
 
@@ -268,39 +241,90 @@ class floorTexture(QWidget):
         # set button layout
         self.button_layout2 = QVBoxLayout()
 
+
+        # create floor texture buttons
         self.texture3 = QRadioButton("Brown Floor")
         self.texture4 = QRadioButton("Wood Floor")
+        # create selector
+        self.btn = QPushButton("Select")
+
+        self.currentRBtn = self.texture3
+
+        # set texture choice
+        self.label = QLabel(self)
+
+        # change style of lettering
+        self.style = QFont()
+        self.style.setBold(True)
+        self.label.setFont(self.style)
+
+        self.chk_RBtn()
+        print(CurRBtn)
 
         self.iniUt()
 
     def iniUt(self):
 
-
         self.floorG.setTitle("Texture Floor")
 
 
         # creat button brown floor
-        self.texture3.setIcon(QIcon(Server.floorTextures["floor"]))
-        self.texture3.setChecked(True)
-        self.texture3.toggled.connect(self.onClicked)
+        self.texture3.setIcon(QIcon(Server.floorTextures["Brown floor"]))
+        self.texture3.clicked.connect(lambda: self.rBtn_clk(self.texture3))
+
+        # default texture
+
 
         # create button wood floor
-        self.texture4.setIcon(QIcon(Server.floorTextures["wood"]))
+        self.texture4.setIcon(QIcon(Server.floorTextures["Wood floor"]))
+        self.texture4.clicked.connect(lambda: self.rBtn_clk(self.texture4))
+
+        self.label.setText('currently used\n' + CurRBtn )
+
+        self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
+
         #self.texture4.setChecked(True)
         self.button_layout2.addWidget(self.texture3)
         self.button_layout2.addWidget(self.texture4)
-
+        self.button_layout2.addWidget(self.btn)
+        self.button_layout2.addWidget(self.label)
 
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
 
-    def onClicked(self):
-        button = self.sender()
+    # show new setting, after returing to options
+    def chk_RBtn(self):
+        if CurRBtn == "Wood floor":
+            self.texture3.setChecked(False)
+            self.texture4.setChecked(True)
 
-        if button.isChecked():
+
+        elif CurRBtn == "Brown floor":
+            self.texture4.setChecked(False)
+            self.texture3.setChecked(True)
+            print('testing branch')
+        else:
+            self.texture3.setChecked(True)
+
+
+    def rBtn_clk(self, button):
+        self.currentRBtn = button
+        #print("nach dem Klick", self.currentRBtn.text())
+
+    def btn_clk(self, button):
+        global CurRBtn
+
+        if button == self.texture3:
+            Server.ftexture = "Brown floor"
+            CurRBtn = "Brown floor"
+
+        elif button == self.texture4:
+            Server.ftexture = "Wood floor"
+            CurRBtn = "Wood floor"
+        else:
             pass
 
-
+        self.label.setText("You selected: \n" + button.text())
 
 
 
@@ -371,8 +395,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
     sys.exit(app.exec_())
-
-
-
-
 
