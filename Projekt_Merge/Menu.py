@@ -32,7 +32,7 @@ playlist = {
 CurFloor = "Brown floor "
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
-CurCol = "on"
+CurCol = "Wall Collision   On"
 
 
 class Game (QWidget):
@@ -228,21 +228,18 @@ class TableWidget(QWidget):
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
-        
         self.tab1.layout = QHBoxLayout()
-        
+
         self.gameG = Spellcards()
         self.bulG = BulletCol()
-        
-        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
 
-        #self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
+        # add new Boxes to tab1
         self.tab1.layout.addWidget(self.bulG)
         self.tab1.layout.addWidget(self.gameG)
 
         self.tab1.setLayout(self.tab1.layout)
 
-        
+
         # create content grafic tab
         self.tab3.layout = QHBoxLayout()
 
@@ -302,6 +299,8 @@ class Spellcards(QWidget):
 
         self.gameG.setTitle("Spellcard Selection")
 
+
+        # add buttons to button layout
         self.button_layout1.addWidget(self.Spell1)
         self.button_layout1.addWidget(self.Spell2)
         self.button_layout1.addWidget(self.Spell3)
@@ -313,7 +312,7 @@ class Spellcards(QWidget):
         self.button_layout1.addWidget(self.btn)
         self.button_layout1.addWidget(self.label)
 
-        # add button layout in wall layout
+        # add button layout to Spellbox
         self.gameG.setLayout(self.button_layout1)
         self.gameG.setStyleSheet('background-color: rgb(240,255,255);')
 
@@ -377,7 +376,6 @@ class Spellcards(QWidget):
     def rBtn_clk(self, button):
         self.currentRBtn = button
 
-
     def btn_clk(self, button):
         global CurSpell
         print(button.text() + ' clicked')
@@ -413,7 +411,7 @@ class Spellcards(QWidget):
         elif button == self.Spell8:
             Server.spellcard = "AllSpellcards"
             CurSpell = "AllSpellcards"
-            
+
         else:
             pass
 
@@ -432,8 +430,8 @@ class BulletCol(QWidget):
         self.button_layout1 = QVBoxLayout()
 
         # create buttons
-        self.BulTrue = QRadioButton("On")
-        self.BulFalse = QRadioButton("Off")
+        self.BulTrue = QRadioButton("Wall Collision   On")
+        self.BulFalse = QRadioButton("Wall Collision   Off")
         self.btn = QPushButton("Select")
 
         self.currentRBtn = self.BulTrue
@@ -452,16 +450,18 @@ class BulletCol(QWidget):
 
     def iniUt(self):
 
-        self.bulG.setTitle("Bullet collision")
+        self.bulG.setTitle("Bullet - Wall Collision")
 
         self.button_layout1.addWidget(self.BulTrue)
         self.button_layout1.addWidget(self.BulFalse)
         self.button_layout1.addWidget(self.btn)
         self.button_layout1.addWidget(self.label)
 
+
         # add button layout in wall layout
         self.bulG.setLayout(self.button_layout1)
         self.bulG.setStyleSheet('background-color: rgb(240,255,255);')
+
 
         # click buttons
         self.BulTrue.clicked.connect(lambda: self.rBtn_clk(self.BulTrue))
@@ -475,13 +475,16 @@ class BulletCol(QWidget):
     def chk_RBtn(self):
         global CurCol
 
+        print('Here: ' + CurCol)
         self.BulFalse.setChecked(False)
+        self.BulTrue.setChecked(False)
 
-        if CurCol == "On":
+        if CurCol == "Wall Collision   On":
             self.BulTrue.setChecked(True)
 
-        elif CurCol == "Off":
+        elif CurCol == "Wall Collision   Off":
             self.BulFalse.setChecked(True)
+            print('now why?')
 
         else:
             self.BulTrue.setChecked(True)
@@ -500,12 +503,12 @@ class BulletCol(QWidget):
 
         if button == self.BulTrue:
             Server.BulCollision = True
-            CurWall = "On"
+            CurCol = "Wall Collision   On"
 
         elif button == self.BulFalse:
             Server.BulCollision = False
-            CurWall = "Off"
-            
+            CurCol = "Wall Collision   Off"
+
         else:
             pass
 
@@ -841,8 +844,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
     sys.exit(app.exec_())
-
-
-
-
-
