@@ -161,8 +161,8 @@ class SpielFeld(QWidget):
             return QPixmap(floorTextures["Brown floor"])
 
         elif name == "Grass floor":
-            Menu.CurFloor = "Blue floor"
-            return QPixmap(floorTextures["Blue floor"])
+            Menu.CurFloor = "Grass floor"
+            return QPixmap(floorTextures["Grass floor"])
 
         elif name == "Pink floor":
             Menu.CurFloor = "Pink floor"
