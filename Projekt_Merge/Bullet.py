@@ -84,7 +84,7 @@ class Bullet(object):
         self.time = time
         self.delay = delay
         self.owner = owner
-        self.BulletTextures = {0:QPixmap('textures/Bullets/RedSeal.png'), #Standart
+        self.BulletTextures = {0:QPixmap('textures/Bullets/Standart.png'), #Standart
                                #Spellcard1
                                1:QPixmap('textures/Bullets/GreenOrb.png'), #Green 1
                                2:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 1
