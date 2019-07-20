@@ -31,6 +31,9 @@ playlist = {
 #default setting
 CurFloor = "Brown floor "
 CurWall = "Metall wall"
+CurRobot = "Robot1"
+CurCol = "on"
+
 
 class Game (QWidget):
 
@@ -222,26 +225,29 @@ class TableWidget(QWidget):
         self.tab3 = QWidget()
 
         # Add tabs
-        self.tabs.addTab(self.tab1, "Keyboard")
+        self.tabs.addTab(self.tab1, "Game")
         #self.tabs.addTab(self.tab2, "Audio")
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
-        self.tab1.layout = QGridLayout(self)
+        
+        self.tab1.layout = QHBoxLayout()
         #self.pushButton1 = QPushButton("PyQt5 button")
+        self.gameG = Spellcards()
+
+        self.bulG = BulletCol()
+        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
 
         #self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
         self.tab1.setLayout(self.tab1.layout)
+        self.tab1.layout.addWidget(self.gameG)
+        self.tab1.layout.addWidget(self.bulG)
+
+
+
 
         # create second tab
-        #self.tab2.layout = QGridLayout(self)
-
-        #self.pushButton2 = QPushButton("Test")
-
-        #self.tab2.layout.addWidget(self.pushButton2)
-        #self.tab2.setLayout(self.tab2.layout)
-
-
+        
         # create content grafic tab
         self.tab3.layout = QHBoxLayout()
 
@@ -262,6 +268,269 @@ class TableWidget(QWidget):
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
+
+class Spellcards(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # set wall texture layout
+        self.gameG = QGroupBox(self)
+
+        # set button layout
+        self.button_layout1 = QVBoxLayout()
+
+        # create buttons
+        self.Robo1 = QRadioButton("Spellcard1")
+        self.Robo2 = QRadioButton("Spellcard2")
+        self.Robo3 = QRadioButton("Spellcard3")
+        self.Robo4 = QRadioButton("Spellcard4")
+        self.Robo5 = QRadioButton("Spellcard5")
+        self.Robo6 = QRadioButton("Spellcard6")
+        self.Robo7 = QRadioButton("Spellcard7")
+        self.Robo8 = QRadioButton("All Spellcards")
+
+        self.btn = QPushButton("Select")
+
+        self.currentRBtn = self.Robo1
+
+        # set texture choice
+        self.label = QLabel(self)
+
+        # change style of lettering
+        self.style = QFont()
+        self.style.setBold(True)
+        self.label.setFont(self.style)
+
+        self.chk_RBtn()
+
+        self.iniUt()
+
+    def iniUt(self):
+
+        self.gameG.setTitle("Spellcard Selection")
+
+        # adjust icons on buttons
+        #self.Robo1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
+        #self.Robo2.setIcon(QIcon(Server.wallTextures["Red wall"]))
+        #self.Robo3.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
+        #self.Robo4.setIcon(QIcon(Server.wallTextures["Metall wall"]))
+        #self.Robo5.setIcon(QIcon(Server.wallTextures["Red wall"]))
+        #self.Robo6.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
+        #self.Robo7.setIcon(QIcon(Server.wallTextures["Metall wall"]))
+        #self.Robo8.setIcon(QIcon(Server.wallTextures["Red wall"]))
+
+
+        self.button_layout1.addWidget(self.Robo1)
+        self.button_layout1.addWidget(self.Robo2)
+        self.button_layout1.addWidget(self.Robo3)
+        self.button_layout1.addWidget(self.Robo4)
+        self.button_layout1.addWidget(self.Robo5)
+        self.button_layout1.addWidget(self.Robo6)
+        self.button_layout1.addWidget(self.Robo7)
+        self.button_layout1.addWidget(self.Robo8)
+        self.button_layout1.addWidget(self.btn)
+        self.button_layout1.addWidget(self.label)
+
+        # add button layout in wall layout
+        self.gameG.setLayout(self.button_layout1)
+        self.gameG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        # click buttons
+        self.Robo1.clicked.connect(lambda: self.rBtn_clk(self.Robo1))
+        self.Robo2.clicked.connect(lambda: self.rBtn_clk(self.Robo2))
+        self.Robo3.clicked.connect(lambda: self.rBtn_clk(self.Robo3))
+        self.Robo4.clicked.connect(lambda: self.rBtn_clk(self.Robo4))
+        self.Robo5.clicked.connect(lambda: self.rBtn_clk(self.Robo5))
+        self.Robo6.clicked.connect(lambda: self.rBtn_clk(self.Robo6))
+        self.Robo7.clicked.connect(lambda: self.rBtn_clk(self.Robo7))
+        self.Robo8.clicked.connect(lambda: self.rBtn_clk(self.Robo8))
+
+
+        self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
+
+
+    # show new setting, after returing to options
+    def chk_RBtn(self):
+        global CurRobot
+
+        self.Robo2.setChecked(False)
+        self.Robo3.setChecked(False)
+        self.Robo4.setChecked(False)
+        self.Robo5.setChecked(False)
+        self.Robo6.setChecked(False)
+        self.Robo7.setChecked(False)
+        self.Robo8.setChecked(False)
+
+        if CurRobot == "Robot1":
+            self.Robo1.setChecked(True)
+
+        elif CurRobot == "Robot2":
+            self.Robo2.setChecked(True)
+
+        elif CurRobot == "Robot3":
+            self.Robo3.setChecked(True)
+
+        elif CurRobot == "Robot4":
+            self.Robo4.setChecked(True)
+
+        elif CurRobot == "Robot5":
+            self.Robo5.setChecked(True)
+
+        elif CurRobot == "Robot6":
+            self.Robo6.setChecked(True)
+
+        elif CurRobot == "Robot7":
+            self.Robo7.setChecked(True)
+
+        elif CurRobot == "Robot8":
+            self.Robo8.setChecked(True)
+
+        else:
+            self.Robo1.setChecked(True)
+
+        self.label.setText('currently used\n' + CurRobot)
+        self.label.update()
+
+
+    def rBtn_clk(self, button):
+        self.currentRBtn = button
+
+
+    def btn_clk(self, button):
+        global CurRobot
+        print(button.text() + ' clicked')
+
+        if button == self.Robo1:
+            Server.roboType = "Robot1"
+            CurRobot = "Robot1"
+
+        elif button == self.Robo2:
+            Server.roboType = "Robot2"
+            CurRobot = "Robot2"
+
+        elif button == self.Robo3:
+            Server.roboType = "Robot3"
+            CurRobot = "Robot3"
+
+        elif button == self.Robo4:
+            Server.roboType = "Robot4"
+            CurRobot = "Robot4"
+
+        elif button == self.Robo5:
+            Server.roboType = "Robot5"
+            CurRobot = "Robot5"
+
+        elif button == self.Robo6:
+            Server.roboType = "Robot6"
+            CurRobot = "Robot6"
+
+        elif button == self.Robo7:
+            Server.roboType = "Robot7"
+            CurRobot = "Robot7"
+
+        elif button == self.Robo8:
+            Server.roboType = "Robot8"
+            CurRobot = "Robot8"
+            
+        else:
+            pass
+
+        self.label.setText("You selected: \n" + button.text())
+        QtGui.QGuiApplication.processEvents()
+
+
+class BulletCol(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # set wall texture layout
+        self.bulG = QGroupBox(self)
+
+        # set button layout
+        self.button_layout1 = QVBoxLayout()
+
+        # create buttons
+        self.BulTrue = QRadioButton("On")
+        self.BulFalse = QRadioButton("Off")
+        self.btn = QPushButton("Select")
+
+        self.currentRBtn = self.BulTrue
+
+        # set texture choice
+        self.label = QLabel(self)
+
+        # change style of lettering
+        self.style = QFont()
+        self.style.setBold(True)
+        self.label.setFont(self.style)
+
+        self.chk_RBtn()
+
+        self.iniUt()
+
+    def iniUt(self):
+
+        self.bulG.setTitle("Bullet - Wall Collision")
+
+        self.button_layout1.addWidget(self.BulTrue)
+        self.button_layout1.addWidget(self.BulFalse)
+        self.button_layout1.addWidget(self.btn)
+        self.button_layout1.addWidget(self.label)
+
+        # add button layout in wall layout
+        self.bulG.setLayout(self.button_layout1)
+        self.bulG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        # click buttons
+        self.BulTrue.clicked.connect(lambda: self.rBtn_clk(self.BulTrue))
+        self.BulFalse.clicked.connect(lambda: self.rBtn_clk(self.BulFalse))
+
+
+        self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
+
+
+    # show new setting, after returing to options
+    def chk_RBtn(self):
+        global CurCol
+
+        self.BulFalse.setChecked(False)
+
+        if CurCol == "On":
+            self.BulTrue.setChecked(True)
+
+        elif CurCol == "Off":
+            self.BulFalse.setChecked(True)
+
+        else:
+            self.BulTrue.setChecked(True)
+
+        self.label.setText('currently used\n' + CurCol)
+        self.label.update()
+
+
+    def rBtn_clk(self, button):
+        self.currentRBtn = button
+
+
+    def btn_clk(self, button):
+        global CurCol
+        print(button.text() + ' clicked')
+
+        if button == self.BulTrue:
+            Server.BulCollision = True
+            CurWall = "On"
+
+        elif button == self.BulFalse:
+            Server.BulCollision = False
+            CurWall = "Off"
+            
+        else:
+            pass
+
+        self.label.setText("You selected: \n" + button.text())
+        QtGui.QGuiApplication.processEvents()
+
+
 
 
 class wallTexture(QWidget):

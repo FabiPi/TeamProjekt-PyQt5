@@ -35,6 +35,12 @@ ftexture = "Brown floor"
 # selected wall texture
 wtexture = "Metall wall"
 
+# selected Robot Type
+roboType = "Robot1"
+
+# selected Collision
+BulCollision = True
+
 # wall libraries
 floorTextures = {
     "Brown floor": 'textures/Board/floor00.png',
@@ -89,8 +95,12 @@ class SpielFeld(QWidget):
 
        # change texture preferences
         self.wallTexture = self.changeWall(wtexture)
-        print(wtexture)
+        #print(wtexture)
         self.floorTexture = self.changeFloor(ftexture)
+        
+        self.roboType = self.changeRobo(roboType)
+
+        print(BulCollision)
 
 
         self.RoboTextures = {0:QPixmap('textures/Robots/Robot01.png'), #MainRobot
@@ -101,13 +111,32 @@ class SpielFeld(QWidget):
 
         self.createBoard()
 
+        self.RobotType = self
+
         #init Robots
         Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, 0)
         Robot2 = Robots.Robot(2, QVector2D(100,900), 90, 2, 2, 15, 90, 3)
         Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, 3)
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
 
-        Robot1.setProgram(Control.PlayerRobot_All_Abilities(Robot1))
+        if self.roboType == "Robot1":
+            Robot1.setProgram(Control.PlayerRobot_Ability01(Robot1))
+        elif self.roboType == "Robot2":
+            Robot1.setProgram(Control.PlayerRobot_Ability02(Robot1))
+        elif self.roboType == "Robot3":
+            Robot1.setProgram(Control.PlayerRobot_Ability03(Robot1))
+        elif self.roboType == "Robot4":
+            Robot1.setProgram(Control.PlayerRobot_Ability04(Robot1))
+        elif self.roboType == "Robot5":
+            Robot1.setProgram(Control.PlayerRobot_Ability05(Robot1))
+        elif self.roboType == "Robot6":
+            Robot1.setProgram(Control.PlayerRobot_Ability06(Robot1))
+        elif self.roboType == "Robot7":
+            Robot1.setProgram(Control.PlayerRobot_Ability07(Robot1))
+        elif self.roboType == "Robot8":
+            Robot1.setProgram(Control.PlayerRobot_All_Abilities(Robot1))
+
+        
         Robot2.setProgram(Control.TargetHunt(Robot2))
         Robot3.setProgram(Control.TargetHunt(Robot3))
         Robot4.setProgram(Control.TargetHunt(Robot4))
@@ -136,6 +165,43 @@ class SpielFeld(QWidget):
 
         self.show()
 
+
+    def changeRobo(self, name):
+
+        if name == "Robot1":
+            Menu.CurWall = "Robot1"
+            return "Robot1"
+
+        elif name == "Robot2":
+            Menu.CurWall = "Robot2"
+            return "Robot2"
+
+        elif name == "Robot3":
+            Menu.CurWall = "Robot3"
+            return "Robot3"
+
+        elif name == "Robot4":
+            Menu.CurWall = "Robot4"
+            return "Robot4"
+
+        elif name == "Robot5":
+            Menu.CurWall = "Robot5"
+            return "Robot5"
+
+        elif name == "Robot6":
+            Menu.CurWall = "Robot6"
+            return "Robot6"
+
+        elif name == "Robot7":
+            Menu.CurWall = "Robot7"
+            return "Robot7"
+
+        elif name == "Robot8":
+            Menu.CurWall = "Robot8"
+            return "Robot8"
+        
+        else:
+            pass
 
     def changeWall(self, name):
 
@@ -262,8 +328,9 @@ class SpielFeld(QWidget):
                     bul.time -= 1
                     if bul.time == 0:
                         SpielFeld.Bullets.remove(bul)
-                    # if self.BulletBarrierCollision(bul) and bul in SpielFeld.Bullets:
-                    #    SpielFeld.Bullets.remove(bul)
+                    if BulCollision:
+                        if self.BulletBarrierCollision(bul) and bul in SpielFeld.Bullets:
+                            SpielFeld.Bullets.remove(bul)
                     for robot in self.robots:
                         if bul.one_hit(robot):
                             if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
