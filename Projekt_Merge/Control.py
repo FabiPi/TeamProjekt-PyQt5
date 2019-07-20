@@ -17,19 +17,33 @@ class RobotControl(QThread):
 class PlayerRobot_All_Abilities(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -72,19 +86,33 @@ class PlayerRobot_All_Abilities(RobotControl):
 class PlayerRobot_Ability01(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -104,19 +132,33 @@ class PlayerRobot_Ability01(RobotControl):
 class PlayerRobot_Ability02(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -135,19 +177,33 @@ class PlayerRobot_Ability02(RobotControl):
 class PlayerRobot_Ability03(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -166,19 +222,33 @@ class PlayerRobot_Ability03(RobotControl):
 class PlayerRobot_Ability04(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -198,19 +268,33 @@ class PlayerRobot_Ability04(RobotControl):
 class PlayerRobot_Ability05(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -229,19 +313,33 @@ class PlayerRobot_Ability05(RobotControl):
 class PlayerRobot_Ability06(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -260,19 +358,33 @@ class PlayerRobot_Ability06(RobotControl):
 class PlayerRobot_Ability07(RobotControl):
     def run(self):
         while True:
-            self.msleep(100)
+            self.msleep(10)
             
             if keyboard.is_pressed('w'):
-                self.robot.a = 0.1
+                if self.robot.a + 0.3 <= self.robot.a_max:
+                    self.robot.a += 0.3
 
-            if keyboard.is_pressed('s'):
-                self.robot.a = -0.1
+            elif keyboard.is_pressed('s'):
+                if abs(self.robot.a)  + 0.3 <= self.robot.a_max:
+                    self.robot.a += -0.3
+                    
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v = self.robot.v * 0.5
+                self.robot.a = self.robot.a * 0.5
 
             if keyboard.is_pressed('a'):
-                self.robot.a_alpha = 0.5
+                if self.robot.a_alpha +1 <= self.robot.a_alpha_max:
+                    self.robot.a_alpha += 1
 
-            if keyboard.is_pressed('d'):
-                self.robot.a_alpha = -0.5
+            elif keyboard.is_pressed('d'):
+                if abs(self.robot.a_alpha) + 1 <=  self.robot.a_alpha_max:
+                    self.robot.a_alpha += -1
+
+            #Slowdown if no key is pressed
+            else:
+                self.robot.v_alpha = self.robot.v_alpha  * 0.4
+                self.robot.a_alpha  = self.robot.a_alpha  * 0.4
                 
             if keyboard.is_pressed('j'):
                 self.robot.shoot()
@@ -295,7 +407,7 @@ class TargetHunt(RobotControl):
             self.robot.a = 1
             target = 1
             self.robot.aimTargetView(target)
-            self.msleep(100)
+            self.msleep(10)
             if self.robot.ViewList[target][3]:
                 self.robot.shoot()
 
@@ -317,5 +429,5 @@ class CircleMap(RobotControl):
             if self.robot.inVicinity(target):
                 targetnum = (targetnum +1) % 4
             self.robot.aimTarget(target)
-            self.msleep(100)
+            self.msleep(10)
             self.robot.shoot()
