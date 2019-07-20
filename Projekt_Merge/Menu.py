@@ -199,8 +199,8 @@ class OptionField(QWidget):
 
         self.table_widget = TableWidget(self)
         QtGui.QGuiApplication.processEvents()
-        self.table_widget.move(380, 150)
-        self.table_widget.resize(450,300)
+        self.table_widget.move(380, 100)
+        self.table_widget.resize(470,350)
 
         pygame.mixer.music.load(playlist["Track 4"])
         pygame.mixer.music.play(-1, 0.0)
@@ -221,45 +221,35 @@ class TableWidget(QWidget):
         # Initialize tab screen
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
-        #self.tab2 = QWidget()
         self.tab3 = QWidget()
 
         # Add tabs
         self.tabs.addTab(self.tab1, "Game")
-        #self.tabs.addTab(self.tab2, "Audio")
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
-        
         self.tab1.layout = QHBoxLayout()
-        #self.pushButton1 = QPushButton("PyQt5 button")
+
         self.gameG = Spellcards()
-
         self.bulG = BulletCol()
-        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
 
-        #self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
-        self.tab1.setLayout(self.tab1.layout)
-        self.tab1.layout.addWidget(self.gameG)
+        # add new Boxes to tab1
         self.tab1.layout.addWidget(self.bulG)
+        self.tab1.layout.addWidget(self.gameG)
+
+        self.tab1.setLayout(self.tab1.layout)
 
 
-
-
-        # create second tab
-        
         # create content grafic tab
         self.tab3.layout = QHBoxLayout()
 
         # add wallG to tab3
         self.wallG = wallTexture()
-        #self.wallG.setStyleSheet('background-color: rgb(240,255,255);')
         self.tab3.layout.addWidget(self.wallG)
 
 
         # add floorG to tab3
         self.floorG = floorTexture()
-        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
         self.tab3.layout.addWidget(self.floorG)
 
         # add all layouts to tab3
@@ -273,7 +263,7 @@ class Spellcards(QWidget):
     def __init__(self):
         super().__init__()
 
-        # set wall texture layout
+        # set layout for Spellbox
         self.gameG = QGroupBox(self)
 
         # set button layout
@@ -431,7 +421,7 @@ class Spellcards(QWidget):
         elif button == self.Robo8:
             Server.roboType = "Robot8"
             CurRobot = "Robot8"
-            
+
         else:
             pass
 
@@ -523,7 +513,7 @@ class BulletCol(QWidget):
         elif button == self.BulFalse:
             Server.BulCollision = False
             CurWall = "Off"
-            
+
         else:
             pass
 
@@ -859,8 +849,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
     sys.exit(app.exec_())
-
-
-
-
-
