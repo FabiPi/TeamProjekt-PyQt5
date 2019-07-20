@@ -9,19 +9,19 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
 import sys
-import pygame # needs to be installed (further information https://www.pygame.org/docs/ref/mixer.html)
+import pygame # needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
 import Server
 
 # initalize the music mixer
 pygame.mixer.init()
 
 playlist = {
-    "Flute 1": "sounds/beautiful-flute-ringtone.mp3",
-    "Flute 2": "sounds/Bahubali Flute Ringtone 2019.mp3",
-    "Flute 3": "sounds/japanese_zen_1.mp3",
-    "Flute 4": "sounds/japanese_zen_2.mp3",
-    "Flute 5": "sounds/Beautiful Japanese Music - Cherry Blossoms.mp3",
-    "Flute 6": 'sounds/Beautiful Japanese Music - Kitsune Woods.mp3'
+    "Track 1": "sounds/beautiful-flute-ringtone.mp3",
+    "Track 2": "sounds/Bahubali Flute Ringtone 2019.mp3",
+    "Track 3": "sounds/japanese_zen_1.mp3",
+    "Track 4": "sounds/japanese_zen_2.mp3",
+    "Track 5": "sounds/Beautiful Japanese Music - Cherry Blossoms.mp3",
+    "Track 6": 'sounds/Beautiful Japanese Music - Kitsune Woods.mp3'
 }
 
 # Japanese_zen_1.mp3 & Japanese_zen_2 ( downloaded from https://www.zedge.net/find/ringtones/japanese%20bamboo%20flute)
@@ -55,8 +55,8 @@ class Game (QWidget):
         self.movie.frameChanged.connect(self.repaint)
         self.movie.start()
 
-        #pygame.mixer.music.load(playlist["Flute 3])
-        pygame.mixer.music.load(playlist["Flute 5"])
+        # select the music track
+        pygame.mixer.music.load(playlist["Track 5"])
         # loops the music
         pygame.mixer.music.play(-1, 0.0)
 
@@ -129,8 +129,7 @@ class start_Menu(QWidget):
         self.movie.start()
 
         # start new music in loop
-        #pygame.mixer.music.load(playlist["Flute 4"])
-        pygame.mixer.music.load(playlist["Flute 6"])
+        pygame.mixer.music.load(playlist["Track 6"])
         pygame.mixer.music.play(-1, 0.0)
 
 
@@ -199,6 +198,9 @@ class OptionField(QWidget):
         QtGui.QGuiApplication.processEvents()
         self.table_widget.move(380, 150)
         self.table_widget.resize(450,300)
+
+        pygame.mixer.music.load(playlist["Track 4"])
+        pygame.mixer.music.play(-1, 0.0)
 
         self.show()
 
@@ -543,6 +545,9 @@ class CreditText(QWidget):
 
         self.back.clicked.connect(self.Back2Menu)
         self.back.move(350,330)
+
+        pygame.mixer.music.load(playlist["Track 3"])
+        pygame.mixer.music.play(-1, 0.0)
 
         self.show()
 
