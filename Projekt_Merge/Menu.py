@@ -8,13 +8,15 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
-    QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
+    QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox
 
 import sys
-import pygame # needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
+
+# needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
+import pygame
 import Server
 
-# initalize the music mixer
+# initialize the music mixer
 pygame.mixer.init()
 
 playlist = {
@@ -26,10 +28,13 @@ playlist = {
     "Track 6": 'sounds/Beautiful Japanese Music - Kitsune Woods.mp3'
 }
 
-# Japanese_zen_1.mp3 & Japanese_zen_2 ( downloaded from https://www.zedge.net/find/ringtones/japanese%20bamboo%20flute)
-# Japanese Music - Cherry Blossoms & Japanese Music - Kitsune Woods (downloaded from https://archive.org/details/BeautifulJapaneseMusicZenGarden/Beautiful+Japanese+Music+-+Kitsune+Woods.mp3)
+# Japanese_zen_1.mp3 & Japanese_zen_2 ( downloaded from
+# https://www.zedge.net/find/ringtones/japanese%20bamboo%20flute) Japanese Music - Cherry Blossoms & Japanese Music -
+# Kitsune Woods (downloaded from https://archive.org/details/BeautifulJapaneseMusicZenGarden/Beautiful+Japanese+Music
+# +-+Kitsune+Woods.mp3)
 
-# background libery for Option
+
+# background library for Option
 backgrounds = {
     "BlueForest": "textures/Background/Forest.jpg",
     "Gate": "textures/Background/Gate.jpg",
@@ -40,8 +45,7 @@ backgrounds = {
     "Tempel": "textures/Background/Tempel.jpg"
 }
 
-
-#default setting
+# default setting
 CurFloor = "Brown floor "
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
@@ -60,6 +64,7 @@ class Game (QWidget):
         self.resize(800, 336)
         Server.center(self)
         self.setWindowTitle('Welcome')
+
         self.enter = QPushButton('enter', self)
         self.enter.move(360,280)
         self.enter.resize(80, 25)
@@ -840,7 +845,6 @@ class CreditText(QWidget):
             start_Menu.Back2Menu(self)
 
 
-
 class How2PlayText(QWidget):
 
     def __init__(self):
@@ -868,7 +872,6 @@ class How2PlayText(QWidget):
 
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
-
 
 
 if __name__ == '__main__':
