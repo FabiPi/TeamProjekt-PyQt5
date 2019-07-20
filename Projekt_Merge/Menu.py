@@ -2,6 +2,8 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
+import random
+
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
@@ -26,6 +28,17 @@ playlist = {
 
 # Japanese_zen_1.mp3 & Japanese_zen_2 ( downloaded from https://www.zedge.net/find/ringtones/japanese%20bamboo%20flute)
 # Japanese Music - Cherry Blossoms & Japanese Music - Kitsune Woods (downloaded from https://archive.org/details/BeautifulJapaneseMusicZenGarden/Beautiful+Japanese+Music+-+Kitsune+Woods.mp3)
+
+# background libery for Option
+backgrounds = {
+    "BlueForest": "textures/Background/Forest.jpg",
+    "Gate": "textures/Background/Gate.jpg",
+    "ForestTempel": "textures/Background/ForestTempel.jpg",
+    "NightRoad": "textures/Background/NightRoad.jpg",
+    "RedForest": "textures/Background/RedForest.jpg",
+    "Shrine": "textures/Background/Shrine.jpg",
+    "Tempel": "textures/Background/Tempel.jpg"
+}
 
 
 #default setting
@@ -183,7 +196,8 @@ class OptionField(QWidget):
         super().__init__()
 
         self.background = QLabel(self)
-        self.image = QPixmap('textures/Background/NightRoad.jpg')
+        # randomly change background after every enter
+        self.image = self.ImageSet()
         self.background.setPixmap(self.image)
 
         self.InitUI()
@@ -202,7 +216,7 @@ class OptionField(QWidget):
         self.table_widget.move(380, 100)
         self.table_widget.resize(470,350)
 
-        pygame.mixer.music.load(playlist["Track 4"])
+        pygame.mixer.music.load(playlist["Track 5"])
         pygame.mixer.music.play(-1, 0.0)
 
         self.show()
@@ -210,6 +224,10 @@ class OptionField(QWidget):
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
 
+
+    def ImageSet(self):
+        Namelist = ["BlueForest", "Gate", "ForestTempel", "NightRoad", "RedForest", "Shrine", "Tempel" ]
+        return QPixmap(backgrounds[random.choice(Namelist)])
 
 
 class TableWidget(QWidget):
@@ -800,7 +818,7 @@ class CreditText(QWidget):
         self.back.clicked.connect(self.Back2Menu)
         self.back.move(350,330)
 
-        pygame.mixer.music.load(playlist["Track 3"])
+        pygame.mixer.music.load(playlist["Track 6"])
         pygame.mixer.music.play(-1, 0.0)
 
         self.show()
