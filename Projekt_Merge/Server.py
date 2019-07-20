@@ -97,27 +97,26 @@ class SpielFeld(QWidget):
         self.wallTexture = self.changeWall(wtexture)
         #print(wtexture)
         self.floorTexture = self.changeFloor(ftexture)
-        
+
         self.spellcard = self.changeSpellcard(spellcard)
 
         print(BulCollision)
 
-
-        self.RoboTextures = {0:QPixmap('textures/Robots/Robot01.png'), #MainRobot
-                             1:QPixmap('textures/Robots/Robot_Dead.png'), #Dead
-                             2:QPixmap('textures/Robots/Robot_In.png'), #Ivincible
-                             3:QPixmap('textures/Robots/Robot02.png') #EnemyRobot
+        self.RoboTextures = {0: QPixmap('textures/Robots/Robot01.png'),  # MainRobot
+                             1: QPixmap('textures/Robots/Robot_Dead.png'),  # Dead
+                             2: QPixmap('textures/Robots/Robot_In.png'),  # Ivincible
+                             3: QPixmap('textures/Robots/Robot02.png')  # EnemyRobot
                              }
 
         self.createBoard()
 
         self.RobotType = self
 
-        #init Robots
-        Robot1 = Robots.Robot(1, QVector2D(500,500), 290, 2, 2, 15, 90, 0)
-        Robot2 = Robots.Robot(2, QVector2D(100,900), 90, 2, 2, 15, 90, 3)
-        Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, 3)
-        Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
+        # init Robots
+        Robot1 = Robots.Robot(1, QVector2D(500, 500), 290, 2, 2, 15, 90, 0)
+        Robot2 = Robots.Robot(2, QVector2D(100, 900), 90, 2, 2, 15, 90, 3)
+        Robot3 = Robots.Robot(3, QVector2D(250, 650), 270, 2, 2, 15, 90, 3)
+        Robot4 = Robots.Robot(4, QVector2D(950, 100), 180, 2, 2, 15, 90, 3)
 
         if self.spellcard == "Spellcard1":
             Robot1.setProgram(Control.PlayerRobot_Ability01(Robot1))
@@ -136,7 +135,6 @@ class SpielFeld(QWidget):
         elif self.spellcard == "AllSpellcards":
             Robot1.setProgram(Control.PlayerRobot_All_Abilities(Robot1))
 
-        
         Robot2.setProgram(Control.TargetHunt(Robot2))
         Robot3.setProgram(Control.TargetHunt(Robot3))
         Robot4.setProgram(Control.TargetHunt(Robot4))
@@ -153,7 +151,6 @@ class SpielFeld(QWidget):
 
         self.initUI()
 
-
     def initUI(self):
 
         self.setGeometry(0, 0, SCREENWIDTH, SCREENHEIGHT)
@@ -164,7 +161,6 @@ class SpielFeld(QWidget):
         self.isPaused = False
 
         self.show()
-
 
     def changeSpellcard(self, name):
 
@@ -199,7 +195,7 @@ class SpielFeld(QWidget):
         elif name == "AllSpellcards":
             Menu.CurSpell = "AllSpellcards"
             return "AllSpellcards"
-        
+
         else:
             pass
 
@@ -218,7 +214,6 @@ class SpielFeld(QWidget):
             return QPixmap(wallTextures["Mosaik wall"])
         else:
             pass
-
 
     def changeFloor(self, name):
 
@@ -249,7 +244,6 @@ class SpielFeld(QWidget):
         else:
             pass
 
-
     def start(self):
 
         if self.isPaused:
@@ -259,45 +253,42 @@ class SpielFeld(QWidget):
 
         self.timer.start(FPS, self)
 
-
     def createBoard(self):
 
-        #set Walls, set array value to 1 to place Wall
-        #set Wall around the edges
+        # set Walls, set array value to 1 to place Wall
+        # set Wall around the edges
 
-        #SpielFeld.PlayFieldAR[90][90] = 1
-        #SpielFeld.PlayFieldAR[10][10] = 1
+        # SpielFeld.PlayFieldAR[90][90] = 1
+        # SpielFeld.PlayFieldAR[10][10] = 1
 
-        for x in range(0,100,1):
-            SpielFeld.PlayFieldAR[x][0]= 1
-            SpielFeld.PlayFieldAR[x][99]= 1
-        for y in range(1,99,1):
-            SpielFeld.PlayFieldAR[0][y]= 1
-            SpielFeld.PlayFieldAR[99][y]= 1
+        for x in range(0, 100, 1):
+            SpielFeld.PlayFieldAR[x][0] = 1
+            SpielFeld.PlayFieldAR[x][99] = 1
+        for y in range(1, 99, 1):
+            SpielFeld.PlayFieldAR[0][y] = 1
+            SpielFeld.PlayFieldAR[99][y] = 1
 
-        #set some Obstacle
+        # set some Obstacle
         for i in range(0, 25, 1):
-            SpielFeld.PlayFieldAR[70][i+45] = 1
-            SpielFeld.PlayFieldAR[71][i+45] = 1
+            SpielFeld.PlayFieldAR[70][i + 45] = 1
+            SpielFeld.PlayFieldAR[71][i + 45] = 1
 
         for i in range(0, 40, 1):
-            SpielFeld.PlayFieldAR[i+10][40] = 1
-            SpielFeld.PlayFieldAR[i+10][41] = 1
+            SpielFeld.PlayFieldAR[i + 10][40] = 1
+            SpielFeld.PlayFieldAR[i + 10][41] = 1
         for i in range(0, 50, 1):
-            SpielFeld.PlayFieldAR[i+30][70] = 1
-            SpielFeld.PlayFieldAR[i+30][71] = 1
+            SpielFeld.PlayFieldAR[i + 30][70] = 1
+            SpielFeld.PlayFieldAR[i + 30][71] = 1
 
         for i in range(0, 30, 1):
-            SpielFeld.PlayFieldAR[i+25][20] = 1
-            SpielFeld.PlayFieldAR[i+25][21] = 1
+            SpielFeld.PlayFieldAR[i + 25][20] = 1
+            SpielFeld.PlayFieldAR[i + 25][21] = 1
 
         for i in range(0, 10, 1):
-            SpielFeld.PlayFieldAR[10][i+50] = 1
-            SpielFeld.PlayFieldAR[11][i+50] = 1
-
+            SpielFeld.PlayFieldAR[10][i + 50] = 1
+            SpielFeld.PlayFieldAR[11][i + 50] = 1
 
     def timerEvent(self, event):
-
 
         if event.timerId() == self.timer.timerId():
 
@@ -331,6 +322,9 @@ class SpielFeld(QWidget):
                     if BulCollision:
                         if self.BulletBarrierCollision(bul) and bul in SpielFeld.Bullets:
                             SpielFeld.Bullets.remove(bul)
+                            Menu.CurCol = "Wall Collision   On"
+                    else:
+                        Menu.CurCol = "Wall Collision   Off"
                     for robot in self.robots:
                         if bul.one_hit(robot):
                             if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
@@ -350,7 +344,6 @@ class SpielFeld(QWidget):
         else:
             super(SpielFeld, self).timerEvent(event)
 
-
     def fetchBullets(self, Robot):
         SpielFeld.Bullets.extend(Robot.BulList)
         # print(SpielFeld.Bullets)
@@ -362,14 +355,14 @@ class SpielFeld(QWidget):
         if Robot.coolDown != 0:
             Robot.coolDown -= 1
 
-    # Death Counter (Down) {see Constants}
+        # Death Counter (Down) {see Constants}
+
     def reduceDeathTime(self, Robot):
         if Robot.deathTime != 0:
             Robot.deathTime -= 1
             if Robot.deathTime == 0:
                 Robot.immuneTime = IMMUNE_TIME
                 Robot.texture = 2
-
 
     def teleport_bullet(self, robo):
         spot = random.randint(1, 5)
@@ -406,7 +399,6 @@ class SpielFeld(QWidget):
             if bul.delay == 0:
                 bul.drawBullet(qp)
 
-
     def drawRobo(self, Robo, br):
 
         # Set Rotation, place etc
@@ -421,7 +413,6 @@ class SpielFeld(QWidget):
         br.drawPixmap(target, texture, source)
         br.restore()
 
-
     def FOV(self, Robo):
         view = QPainterPath()
 
@@ -432,8 +423,10 @@ class SpielFeld(QWidget):
         yPos2 = math.sin(math.radians(Robo.alpha - (Robo.FOV / 2))) * Robo.radius
 
         x1 = QPoint(int(round(Robo.position.x())) + Robo.radius, int(round(Robo.position.y())) + Robo.radius)
-        x2 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos)
-        x3 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos2, (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos2)
+        x2 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos,
+                         (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos)
+        x3 = x1 + QPoint((int(round(Robo.position.x())) + Robo.radius) + 1000 * xPos2,
+                         (int(round(Robo.position.y())) + Robo.radius) - 1000 * yPos2)
 
         view.addPolygon(QPolygonF([x1, x2, x3]))
         view.closeSubpath()
@@ -451,7 +444,7 @@ class SpielFeld(QWidget):
             if robo != x:
                 if viewPanel.intersects(x.roboShape()):
                     ids.append(x.robotid)
-                    #print(robo.robotid, ids)
+                    # print(robo.robotid, ids)
                 else:
                     robo.ViewList[x.robotid][3] = False
 
@@ -468,21 +461,19 @@ class SpielFeld(QWidget):
                     toUpDate = {viewedRobo: [robot.position, distance, viewedDirection, seen]}
 
                     robo.ViewList.update(toUpDate)
-                    #print(robo.robotid, robo.ViewList)
-
+                    # print(robo.robotid, robo.ViewList)
 
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
-        #Draw the PlayField
+        # Draw the PlayField
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
-                    if SpielFeld.PlayFieldAR[i][j]==1:
-                        texture = self.wallTexture
-                        self.BarrierList.append(texture)
-                    else:
-                        texture = self.floorTexture
-                    qp.drawPixmap(i*10, j*10, texture)
-
+                if SpielFeld.PlayFieldAR[i][j] == 1:
+                    texture = self.wallTexture
+                    self.BarrierList.append(texture)
+                else:
+                    texture = self.floorTexture
+                qp.drawPixmap(i * 10, j * 10, texture)
 
     def keyPressEvent(self, event):
         if not self.isStarted:
@@ -499,7 +490,6 @@ class SpielFeld(QWidget):
         else:
             super(SpielFeld, self).keyPressEvent(event)
 
-
     def Message(self):
         msgBox = QMessageBox()
 
@@ -507,7 +497,7 @@ class SpielFeld(QWidget):
         msgBox.setIconPixmap(QPixmap('textures/Board/pauseEmoji.png'))
         msgBox.setText("Your in the pause screen. \n Do you want to continue? \n")
 
-        #set Buttons
+        # set Buttons
         msgBox.addButton(QMessageBox.Yes)
         msgBox.addButton(QMessageBox.No)
 
@@ -518,7 +508,6 @@ class SpielFeld(QWidget):
         msgBox.exec_()
 
         return msgBox
-
 
     def pause(self):
 
@@ -543,7 +532,6 @@ class SpielFeld(QWidget):
             self.timer.start(FPS, self)
 
         self.update()
-
 
     def moveRobot(self, Robo):
         # berechne neue Lenkrichtung
@@ -681,4 +669,3 @@ class SpielFeld(QWidget):
         else:
             SpielFeld.Bullets.remove(bullet)
         return False
-
