@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGridLayout, QGroupBox
 
 import sys
-import pygame # needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
+import pygame # needs to be installed (further information https://www.pygame.org/docs/ref/mixer.html)
 import Server
 
 # initalize the music mixer
