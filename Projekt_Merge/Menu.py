@@ -216,6 +216,11 @@ class OptionField(QWidget):
         self.table_widget.move(380, 100)
         self.table_widget.resize(470,350)
 
+        # for use, if tab_widget is not shown transparent)
+        #self.table_widget.setStyleSheet('background-color: transparent;')
+        # transparent as rgb color number
+        #self.table_widget.setStyleSheet('background-color: rgb(255, 255, 255);')
+
         pygame.mixer.music.load(playlist["Track 5"])
         pygame.mixer.music.play(-1, 0.0)
 
@@ -223,6 +228,7 @@ class OptionField(QWidget):
 
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
+
 
     def ImageSet(self):
         themes = list(backgrounds.keys())
@@ -331,7 +337,9 @@ class Spellcards(QWidget):
 
         # add button layout to Spellbox
         self.gameG.setLayout(self.button_layout1)
-        self.gameG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        # set Spellbox semi transparent
+        self.gameG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
 
         # click buttons
         self.Spell1.clicked.connect(lambda: self.rBtn_clk(self.Spell1))
@@ -477,7 +485,9 @@ class BulletCol(QWidget):
 
         # add button layout in wall layout
         self.bulG.setLayout(self.button_layout1)
-        self.bulG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        # set Bullet setting semi-transparent
+        self.bulG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
 
 
         # click buttons
@@ -582,7 +592,9 @@ class wallTexture(QWidget):
 
         # add button layout in wall layout
         self.wallG.setLayout(self.button_layout1)
-        self.wallG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        # set wall texture box semi-transparent
+        self.wallG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
 
         # click buttons
         self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
@@ -719,7 +731,9 @@ class floorTexture(QWidget):
 
         # add button layout in floor layout
         self.floorG.setLayout(self.button_layout2)
-        self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
+
+        #set floor textures box semi-transparent
+        self.floorG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
 
 
     # show new setting, after returing to options
