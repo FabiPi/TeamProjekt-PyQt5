@@ -31,7 +31,7 @@ playlist = {
 #default setting
 CurFloor = "Brown floor "
 CurWall = "Metall wall"
-CurRobot = "Robot1"
+CurSpell = "Spellcard1"
 CurCol = "on"
 
 
@@ -228,18 +228,21 @@ class TableWidget(QWidget):
         self.tabs.addTab(self.tab3, "Grafik")
 
         # Create first tab
+        
         self.tab1.layout = QHBoxLayout()
-
+        
         self.gameG = Spellcards()
         self.bulG = BulletCol()
+        
+        #self.floorG.setStyleSheet('background-color: rgb(240,255,255);')
 
-        # add new Boxes to tab1
+        #self.tab1.layout.addWidget(self.pushButton1, 0, 1, 1, 2)
         self.tab1.layout.addWidget(self.bulG)
         self.tab1.layout.addWidget(self.gameG)
 
         self.tab1.setLayout(self.tab1.layout)
 
-
+        
         # create content grafic tab
         self.tab3.layout = QHBoxLayout()
 
@@ -270,18 +273,18 @@ class Spellcards(QWidget):
         self.button_layout1 = QVBoxLayout()
 
         # create buttons
-        self.Robo1 = QRadioButton("Spellcard1")
-        self.Robo2 = QRadioButton("Spellcard2")
-        self.Robo3 = QRadioButton("Spellcard3")
-        self.Robo4 = QRadioButton("Spellcard4")
-        self.Robo5 = QRadioButton("Spellcard5")
-        self.Robo6 = QRadioButton("Spellcard6")
-        self.Robo7 = QRadioButton("Spellcard7")
-        self.Robo8 = QRadioButton("All Spellcards")
+        self.Spell1 = QRadioButton("Spellcard1")
+        self.Spell2 = QRadioButton("Spellcard2")
+        self.Spell3 = QRadioButton("Spellcard3")
+        self.Spell4 = QRadioButton("Spellcard4")
+        self.Spell5 = QRadioButton("Spellcard5")
+        self.Spell6 = QRadioButton("Spellcard6")
+        self.Spell7 = QRadioButton("Spellcard7")
+        self.Spell8 = QRadioButton("All Spellcards")
 
         self.btn = QPushButton("Select")
 
-        self.currentRBtn = self.Robo1
+        self.currentRBtn = self.Spell1
 
         # set texture choice
         self.label = QLabel(self)
@@ -299,25 +302,14 @@ class Spellcards(QWidget):
 
         self.gameG.setTitle("Spellcard Selection")
 
-        # adjust icons on buttons
-        #self.Robo1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
-        #self.Robo2.setIcon(QIcon(Server.wallTextures["Red wall"]))
-        #self.Robo3.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
-        #self.Robo4.setIcon(QIcon(Server.wallTextures["Metall wall"]))
-        #self.Robo5.setIcon(QIcon(Server.wallTextures["Red wall"]))
-        #self.Robo6.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
-        #self.Robo7.setIcon(QIcon(Server.wallTextures["Metall wall"]))
-        #self.Robo8.setIcon(QIcon(Server.wallTextures["Red wall"]))
-
-
-        self.button_layout1.addWidget(self.Robo1)
-        self.button_layout1.addWidget(self.Robo2)
-        self.button_layout1.addWidget(self.Robo3)
-        self.button_layout1.addWidget(self.Robo4)
-        self.button_layout1.addWidget(self.Robo5)
-        self.button_layout1.addWidget(self.Robo6)
-        self.button_layout1.addWidget(self.Robo7)
-        self.button_layout1.addWidget(self.Robo8)
+        self.button_layout1.addWidget(self.Spell1)
+        self.button_layout1.addWidget(self.Spell2)
+        self.button_layout1.addWidget(self.Spell3)
+        self.button_layout1.addWidget(self.Spell4)
+        self.button_layout1.addWidget(self.Spell5)
+        self.button_layout1.addWidget(self.Spell6)
+        self.button_layout1.addWidget(self.Spell7)
+        self.button_layout1.addWidget(self.Spell8)
         self.button_layout1.addWidget(self.btn)
         self.button_layout1.addWidget(self.label)
 
@@ -326,14 +318,14 @@ class Spellcards(QWidget):
         self.gameG.setStyleSheet('background-color: rgb(240,255,255);')
 
         # click buttons
-        self.Robo1.clicked.connect(lambda: self.rBtn_clk(self.Robo1))
-        self.Robo2.clicked.connect(lambda: self.rBtn_clk(self.Robo2))
-        self.Robo3.clicked.connect(lambda: self.rBtn_clk(self.Robo3))
-        self.Robo4.clicked.connect(lambda: self.rBtn_clk(self.Robo4))
-        self.Robo5.clicked.connect(lambda: self.rBtn_clk(self.Robo5))
-        self.Robo6.clicked.connect(lambda: self.rBtn_clk(self.Robo6))
-        self.Robo7.clicked.connect(lambda: self.rBtn_clk(self.Robo7))
-        self.Robo8.clicked.connect(lambda: self.rBtn_clk(self.Robo8))
+        self.Spell1.clicked.connect(lambda: self.rBtn_clk(self.Spell1))
+        self.Spell2.clicked.connect(lambda: self.rBtn_clk(self.Spell2))
+        self.Spell3.clicked.connect(lambda: self.rBtn_clk(self.Spell3))
+        self.Spell4.clicked.connect(lambda: self.rBtn_clk(self.Spell4))
+        self.Spell5.clicked.connect(lambda: self.rBtn_clk(self.Spell5))
+        self.Spell6.clicked.connect(lambda: self.rBtn_clk(self.Spell6))
+        self.Spell7.clicked.connect(lambda: self.rBtn_clk(self.Spell7))
+        self.Spell8.clicked.connect(lambda: self.rBtn_clk(self.Spell8))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -341,44 +333,44 @@ class Spellcards(QWidget):
 
     # show new setting, after returing to options
     def chk_RBtn(self):
-        global CurRobot
+        global CurSpell
 
-        self.Robo2.setChecked(False)
-        self.Robo3.setChecked(False)
-        self.Robo4.setChecked(False)
-        self.Robo5.setChecked(False)
-        self.Robo6.setChecked(False)
-        self.Robo7.setChecked(False)
-        self.Robo8.setChecked(False)
+        self.Spell2.setChecked(False)
+        self.Spell3.setChecked(False)
+        self.Spell4.setChecked(False)
+        self.Spell5.setChecked(False)
+        self.Spell6.setChecked(False)
+        self.Spell7.setChecked(False)
+        self.Spell8.setChecked(False)
 
-        if CurRobot == "Robot1":
-            self.Robo1.setChecked(True)
+        if CurSpell == "Spellcard1":
+            self.Spell1.setChecked(True)
 
-        elif CurRobot == "Robot2":
-            self.Robo2.setChecked(True)
+        elif CurSpell == "Spellcard2":
+            self.Spell2.setChecked(True)
 
-        elif CurRobot == "Robot3":
-            self.Robo3.setChecked(True)
+        elif CurSpell == "Spellcard3":
+            self.Spell3.setChecked(True)
 
-        elif CurRobot == "Robot4":
-            self.Robo4.setChecked(True)
+        elif CurSpell == "Spellcard4":
+            self.Spell4.setChecked(True)
 
-        elif CurRobot == "Robot5":
-            self.Robo5.setChecked(True)
+        elif CurSpell == "Spellcard5":
+            self.Spell5.setChecked(True)
 
-        elif CurRobot == "Robot6":
-            self.Robo6.setChecked(True)
+        elif CurSpell == "Spellcard6":
+            self.Spell6.setChecked(True)
 
-        elif CurRobot == "Robot7":
-            self.Robo7.setChecked(True)
+        elif CurSpell == "Spellcard7":
+            self.Spell7.setChecked(True)
 
-        elif CurRobot == "Robot8":
-            self.Robo8.setChecked(True)
+        elif CurSpell == "AllSpellcards":
+            self.Spell8.setChecked(True)
 
         else:
-            self.Robo1.setChecked(True)
+            self.Spell1.setChecked(True)
 
-        self.label.setText('currently used\n' + CurRobot)
+        self.label.setText('currently used\n' + CurSpell)
         self.label.update()
 
 
@@ -387,41 +379,41 @@ class Spellcards(QWidget):
 
 
     def btn_clk(self, button):
-        global CurRobot
+        global CurSpell
         print(button.text() + ' clicked')
 
-        if button == self.Robo1:
-            Server.roboType = "Robot1"
-            CurRobot = "Robot1"
+        if button == self.Spell1:
+            Server.spellcard = "Spellcard1"
+            CurSpell = "Spellcard1"
 
-        elif button == self.Robo2:
-            Server.roboType = "Robot2"
-            CurRobot = "Robot2"
+        elif button == self.Spell2:
+            Server.spellcard = "Spellcard2"
+            CurSpell = "Spellcard2"
 
-        elif button == self.Robo3:
-            Server.roboType = "Robot3"
-            CurRobot = "Robot3"
+        elif button == self.Spell3:
+            Server.spellcard = "Spellcard3"
+            CurSpell = "Spellcard3"
 
-        elif button == self.Robo4:
-            Server.roboType = "Robot4"
-            CurRobot = "Robot4"
+        elif button == self.Spell4:
+            Server.spellcard = "Spellcard4"
+            CurSpell = "Spellcard4"
 
-        elif button == self.Robo5:
-            Server.roboType = "Robot5"
-            CurRobot = "Robot5"
+        elif button == self.Spell5:
+            Server.spellcard = "Spellcard5"
+            CurSpell = "Spellcard5"
 
-        elif button == self.Robo6:
-            Server.roboType = "Robot6"
-            CurRobot = "Robot6"
+        elif button == self.Spell6:
+            Server.spellcard = "Spellcard6"
+            CurSpell = "Spellcard6"
 
-        elif button == self.Robo7:
-            Server.roboType = "Robot7"
-            CurRobot = "Robot7"
+        elif button == self.Spell7:
+            Server.spellcard = "Spellcard7"
+            CurSpell = "Spellcard7"
 
-        elif button == self.Robo8:
-            Server.roboType = "Robot8"
-            CurRobot = "Robot8"
-
+        elif button == self.Spell8:
+            Server.spellcard = "AllSpellcards"
+            CurSpell = "AllSpellcards"
+            
         else:
             pass
 
@@ -460,7 +452,7 @@ class BulletCol(QWidget):
 
     def iniUt(self):
 
-        self.bulG.setTitle("Bullet - Wall Collision")
+        self.bulG.setTitle("Bullet collision")
 
         self.button_layout1.addWidget(self.BulTrue)
         self.button_layout1.addWidget(self.BulFalse)
@@ -513,7 +505,7 @@ class BulletCol(QWidget):
         elif button == self.BulFalse:
             Server.BulCollision = False
             CurWall = "Off"
-
+            
         else:
             pass
 
@@ -849,3 +841,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     game = Game()
     sys.exit(app.exec_())
+
+
+
+
+

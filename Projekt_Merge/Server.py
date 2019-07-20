@@ -35,8 +35,8 @@ ftexture = "Brown floor"
 # selected wall texture
 wtexture = "Metall wall"
 
-# selected Robot Type
-roboType = "Robot1"
+# selected Spellcard
+spellcard = "Spellcard1"
 
 # selected Collision
 BulCollision = True
@@ -98,7 +98,7 @@ class SpielFeld(QWidget):
         #print(wtexture)
         self.floorTexture = self.changeFloor(ftexture)
         
-        self.roboType = self.changeRobo(roboType)
+        self.spellcard = self.changeSpellcard(spellcard)
 
         print(BulCollision)
 
@@ -119,21 +119,21 @@ class SpielFeld(QWidget):
         Robot3 = Robots.Robot(3, QVector2D(250,650), 270, 2, 2, 15, 90, 3)
         Robot4 = Robots.Robot(4, QVector2D(950,100), 180, 2, 2, 15, 90, 3)
 
-        if self.roboType == "Robot1":
+        if self.spellcard == "Spellcard1":
             Robot1.setProgram(Control.PlayerRobot_Ability01(Robot1))
-        elif self.roboType == "Robot2":
+        elif self.spellcard == "Spellcard2":
             Robot1.setProgram(Control.PlayerRobot_Ability02(Robot1))
-        elif self.roboType == "Robot3":
+        elif self.spellcard == "Spellcard3":
             Robot1.setProgram(Control.PlayerRobot_Ability03(Robot1))
-        elif self.roboType == "Robot4":
+        elif self.spellcard == "Spellcard4":
             Robot1.setProgram(Control.PlayerRobot_Ability04(Robot1))
-        elif self.roboType == "Robot5":
+        elif self.spellcard == "Spellcard5":
             Robot1.setProgram(Control.PlayerRobot_Ability05(Robot1))
-        elif self.roboType == "Robot6":
+        elif self.spellcard == "Spellcard6":
             Robot1.setProgram(Control.PlayerRobot_Ability06(Robot1))
-        elif self.roboType == "Robot7":
+        elif self.spellcard == "Spellcard7":
             Robot1.setProgram(Control.PlayerRobot_Ability07(Robot1))
-        elif self.roboType == "Robot8":
+        elif self.spellcard == "AllSpellcards":
             Robot1.setProgram(Control.PlayerRobot_All_Abilities(Robot1))
 
         
@@ -166,39 +166,39 @@ class SpielFeld(QWidget):
         self.show()
 
 
-    def changeRobo(self, name):
+    def changeSpellcard(self, name):
 
-        if name == "Robot1":
-            Menu.CurWall = "Robot1"
-            return "Robot1"
+        if name == "Spellcard1":
+            Menu.CurSpell = "Spellcard1"
+            return "Spellcard1"
 
-        elif name == "Robot2":
-            Menu.CurWall = "Robot2"
-            return "Robot2"
+        elif name == "Spellcard2":
+            Menu.CurSpell = "Spellcard2"
+            return "Spellcard2"
 
-        elif name == "Robot3":
-            Menu.CurWall = "Robot3"
-            return "Robot3"
+        elif name == "Spellcard3":
+            Menu.CurSpell = "Spellcard3"
+            return "Spellcard3"
 
-        elif name == "Robot4":
-            Menu.CurWall = "Robot4"
-            return "Robot4"
+        elif name == "Spellcard4":
+            Menu.CurSpell = "Spellcard4"
+            return "Spellcard4"
 
-        elif name == "Robot5":
-            Menu.CurWall = "Robot5"
-            return "Robot5"
+        elif name == "Spellcard5":
+            Menu.CurSpell = "Spellcard5"
+            return "Spellcard5"
 
-        elif name == "Robot6":
-            Menu.CurWall = "Robot6"
-            return "Robot6"
+        elif name == "Spellcard6":
+            Menu.CurSpell = "Spellcard6"
+            return "Spellcard6"
 
-        elif name == "Robot7":
-            Menu.CurWall = "Robot7"
-            return "Robot7"
+        elif name == "Spellcard7":
+            Menu.CurSpell = "Spellcard7"
+            return "Spellcard7"
 
-        elif name == "Robot8":
-            Menu.CurWall = "Robot8"
-            return "Robot8"
+        elif name == "AllSpellcards":
+            Menu.CurSpell = "AllSpellcards"
+            return "AllSpellcards"
         
         else:
             pass
