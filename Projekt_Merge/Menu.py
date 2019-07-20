@@ -224,10 +224,9 @@ class OptionField(QWidget):
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
 
-
     def ImageSet(self):
-        Namelist = ["BlueForest", "Gate", "ForestTempel", "NightRoad", "RedForest", "Shrine", "Tempel" ]
-        return QPixmap(backgrounds[random.choice(Namelist)])
+        themes = list(backgrounds.keys())
+        return QPixmap(backgrounds[random.choice(themes)])
 
 
 class TableWidget(QWidget):
