@@ -14,6 +14,8 @@ import sys
 
 # needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
 import pygame
+
+
 import Server
 
 # initialize the music mixer
@@ -83,8 +85,10 @@ class Game (QWidget):
 
         self.show()
 
+
     def gameMenu(self):
         self.startM = start_Menu()
+        self.movie.stop()
         self.close()
 
     # reproduce movie
@@ -153,8 +157,8 @@ class start_Menu(QWidget):
         pygame.mixer.music.load(playlist["Track 6"])
         pygame.mixer.music.play(-1, 0.0)
 
-
         self.show()
+
 
     # reproduce movie
     def paintEvent(self, event):
@@ -165,6 +169,7 @@ class start_Menu(QWidget):
         pixmap = self.movie.currentPixmap()
         self.setMask(pixmap.mask())
         painter.drawPixmap(0, 0, pixmap)
+
 
     def Instance(self):
         self.gBoard = Server.SpielFeld()
@@ -308,6 +313,7 @@ class Spellcards(QWidget):
         self.Spell8 = QRadioButton("All Spellcards")
 
         self.btn = QPushButton("Select")
+        self.btn.setStyleSheet('background-color: white')
 
         self.currentRBtn = self.Spell1
 
@@ -343,8 +349,8 @@ class Spellcards(QWidget):
         # add button layout to Spellbox
         self.gameG.setLayout(self.button_layout1)
 
-        # set Spellbox semi transparent
-        self.gameG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
+        # set Spellbox semi transparent rgba(255, 255, 255, 0.8)
+        self.gameG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
         # click buttons
         self.Spell1.clicked.connect(lambda: self.rBtn_clk(self.Spell1))
@@ -462,7 +468,9 @@ class BulletCol(QWidget):
         # create buttons
         self.BulTrue = QRadioButton("Wall Collision   On")
         self.BulFalse = QRadioButton("Wall Collision   Off")
+
         self.btn = QPushButton("Select")
+        self.btn.setStyleSheet('background-color: white')
 
         self.currentRBtn = self.BulTrue
 
@@ -492,7 +500,7 @@ class BulletCol(QWidget):
         self.bulG.setLayout(self.button_layout1)
 
         # set Bullet setting semi-transparent
-        self.bulG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
+        self.bulG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
 
         # click buttons
@@ -564,7 +572,9 @@ class wallTexture(QWidget):
         self.texture1 = QRadioButton("Metall wall")
         self.texture2 = QRadioButton("Red wall")
         self.texture3 = QRadioButton("Mosaik wall")
+
         self.btn = QPushButton("Select")
+        self.btn.setStyleSheet('background-color: white')
 
         self.currentRBtn = self.texture1
 
@@ -599,7 +609,7 @@ class wallTexture(QWidget):
         self.wallG.setLayout(self.button_layout1)
 
         # set wall texture box semi-transparent
-        self.wallG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
+        self.wallG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
         # click buttons
         self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
@@ -681,6 +691,7 @@ class floorTexture(QWidget):
         self.texture6 = QRadioButton("Brownstone floor")
         # create selector
         self.btn = QPushButton("Select")
+        self.btn.setStyleSheet('background-color: white')
 
         self.currentRBtn = self.texture1
 
@@ -699,6 +710,12 @@ class floorTexture(QWidget):
     def iniUt(self):
 
         self.floorG.setTitle("Texture Floor")
+
+        # title cant be set bold
+        #self.setStyleSheet('QGroupBox:title {color: blue;}')
+        # alternatives, but not really efficient
+        #self.floorG.setStyleSheet("font-weight: bold;")
+        #self.setStyleSheet("font-weight: bold;")
 
         # add button icons
         self.texture1.setIcon(QIcon(Server.floorTextures["Brown floor"]))
@@ -738,7 +755,7 @@ class floorTexture(QWidget):
         self.floorG.setLayout(self.button_layout2)
 
         #set floor textures box semi-transparent
-        self.floorG.setStyleSheet('background-color: rgba(255, 255, 255, 0.8);')
+        self.floorG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
 
     # show new setting, after returing to options
