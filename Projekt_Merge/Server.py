@@ -109,6 +109,8 @@ class SpielFeld(QWidget):
 
         print(BulCollision)
 
+        self.SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
+
         self.RoboTextures = {0: QPixmap('textures/Robots/Robot01.png'),  # MainRobot
                              1: QPixmap('textures/Robots/Robot_Dead.png'),  # Dead
                              2: QPixmap('textures/Robots/Robot_In.png'),  # Ivincible
@@ -362,11 +364,11 @@ class SpielFeld(QWidget):
                                 self.setNextBombPos()
                                 
                                 # Immunity
-                                robot.immuneTime = 10000
+                                robot.immuneTime = 500
                                 robot.texture = 2
                                                         
-                                SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
-                                pygame.mixer.Sound.play(SoundBomb)
+                                
+                                pygame.mixer.Sound.play(self.SoundBomb)
                             
 
                             

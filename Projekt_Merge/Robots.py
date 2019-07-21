@@ -62,6 +62,14 @@ class Robot(object):
         self.v_alpha = 0
         self.v = 0
 
+        self.SoundSpecial1 = pygame.mixer.Sound('sounds/special1.wav')
+        self.SoundSpecial2 = pygame.mixer.Sound('sounds/special2.wav')
+        self.SoundSpecial3 = pygame.mixer.Sound('sounds/special3.wav')
+        self.SoundSpecial4 = pygame.mixer.Sound('sounds/special4.wav')
+        self.SoundSpecial5 = pygame.mixer.Sound('sounds/special5.wav')                    
+        self.SoundSpecial6 = pygame.mixer.Sound('sounds/special6.wav')
+        self.SoundSpecial7 = pygame.mixer.Sound('sounds/special7.wav')
+
     #Methods for Robot Controll
     def setProgram(self, program):
         self.program = program
@@ -195,8 +203,8 @@ class Robot(object):
                     self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
                     self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
 
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special1.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            
+            pygame.mixer.Sound.play(self.SoundSpecial1)
 
             self.coolDown = 150
 
@@ -212,9 +220,8 @@ class Robot(object):
             for delay in range(0, Repetitions, 1):
                 for i in range(0, 8, 1):
                     self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
-
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special2.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            
+            pygame.mixer.Sound.play(self.SoundSpecial2)
            
 
             self.coolDown = 550
@@ -256,8 +263,7 @@ class Robot(object):
                 self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
                 self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
 
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special3.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            pygame.mixer.Sound.play(self.SoundSpecial3)
             
             self.coolDown = 250
 
@@ -275,9 +281,9 @@ class Robot(object):
                 LifeTime = random.randint(250,350)
                 for step in range(0,BulletAmmount,1):
                     self.BulList.append(self.createBullet(15,LifeTime, 0,(alpha1 + step*alphaStep) % 360,0,6,0))
+            
 
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special4.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            pygame.mixer.Sound.play(self.SoundSpecial4)
             
             self.coolDown = 400
 
@@ -298,8 +304,7 @@ class Robot(object):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(17,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
 
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special5.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            pygame.mixer.Sound.play(self.SoundSpecial5)
 
             self.coolDown = 450
 
@@ -320,9 +325,8 @@ class Robot(object):
             for delay in range(0, Repetitions, 1):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(22,LifeTime, delay*4,((alpha1 + i*alphaStep) + alphaWindow * delay) % 360,0,6,0))
-                    
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special6.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+
+            pygame.mixer.Sound.play(self.SoundSpecial6)
             
             self.coolDown = 450
 
@@ -342,8 +346,7 @@ class Robot(object):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(27,LifeTime-delay*4, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
 
-            SoundSpecial1 = pygame.mixer.Sound('sounds/special7.wav')
-            pygame.mixer.Sound.play(SoundSpecial1)
+            pygame.mixer.Sound.play(self.SoundSpecial7)
             
             self.coolDown = 700
         
