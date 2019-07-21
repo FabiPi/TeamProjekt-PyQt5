@@ -178,6 +178,8 @@ class start_Menu(QWidget):
     def startGame(self):
         self.Instance().start()
         pygame.mixer.music.stop()
+        pygame.mixer.music.load("sounds/Introtheme.mp3")
+        pygame.mixer.music.play(-1, 0.0)
         self.close()
 
     def Options(self):

@@ -5,6 +5,7 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
 from PyQt5.QtCore import Qt, QBasicTimer, QThread
+from playsound import playsound
 import keyboard
 import sys
 import math
@@ -14,6 +15,9 @@ import random
 import Server
 import Bullet
 import Control
+import pygame
+
+pygame.mixer.init()
 
 #Constants
 alpha_eps = 0.5 #velocity-stop breakpoint
@@ -191,6 +195,9 @@ class Robot(object):
                     self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
                     self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
 
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special1.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+
             self.coolDown = 150
 
     def spellcard2(self):
@@ -205,6 +212,10 @@ class Robot(object):
             for delay in range(0, Repetitions, 1):
                 for i in range(0, 8, 1):
                     self.BulList.append(self.createBullet(6,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
+
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special2.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+           
 
             self.coolDown = 550
 
@@ -245,7 +256,9 @@ class Robot(object):
                 self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
                 self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
 
-
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special3.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+            
             self.coolDown = 250
 
     def spellcard4(self):
@@ -263,6 +276,9 @@ class Robot(object):
                 for step in range(0,BulletAmmount,1):
                     self.BulList.append(self.createBullet(15,LifeTime, 0,(alpha1 + step*alphaStep) % 360,0,6,0))
 
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special4.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+            
             self.coolDown = 400
 
 
@@ -281,6 +297,9 @@ class Robot(object):
             for delay in range(0, Repetitions, 1):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(17,LifeTime, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
+
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special5.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
 
             self.coolDown = 450
 
@@ -301,7 +320,10 @@ class Robot(object):
             for delay in range(0, Repetitions, 1):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(22,LifeTime, delay*4,((alpha1 + i*alphaStep) + alphaWindow * delay) % 360,0,6,0))
-
+                    
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special6.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+            
             self.coolDown = 450
 
     def spellcard7(self):
@@ -320,6 +342,9 @@ class Robot(object):
                 for i in range(0, BulletAmmount, 1):
                     self.BulList.append(self.createBullet(27,LifeTime-delay*4, delay*4,(alpha1 + i*alphaStep) % 360,0,6,0))
 
+            SoundSpecial1 = pygame.mixer.Sound('sounds/special7.wav')
+            pygame.mixer.Sound.play(SoundSpecial1)
+            
             self.coolDown = 700
         
 

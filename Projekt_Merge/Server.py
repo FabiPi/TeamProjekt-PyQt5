@@ -4,8 +4,9 @@ von B-Dome, JangJang3, FabiPi
 """
 
 from PyQt5.QtWidgets import QWidget, QApplication, QDesktopWidget, QMessageBox
-from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF
+from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath, QPolygonF, QMovie
 from PyQt5.QtCore import Qt, QBasicTimer, QPoint, QEvent, QRectF
+
 
 import sys
 import math
@@ -16,6 +17,10 @@ import Robots
 import Bullet
 import Control
 import Menu
+# needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
+import pygame
+
+pygame.mixer.init()
 
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
@@ -28,6 +33,8 @@ v_alpha_Max = 2
 count = 0
 DEATH_TIME = 100
 IMMUNE_TIME = 150
+BOMB_SIZE = 32
+BOMB_TIMER = 5000
 
 # selected floor texture
 ftexture = "Brown floor"
@@ -107,6 +114,15 @@ class SpielFeld(QWidget):
                              2: QPixmap('textures/Robots/Robot_In.png'),  # Ivincible
                              3: QPixmap('textures/Robots/Robot02.png')  # EnemyRobot
                              }
+
+        self.bombPosition = {0: [50,50],
+                             1: [900,50],                            
+                             2: [900,900],
+                             3: [50,900],
+                             }
+
+        self.bombTime = BOMB_TIMER
+        self.currentBombPos = 0
 
         self.createBoard()
 
@@ -312,6 +328,8 @@ class SpielFeld(QWidget):
                 self.reduceDelay(robot)
                 self.reduceDeathTime(robot)
                 self.reduceImmuneTime(robot)
+                self.reduceBombTime()
+                #print(self.currentBombPos)
 
             for bul in SpielFeld.Bullets:
                 if bul.delay == 0:
@@ -336,6 +354,23 @@ class SpielFeld(QWidget):
                                 robot.texture = 2
                             if bul in SpielFeld.Bullets:
                                 SpielFeld.Bullets.remove(bul)
+
+                            
+                        if self.bomb_hit(robot):
+                            if robot.robotid == 1:
+                                #Hier: Hit-Effekte
+                                self.setNextBombPos()
+                                
+                                # Immunity
+                                robot.immuneTime = 10000
+                                robot.texture = 2
+                                                        
+                                SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
+                                pygame.mixer.Sound.play(SoundBomb)
+                            
+
+                            
+                            ###
                 else:
                     bul.delay -= 1
 
@@ -398,6 +433,7 @@ class SpielFeld(QWidget):
         for bul in SpielFeld.Bullets:
             if bul.delay == 0:
                 bul.drawBullet(qp)
+        self.drawBomb(qp)
 
     def drawRobo(self, Robo, br):
 
@@ -474,6 +510,47 @@ class SpielFeld(QWidget):
                 else:
                     texture = self.floorTexture
                 qp.drawPixmap(i * 10, j * 10, texture)
+
+## BOMB ##
+            
+
+    def bombShape(self, bombPos):
+        shape = QPainterPath()
+        shape.addRect(bombPos[0], bombPos[1], BOMB_SIZE, BOMB_SIZE)
+        return shape
+
+    def bomb_hit(self, robo):
+        if self.bombShape(self.bombPosition[self.currentBombPos]).intersects(robo.roboShape()):
+            return True
+        else: pass
+
+    def drawBomb(self, qp):        
+        texture = QPixmap('textures/bomb.jpg')
+
+        qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
+
+    def reduceBombTime(self):
+        if self.bombTime != 0:
+            self.bombTime -= 1
+            if self.bombTime == 0:
+                self.bombTime = BOMB_TIMER
+                self.setNextBombPos()
+                #self.setCurrBombPos()
+
+    def setCurrBombPos(self, bombPos ):
+        if bombPos >= 0 and bombPos < 3:
+            bombPos += 1
+        else:
+            bombPos = 0
+
+        return bombPos
+
+    def setNextBombPos(self):
+        self.currentBombPos = self.setCurrBombPos(self.currentBombPos)
+        
+        
+
+##
 
     def keyPressEvent(self, event):
         if not self.isStarted:
