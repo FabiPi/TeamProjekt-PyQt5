@@ -2,7 +2,6 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
-import random
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
@@ -10,24 +9,25 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox
 
+import Server
+import random
 import sys
 
+####################################################################################
 # needs to be installed (https://www.pygame.org/docs/ref/mixer.html)
+####################################################################################
 import pygame
 
 
-import Server
-
-# initialize the music mixer
-pygame.mixer.init()
-
+# music playlist for game
 playlist = {
     "Track 1": "sounds/beautiful-flute-ringtone.mp3",
     "Track 2": "sounds/Bahubali Flute Ringtone 2019.mp3",
     "Track 3": "sounds/japanese_zen_1.mp3",
     "Track 4": "sounds/japanese_zen_2.mp3",
     "Track 5": "sounds/Beautiful Japanese Music - Cherry Blossoms.mp3",
-    "Track 6": 'sounds/Beautiful Japanese Music - Kitsune Woods.mp3'
+    "Track 6": "sounds/Beautiful Japanese Music - Kitsune Woods.mp3",
+    "Track 7": "sounds/IntroTheme.mp3"
 }
 
 # Japanese_zen_1.mp3 & Japanese_zen_2 ( downloaded from
@@ -36,7 +36,8 @@ playlist = {
 # +-+Kitsune+Woods.mp3)
 
 
-# background library for Option
+
+# background library
 backgrounds = {
     "BlueForest": "textures/Background/Forest.jpg",
     "Gate": "textures/Background/Gate.jpg",
@@ -47,12 +48,21 @@ backgrounds = {
     "Tempel": "textures/Background/Tempel.jpg"
 }
 
-# default setting
+
+# default settings
 CurFloor = "Brown floor"
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
 CurCol = "Wall Collision   On"
 
+
+# initialize the music mixer
+pygame.mixer.init()
+
+
+####################################################################################
+# creating start screen
+####################################################################################
 
 class Game (QWidget):
 
@@ -61,20 +71,19 @@ class Game (QWidget):
 
         self.initUI()
 
-
     def initUI(self):
         self.resize(800, 336)
         Server.center(self)
-        self.setWindowTitle('Welcome')
+        self.setWindowTitle("Welcome")
 
-        self.enter = QPushButton('enter', self)
+        self.enter = QPushButton("enter", self)
         self.enter.move(360,280)
         self.enter.resize(80, 25)
         self.enter.clicked.connect(self.gameMenu)
-        self.enter.setStyleSheet('background-color: rgb(240,255,255); font: bold 15px; color: black;')
+        self.enter.setStyleSheet("background-color: rgb(240,255,255); font: bold 15px; color: black;")
 
         # create background animated gif
-        self.movie = QMovie('textures/Background/Red.gif')
+        self.movie = QMovie("textures/Background/Red.gif")
         self.movie.frameChanged.connect(self.repaint)
         self.movie.start()
 
@@ -91,10 +100,7 @@ class Game (QWidget):
         self.movie.stop()
         self.close()
 
-    # reproduce movie
     def paintEvent(self, event):
-
-        # https://wiki.python.org/moin/PyQt/Movie%20splash%20screen
         # after every changed image, refresh the background with the currentPixmap
         painter = QPainter(self)
         pixmap = self.movie.currentPixmap()
@@ -102,6 +108,9 @@ class Game (QWidget):
         painter.drawPixmap(0, 0, pixmap)
 
 
+####################################################################################
+# creating start Menu
+####################################################################################
 
 class start_Menu(QWidget):
 
@@ -118,7 +127,6 @@ class start_Menu(QWidget):
 
     def initUI(self):
 
-
         self.resize(self.WIDTH, self.HEIGHT)
         self.setWindowTitle('Start Menu')
         Server.center(self)
@@ -133,7 +141,7 @@ class start_Menu(QWidget):
         self.button2.clicked.connect(self.Options)
         self.button2.move(self.XPosStart, 2 * self.YPosStart)
 
-        # switch to manuel
+        # switch to howtoplay
         self.button3 = QPushButton('How to Play', self)
         self.button3.clicked.connect(self.How2Play)
         self.button3.move(self.XPosStart, 3 * self.YPosStart)
@@ -160,16 +168,13 @@ class start_Menu(QWidget):
         self.show()
 
 
-    # reproduce movie
     def paintEvent(self, event):
 
-        # https://wiki.python.org/moin/PyQt/Movie%20splash%20screen
         # after every changed image, refresh the background with the currentPixmap
         painter = QPainter(self)
         pixmap = self.movie.currentPixmap()
         self.setMask(pixmap.mask())
         painter.drawPixmap(0, 0, pixmap)
-
 
     def Instance(self):
         self.gBoard = Server.SpielFeld()
@@ -178,7 +183,7 @@ class start_Menu(QWidget):
     def startGame(self):
         self.Instance().start()
         pygame.mixer.music.stop()
-        pygame.mixer.music.load("sounds/Introtheme.mp3")
+        pygame.mixer.music.load(playlist["Track 7"])
         pygame.mixer.music.play(-1, 0.0)
         self.close()
 
@@ -202,6 +207,9 @@ class start_Menu(QWidget):
         self.close()
 
 
+####################################################################################
+# creating options
+####################################################################################
 
 class OptionField(QWidget):
     def __init__(self):
@@ -209,7 +217,7 @@ class OptionField(QWidget):
 
         self.background = QLabel(self)
         # randomly change background after every enter
-        self.image = self.ImageSet()
+        self.image = self.ImageChange()
         self.background.setPixmap(self.image)
 
         self.InitUI()
@@ -241,11 +249,14 @@ class OptionField(QWidget):
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
 
-
-    def ImageSet(self):
+    def ImageChange(self):
         themes = list(backgrounds.keys())
         return QPixmap(backgrounds[random.choice(themes)])
 
+    
+####################################################################################
+# creating contents for tabs
+####################################################################################
 
 class TableWidget(QWidget):
     def __init__(self, parent):
@@ -256,19 +267,19 @@ class TableWidget(QWidget):
         # Initialize tab screen
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
-        self.tab3 = QWidget()
+        self.tab2 = QWidget()
 
         # Add tabs
         self.tabs.addTab(self.tab1, "Game")
-        self.tabs.addTab(self.tab3, "Grafik")
+        self.tabs.addTab(self.tab2, "Graphic")
 
-        # Create first tab
+        # Create game tab
         self.tab1.layout = QHBoxLayout()
 
         self.gameG = Spellcards()
         self.bulG = BulletCol()
 
-        # add new Boxes to tab1
+        # add new content to tab1
         self.tab1.layout.addWidget(self.bulG)
         self.tab1.layout.addWidget(self.gameG)
 
@@ -276,23 +287,28 @@ class TableWidget(QWidget):
 
 
         # create content grafic tab
-        self.tab3.layout = QHBoxLayout()
+        self.tab2.layout = QHBoxLayout()
 
         # add wallG to tab3
         self.wallG = wallTexture()
-        self.tab3.layout.addWidget(self.wallG)
+        self.tab2.layout.addWidget(self.wallG)
 
 
         # add floorG to tab3
         self.floorG = floorTexture()
-        self.tab3.layout.addWidget(self.floorG)
+        self.tab2.layout.addWidget(self.floorG)
 
         # add all layouts to tab3
-        self.tab3.setLayout(self.tab3.layout)
+        self.tab2.setLayout(self.tab2.layout)
 
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
+
+
+####################################################################################
+# tab Game: Spellcard option
+####################################################################################
 
 class Spellcards(QWidget):
     def __init__(self):
@@ -335,7 +351,6 @@ class Spellcards(QWidget):
 
         self.gameG.setTitle("Spellcard Selection")
 
-
         # add buttons to button layout
         self.button_layout1.addWidget(self.Spell1)
         self.button_layout1.addWidget(self.Spell2)
@@ -355,14 +370,14 @@ class Spellcards(QWidget):
         self.gameG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
         # click buttons
-        self.Spell1.clicked.connect(lambda: self.rBtn_clk(self.Spell1))
-        self.Spell2.clicked.connect(lambda: self.rBtn_clk(self.Spell2))
-        self.Spell3.clicked.connect(lambda: self.rBtn_clk(self.Spell3))
-        self.Spell4.clicked.connect(lambda: self.rBtn_clk(self.Spell4))
-        self.Spell5.clicked.connect(lambda: self.rBtn_clk(self.Spell5))
-        self.Spell6.clicked.connect(lambda: self.rBtn_clk(self.Spell6))
-        self.Spell7.clicked.connect(lambda: self.rBtn_clk(self.Spell7))
-        self.Spell8.clicked.connect(lambda: self.rBtn_clk(self.Spell8))
+        self.Spell1.clicked.connect(lambda: self.currBtn_clk(self.Spell1))
+        self.Spell2.clicked.connect(lambda: self.currBtn_clk(self.Spell2))
+        self.Spell3.clicked.connect(lambda: self.currBtn_clk(self.Spell3))
+        self.Spell4.clicked.connect(lambda: self.currBtn_clk(self.Spell4))
+        self.Spell5.clicked.connect(lambda: self.currBtn_clk(self.Spell5))
+        self.Spell6.clicked.connect(lambda: self.currBtn_clk(self.Spell6))
+        self.Spell7.clicked.connect(lambda: self.currBtn_clk(self.Spell7))
+        self.Spell8.clicked.connect(lambda: self.currBtn_clk(self.Spell8))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -411,7 +426,7 @@ class Spellcards(QWidget):
         self.label.update()
 
 
-    def rBtn_clk(self, button):
+    def currBtn_clk(self, button):
         self.currentRBtn = button
 
     def btn_clk(self, button):
@@ -457,6 +472,10 @@ class Spellcards(QWidget):
         QtGui.QGuiApplication.processEvents()
 
 
+####################################################################################
+# tab Game: bullet - wall collision setting
+####################################################################################
+
 class BulletCol(QWidget):
     def __init__(self):
         super().__init__()
@@ -476,7 +495,6 @@ class BulletCol(QWidget):
 
         self.currentRBtn = self.BulTrue
 
-        # set texture choice
         self.label = QLabel(self)
 
         # change style of lettering
@@ -504,10 +522,9 @@ class BulletCol(QWidget):
         # set Bullet setting semi-transparent
         self.bulG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
-
         # click buttons
-        self.BulTrue.clicked.connect(lambda: self.rBtn_clk(self.BulTrue))
-        self.BulFalse.clicked.connect(lambda: self.rBtn_clk(self.BulFalse))
+        self.BulTrue.clicked.connect(lambda: self.currBtn_clk(self.BulTrue))
+        self.BulFalse.clicked.connect(lambda: self.currBtn_clk(self.BulFalse))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -535,7 +552,7 @@ class BulletCol(QWidget):
         self.label.update()
 
 
-    def rBtn_clk(self, button):
+    def currBtn_clk(self, button):
         self.currentRBtn = button
 
 
@@ -559,6 +576,9 @@ class BulletCol(QWidget):
 
 
 
+####################################################################################
+# tab Graphic: wall texture choice
+####################################################################################
 
 class wallTexture(QWidget):
     def __init__(self):
@@ -580,7 +600,6 @@ class wallTexture(QWidget):
 
         self.currentRBtn = self.texture1
 
-        # set texture choice
         self.label = QLabel(self)
 
         # change style of lettering
@@ -614,9 +633,9 @@ class wallTexture(QWidget):
         self.wallG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
         # click buttons
-        self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
-        self.texture2.clicked.connect(lambda: self.rBtn_clk(self.texture2))
-        self.texture3.clicked.connect(lambda: self.rBtn_clk(self.texture3))
+        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
+        self.texture2.clicked.connect(lambda: self.currBtn_clk(self.texture2))
+        self.texture3.clicked.connect(lambda: self.currBtn_clk(self.texture3))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -647,7 +666,7 @@ class wallTexture(QWidget):
         self.label.update()
 
 
-    def rBtn_clk(self, button):
+    def currBtn_clk(self, button):
         self.currentRBtn = button
 
 
@@ -672,6 +691,10 @@ class wallTexture(QWidget):
         self.label.setText("You selected: \n" + button.text())
         QtGui.QGuiApplication.processEvents()
 
+
+####################################################################################
+# tab Graphic: floor texture choice
+####################################################################################
 
 class floorTexture(QWidget):
 
@@ -727,16 +750,16 @@ class floorTexture(QWidget):
         self.texture5.setIcon(QIcon(Server.floorTextures["Whitestone floor"]))
         self.texture6.setIcon(QIcon(Server.floorTextures["Brownstone floor"]))
 
-        self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
+        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
 
 
         # clicked buttons
-        self.texture1.clicked.connect(lambda: self.rBtn_clk(self.texture1))
-        self.texture2.clicked.connect(lambda: self.rBtn_clk(self.texture2))
-        self.texture3.clicked.connect(lambda: self.rBtn_clk(self.texture3))
-        self.texture4.clicked.connect(lambda: self.rBtn_clk(self.texture4))
-        self.texture5.clicked.connect(lambda: self.rBtn_clk(self.texture5))
-        self.texture6.clicked.connect(lambda: self.rBtn_clk(self.texture6))
+        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
+        self.texture2.clicked.connect(lambda: self.currBtn_clk(self.texture2))
+        self.texture3.clicked.connect(lambda: self.currBtn_clk(self.texture3))
+        self.texture4.clicked.connect(lambda: self.currBtn_clk(self.texture4))
+        self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
+        self.texture6.clicked.connect(lambda: self.currBtn_clk(self.texture6))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -796,7 +819,7 @@ class floorTexture(QWidget):
         self.label.setText('currently used\n' + CurFloor)
 
 
-    def rBtn_clk(self, button):
+    def currBtn_clk(self, button):
         self.currentRBtn = button
 
 
@@ -833,6 +856,9 @@ class floorTexture(QWidget):
         self.label.setText("You selected: \n" + button.text())
 
 
+####################################################################################
+# creating credit window
+####################################################################################
 
 class CreditText(QWidget):
 
@@ -863,6 +889,11 @@ class CreditText(QWidget):
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
 
+
+
+####################################################################################
+# creating instruction window
+####################################################################################
 
 class How2PlayText(QWidget):
 
