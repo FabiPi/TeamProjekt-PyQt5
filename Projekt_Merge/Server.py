@@ -333,6 +333,19 @@ class SpielFeld(QWidget):
                 self.reduceBombTime()
                 #print(self.currentBombPos)
 
+
+                if self.bomb_hit(robot):
+                    if robot.robotid == 1:
+                        #Hier: Hit-Effekte
+                        self.setNextBombPos()
+                        
+                        # Immunity
+                        robot.immuneTime = 500
+                        robot.texture = 2
+                                                        
+                                
+                        pygame.mixer.Sound.play(self.SoundBomb)
+                        
             for bul in SpielFeld.Bullets:
                 if bul.delay == 0:
                     bul.moveBullet()
@@ -358,17 +371,7 @@ class SpielFeld(QWidget):
                                 SpielFeld.Bullets.remove(bul)
 
                             
-                        if self.bomb_hit(robot):
-                            if robot.robotid == 1:
-                                #Hier: Hit-Effekte
-                                self.setNextBombPos()
-                                
-                                # Immunity
-                                robot.immuneTime = 500
-                                robot.texture = 2
-                                                        
-                                
-                                pygame.mixer.Sound.play(self.SoundBomb)
+                    
                             
 
                             
