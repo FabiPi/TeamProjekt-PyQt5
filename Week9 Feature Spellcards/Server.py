@@ -17,7 +17,7 @@ import Control
 
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
-FPS = 100/ 30
+FPS = 10
 GameStep = (1/ FPS)
 alpha_eps = 0.5
 vMax = 3
@@ -38,11 +38,13 @@ class SpielFeld(QWidget):
 
         self.wallTexture = QPixmap('textures/Board/wall00.png')
         self.floorTexture = QPixmap('textures/Board/floor00.png')
+        self.BG = QPixmap('textures/Board/BG.png')
         
-        self.RoboTextures = {0:QPixmap('textures/Robots/Robot01.png'), #MainRobot
+        self.RoboTextures = {0:QPixmap('textures/Robots/Marisa.png'), #MainRobot
                              1:QPixmap('textures/Robots/Robot_Dead.png'), #Dead
                              2:QPixmap('textures/Robots/Robot_In.png'), #Ivincible
-                             3:QPixmap('textures/Robots/Robot02.png') #EnemyRobot
+                             3:QPixmap('textures/Robots/Fairy.png') ,#Enemy
+                             4:QPixmap('textures/Robots/Fairy_Gold.png') #Enemy invincible
                              }
 
         self.createBoard()
@@ -161,7 +163,7 @@ class SpielFeld(QWidget):
                         elif robot.robotid != 1 and robot.immuneTime == 0:
                             self.teleport_bullet(robot)
                             robot.immuneTime = IMMUNE_TIME
-                            robot.texture = 2
+                            robot.texture = 4
                         if bul in SpielFeld.Bullets:
                             SpielFeld.Bullets.remove(bul)
             else:
@@ -294,15 +296,18 @@ class SpielFeld(QWidget):
 
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
+        texture = self.BG
+        qp.drawPixmap(- ((self.tickCount/2) % 1000), - ((self.tickCount/2) % 1000), texture)     
         #Draw the PlayField
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
                     if SpielFeld.PlayFieldAR[i][j]==1:
                         texture = self.wallTexture
                         self.BarrierList.append(texture)
-                    else:
-                        texture = self.floorTexture
-                    qp.drawPixmap(i*10, j*10, texture)
+                        qp.drawPixmap(i*10, j*10, texture)
+                    #else:
+                    #    texture = self.floorTexture
+                    #qp.drawPixmap(i*10, j*10, texture)
 
 
     def moveRobot(self, Robo):
