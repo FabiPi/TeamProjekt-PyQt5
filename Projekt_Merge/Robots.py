@@ -328,7 +328,7 @@ class Robot(object):
 
             pygame.mixer.Sound.play(self.SoundSpecial6)
             
-            self.coolDown = 450
+            self.coolDown = 900
 
     def spellcard7(self):
         if self.coolDown == 0 and self.deathTime == 0:
