@@ -48,7 +48,7 @@ backgrounds = {
 }
 
 # default setting
-CurFloor = "Brown floor "
+CurFloor = "Brown floor"
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
 CurCol = "Wall Collision   On"
