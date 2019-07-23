@@ -869,8 +869,8 @@ def drawRedBomb(self,qp):
 
     qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
 ```
-Die möglichen Position auf dem Spielfeld werden in einem Dictionary gespiechert. <br/>
-Damit dieses Auftauchen der Bombs auch funktioniert, wird ein separater Timer benötigt, der ab Anfang anfängt runterzuzählen (bzw. neu startet, wenn die Bombe aufgehoben wird)
+Die möglichen Positionen auf dem Spielfeld werden in einem Dictionary gespiechert. <br/>
+Damit das Auftauchen der Bombs auch funktioniert, wird ein separater Timer benötigt, der ab Anfang anfängt runterzuzählen (bzw. neu startet, wenn die Bombe aufgehoben wird)
 ```python
 def reduceBombTime(self):
     if self.bombTime != 0:
@@ -881,8 +881,8 @@ def reduceBombTime(self):
             self.randomizeBombIcon()
             self.setNextBombPos()
 ```
-Beim Pick-Up wird die Position der Bombe auf die nächste Position im Dictionarz gesetzt (mit *setNextBombPos*). <br/>
-Um zu entscheiden, ob eine rote oder grüne Bombe erscheint, gibt es eine *randomizeBombIcon()*-Funktion, die die globale Variable *bombStatus* zufällig auf 'green' oder 'red' setzt. Dieser Status wird dann an den PaintEvent weiter gegeben, wo mit if-Abfragen geprüft wird, ob drawBomb oder drawRedBomb ausgeführt werden soll.
+Beim Pick-Up wird die Position der Bombe auf die nächste Position im Dictionary gesetzt (mit *setNextBombPos*). <br/>
+Um zu entscheiden, ob eine rote oder grüne Bombe erscheint, gibt es eine *randomizeBombIcon()*-Funktion, die die globale Variable *bombStatus* zufällig auf 'green' oder 'red' setzt. Dieser Status wird dann an den PaintEvent weiter gegeben, wo mit if-Abfragen geprüft wird, ob *drawBomb* oder *drawRedBomb* ausgeführt werden soll.
 ```python
 def randomizeBombIcon(self):
     number = random.randint(1, 2)
