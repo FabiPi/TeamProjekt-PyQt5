@@ -400,6 +400,7 @@ class PlayerRobot_Ability07(RobotControl):
                 self.robot.v_alpha = 0
                 self.robot.a_alpha = 0
 
+#Control used for enemies to hunt Player if he is in vision
 class TargetHunt(RobotControl):
 
     def run(self):
@@ -411,6 +412,7 @@ class TargetHunt(RobotControl):
             if self.robot.ViewList[target][3]:
                 self.robot.shoot()
 
+#old Control that sets robot to circle the map (currently not used)
 class CircleMap(RobotControl):
     
     def run(self):
