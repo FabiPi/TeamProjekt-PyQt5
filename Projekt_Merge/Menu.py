@@ -981,11 +981,10 @@ class How2PlayText(QWidget):
     def back2Menu(self):
         start_Menu.Back2Menu(self)
 
-
     def nextPage1(self):
         self.nextP = NextPage1()
         self.close()
-
+        
 
 class NextPage1(QWidget):
 
@@ -1044,7 +1043,6 @@ class NextPage1(QWidget):
         self.close()
 
 
-
 class NextPage2(QWidget):
 
     def __init__(self):
@@ -1059,8 +1057,8 @@ class NextPage2(QWidget):
         self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
         self.title.move(self.image.width() / 2 - self.title.width(), 20)
 
-        self.text3 = QLabel("Additionally, we have some specials hidden in the game. As you can see on the left side,\n"
-                            "we have a little helping hand in form of a Bomb.\n \n Be assured, the bomb will not hurt you in "
+        self.text3 = QLabel("Additionally, we have some specials hidden in the game. As you can see on the left side, "
+                            "we have a little\nhelping hand in form of a Bomb.\n \nBe assured, the bomb will not hurt you in "
                             "any way. Instead it gives you an shield against the attacks of your enemies. ", self)
         self.text3.setStyleSheet("color: black; font: bold; font-size: 15px;")
         self.text3.move(200,100)
@@ -1085,14 +1083,14 @@ class NextPage2(QWidget):
         self.robo_dead.setPixmap(QPixmap("textures/Robots/Robot_Dead.png"))
         self.robo_dead.move(150, 400)
 
-        self.text4 = QLabel("Now let's introduce the most important characters in this game. On the left side, you can see\n"
+        self.text4 = QLabel("Now let's introduce the most important characters in this game. On the left side, you can see "
                             "the robot ninjas.\n \nThe green ninja represents our hero, which you can control with the "
                             "keyboard. The details are mentioned beforehand,\ntake a look if not sure anymore.\n \n"
-                            "The red one, represents the enemy of our hero. So be careful of it. Make sure to shoot it or\n"
-                            "run away. As we mentioned before, you can be saved for a certain amount of time against your\n"
-                            "enemies with the help of the bomb or after you are killed.\n \nThe yellow color represents a golden\n"
-                            "shield around you. Even the best will be shoot, so after being hit by a bullet your color will change\n"
-                            "to grey. But be assured, your hero will be revived after a certain amount of time.", self)
+                            "The red one, represents the enemy of our hero. So be careful of it. Make sure to shoot it or"
+                            "run away.\n \nAs we mentioned before, you can be saved for a certain amount of time against your"
+                            "enemies with the help\nof the bomb or after you are killed. The yellow color represents a golden "
+                            "shield around you.\n \nEven the best will be shoot, so after being hit by a bullet your color will change "
+                            "to grey.\nBut be assured, your hero will be revived after a certain amount of time.", self)
         self.text4.setStyleSheet("color: black; font: bold; font-size: 15px;")
         self.text4.move(200, 250)
 
