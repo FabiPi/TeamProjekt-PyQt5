@@ -17,12 +17,6 @@ Bullet_Speed =5
 
                   
 class Bullet(object):
-    #add Attributes
-    #-Direction
-    #-Velocity (non vector)
-    #-type
-    #-time
-    #-owner
     def __init__(self, position, speed, alpha, time, delay, bulType, owner):
         self.position = position
         self.speed = speed
@@ -85,7 +79,7 @@ class Bullet(object):
         br.drawPixmap(target, texture, source)
         br.restore()
 
-    def moveBullet(self): #export Spellcards later in extra Method
+    def moveBullet(self):
         
         #Spellcard 1    (Star Pattern)
         if  1<= self.bulType <= 5:
@@ -135,6 +129,7 @@ class Bullet(object):
             return True
         else: pass
 
+#Movement-patterns for Bullets in given Spellcard
 
     def Spellcard01(self):
         if self.bulType == 1:
