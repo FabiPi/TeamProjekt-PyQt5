@@ -935,72 +935,46 @@ class How2PlayText(QWidget):
     def __init__(self):
         super(How2PlayText, self).__init__()
 
-        self.oImage = QImage("textures/Background/Test.jpg")
-        self.sImage = self.oImage.scaled(QSize(1300, 800))  # resize Image to widgets size
-        palette = QPalette()
-        palette.setBrush(10, QBrush(self.sImage))
-        self.setPalette(palette)
-        #self.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
+        self.background = QLabel(self)
+        self.image = QPixmap("textures/Background/Test.jpg")
+        self.background.setPixmap(self.image)
 
-        # test background, must look more into setStylesheet
-        #self.setStyleSheet("background-color: orange")
-        self.layout = QVBoxLayout()
-        self.title = QLabel("INSTRUCTIONS")
-        self.title.setStyleSheet("color: Black; font: bold; font-size: 35px")
+
+        self.title = QLabel("INSTRUCTIONS", self)
+        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
+        self.title.move(self.image.width()/2 - self.title.width(), 20)
 
         self.text1 = QLabel("Hello and welcome to our little project! Today you are part of a world "
-                          "full of new adventures and great experiences.\nBut you know, every new beginning comes with some "
-                          "instructions. So before starting the game, lets rule down some basic understanding of the gameplay.\n"
-                            "Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
-                           "spellcards can help you to cast some special abilities. So try some!\n \nDown below you can see the "
-                           "game keys for the selection of only one random spellcard. Just press key L for activating the spell. With the "
-                           "key Q you can halt then\nvelocity of your character and maybe let it take a look around. The"
-                           "others are self-explanatory.")
-        self.text1.setStyleSheet("color: black; font-size: 15px; font: bold")
+                          "full of new adventures and great experiences. But you know,\nevery new beginning comes with some "
+                          "instructions. So before starting the game, lets rule down some basic understanding of the\ngameplay."
+                            " Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
+                           "spellcards can help\nyou to cast some special abilities. So try some!\n \nDown below you can see the "
+                           "game keys for the selection of only one random spellcard. Just press key L for activating the spell.\nWith the "
+                           "key Q you can halt then velocity of your character and maybe let it take a look around. The"
+                           " others are self-explanatory.", self)
+        self.text1.setStyleSheet("background-color: transparent; color: black; font-size: 15px; font: bold")
+        self.text1.move(150, self.title.height() + 50)
 
-        self.keyboard1 = QLabel()
-        self.image1 = QPixmap("textures/Instructions/keyboardOne.jpg")
+        self.keyboard1 = QLabel(self)
+        self.image1 = QPixmap("textures/Instructions/keyboard1.jpg")
         self.keyboard1.setPixmap(self.image1)
-
-        self.text2 = QLabel("But humans are a little greedy and so why not give you the ability to choose all spellcards. Down below"
-                            "you can see the game keys for selecting all spellcards. Press any key\nfrom 1 to 7 to activate one of the "
-                            "special abilities.")
-        self.text2.setStyleSheet("color: black; font: bold; font-size: 15px;")
-
-
-        self.keyboard2 = QLabel()
-        self.image2 = QPixmap("textures/Instructions/keyboardTwo.jpg")
-        self.keyboard2.setPixmap(self.image2)
-
-        self.title.setAlignment(Qt.AlignCenter)
-        self.text1.setAlignment(Qt.AlignCenter)
-        self.keyboard1.setAlignment(Qt.AlignCenter)
-        self.text2.setAlignment(Qt.AlignCenter)
-        self.keyboard2.setAlignment(Qt.AlignCenter)
-
-
-        self.layout.addWidget(self.title)
-        self.layout.addWidget(self.text1)
-        self.layout.addWidget(self.keyboard1)
-        self.layout.addWidget(self.text2)
-        self.layout.addWidget(self.keyboard2)
-        self.setLayout(self.layout)
+        self.keyboard1.move(self.image.width()/2 - self.image1.width()/2, self.text1.height() + 200)
 
 
         self.initUI()
 
     def initUI(self):
-        self.resize(1300, 800)
+        self.resize(self.image.width(), self.image.height())
         self.setWindowTitle('How to Play')
         Server.center(self)
 
         self.back = QPushButton("Back", self)
         self.back.clicked.connect(self.back2Menu)
-        self.back.move(20, 700)
+        self.back.move(20, self.image.height() - self.back.height() - 20)
 
         self.next = QPushButton("Next", self)
-        self.next.clicked.connect(self.nextPage)
-        self.next.move(1180, 700)
+        self.next.clicked.connect(self.nextPage1)
+        self.next.move(self.image.width() - self.next.width() + 20,  self.image.height() - self.next.height() - 20)
 
         self.show()
 
@@ -1008,30 +982,139 @@ class How2PlayText(QWidget):
         start_Menu.Back2Menu(self)
 
 
-    def nextPage(self):
-        self.nextP = NextPage()
+    def nextPage1(self):
+        self.nextP = NextPage1()
+        self.close()
+
+
+class NextPage1(QWidget):
+
+    def __init__(self):
+        super(NextPage1, self).__init__()
+
+        self.background = QLabel(self)
+        self.image = QPixmap("textures/Background/Test.jpg")
+        self.background.setPixmap(self.image)
+
+        self.title = QLabel("INSTRUCTIONS", self)
+        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
+        self.title.move(self.image.width() / 2 - self.title.width(), 20)
+
+
+        self.text2 = QLabel(self)
+        self.text2.setText("But humans are a little greedy and so why not give you the ability to choose all spellcards. With this "
+                           "possibility in the \noption settings, you can use all spells. Down below you can see the game keys for "
+                           "selecting all spellcards.\nPress any key from 1 to 7 to activate one of the special abilities.")
+        self.text2.setStyleSheet("background-color: transparent; color: black; font-size: 15px; font: bold")
+        self.text2.move(200, self.title.height() + 100)
+
+        self.keyboard2 = QLabel(self)
+        self.image2 = QPixmap("textures/Instructions/keyboard2.jpg")
+        self.keyboard2.setPixmap(self.image2)
+        self.keyboard2.move(self.image.width() / 2 - self.image2.width() / 2, self.text2.height() + 200)
+
+        self.selection = QLabel(self)
+        self.image3 = QPixmap("textures/Instructions/spellSelection.png")
+        self.selection.setPixmap(self.image3)
+        self.selection.move(20, 20)
+
+        self.initUI()
+
+    def initUI(self):
+        self.resize(self.image.width(), self.image.height())
+        self.setWindowTitle('How to Play')
+        Server.center(self)
+
+        self.back = QPushButton("Back", self)
+        self.back.clicked.connect(self.back2H2P)
+        self.back.move(20, self.image.height() - self.back.height() - 20)
+
+        self.next = QPushButton("Next", self)
+        self.next.clicked.connect(self.nextPage2)
+        self.next.move(self.image.width() - self.next.width() + 20,  self.image.height() - self.next.height() - 20)
+
+        self.show()
+
+    def back2H2P(self):
+        self.h2P = How2PlayText()
+        self.close()
+
+    def nextPage2(self):
+        self.nextP = NextPage2()
         self.close()
 
 
 
-class NextPage(QWidget):
+class NextPage2(QWidget):
+
     def __init__(self):
-        super(NextPage, self).__init__()
+        super(NextPage2, self).__init__()
+
+        self.background = QLabel(self)
+        self.image = QPixmap("textures/Background/Test.jpg")
+        self.background.setPixmap(self.image)
+
+
+        self.title = QLabel("INSTRUCTIONS", self)
+        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
+        self.title.move(self.image.width() / 2 - self.title.width(), 20)
+
+        self.text3 = QLabel("Additionally, we have some specials hidden in the game. As you can see on the left side,\n"
+                            "we have a little helping hand in form of a Bomb.\n \n Be assured, the bomb will not hurt you in "
+                            "any way. Instead it gives you an shield against the attacks of your enemies. ", self)
+        self.text3.setStyleSheet("color: black; font: bold; font-size: 15px;")
+        self.text3.move(200,100)
+
+        self.bomb = QLabel(self)
+        self.bomb.setPixmap(QPixmap("textures/bomb.jpg"))
+        self.bomb.move(150, 100)
+
+        self.robo_alive = QLabel(self)
+        self.robo_alive.setPixmap(QPixmap("textures/Robots/Robot01.png"))
+        self.robo_alive.move(150, 250)
+
+        self.robo_ememy = QLabel(self)
+        self.robo_ememy.setPixmap(QPixmap("textures/Robots/Robot02.png"))
+        self.robo_ememy.move(150, 300)
+
+        self.robo_immun = QLabel(self)
+        self.robo_immun.setPixmap(QPixmap("textures/Robots/Robot_In.png"))
+        self.robo_immun.move(150, 350)
+
+        self.robo_dead = QLabel(self)
+        self.robo_dead.setPixmap(QPixmap("textures/Robots/Robot_Dead.png"))
+        self.robo_dead.move(150, 400)
+
+        self.text4 = QLabel("Now let's introduce the most important characters in this game. On the left side, you can see\n"
+                            "the robot ninjas.\n \nThe green ninja represents our hero, which you can control with the "
+                            "keyboard. The details are mentioned beforehand,\ntake a look if not sure anymore.\n \n"
+                            "The red one, represents the enemy of our hero. So be careful of it. Make sure to shoot it or\n"
+                            "run away. As we mentioned before, you can be saved for a certain amount of time against your\n"
+                            "enemies with the help of the bomb or after you are killed.\n \nThe yellow color represents a golden\n"
+                            "shield around you. Even the best will be shoot, so after being hit by a bullet your color will change\n"
+                            "to grey. But be assured, your hero will be revived after a certain amount of time.", self)
+        self.text4.setStyleSheet("color: black; font: bold; font-size: 15px;")
+        self.text4.move(200, 250)
+
+        self.endMess = QLabel("HAVE FUN AND ENJOY!!", self)
+        self.endMess.setStyleSheet("color: black; font: bold; font-size: 30px;")
+        self.endMess.move(self.image.width() / 2 - self.endMess.width()/2 - self.endMess.width(), 600)
         self.initUI()
 
+
     def initUI(self):
-        self.resize(800, 800)
+        self.resize(self.image.width(), self.image.height())
         self.setWindowTitle('How to Play')
         Server.center(self)
 
-        self.back = QPushButton("back", self)
-        self.back.clicked.connect(self.back2H2P)
+        self.back = QPushButton("Back", self)
+        self.back.clicked.connect(self.back2Page1)
+        self.back.move(20, self.image.height() - self.back.height() - 20)
 
         self.show()
 
-
-    def back2H2P(self):
-        self.h2P = How2PlayText()
+    def back2Page1(self):
+        self.page1 = NextPage1()
         self.close()
 
 
