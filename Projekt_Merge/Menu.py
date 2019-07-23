@@ -5,9 +5,9 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter, QPalette, QImage, QBrush, qRgba
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
-    QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox
+    QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox, QGraphicsDropShadowEffect
 
 import Server
 import random
@@ -48,6 +48,16 @@ backgrounds = {
     "Tempel": "textures/Background/Tempel.jpg",
 }
 
+# creditBackground liberary
+creditBG = {
+    "Shrine": "textures/Background/peacefulTempel.jpg",
+    "Door": "textures/Background/door.jpg",
+    "Mountain": "textures/Background/Mountain.jpg",
+    "Red Shrine": "textures/Background/Red Shrine.jpg",
+    "Sun": "textures/Background/sun.jpg",
+    "Yuland": "textures/Background/Yuland.jpg",
+    "ShrineDoor": "textures/Background/shrineDoor.png"
+}
 
 # default settings
 CurFloor = "White Stone"
@@ -894,15 +904,27 @@ class floorTexture(QWidget):
 # creating credit window
 ####################################################################################
 
+
 class CreditText(QWidget):
 
     def __init__(self):
         super(CreditText, self).__init__()
 
         self.label = QLabel(self)
-        self.image = QPixmap('textures/Background/CreditBackground.jpg')
+        self.image = self.ImageChange()
         self.label.setPixmap(self.image)
-
+        
+        
+        self.text = QLabel(self)
+        self.text.setText("CREATED BY \n \n"
+                          "Dominik aka B-Dome\n"
+                          "Jang Jang aka JangJang3\n"
+                          "Fabian aka FabiPi")
+        
+        self.text.move(self.image.width()/ 2 - self.text.width()/2 - self.text.width(), self.text.height()*2)
+        self.text.setStyleSheet("color: white; font: bold 30px Comic Sans MS ")
+        self.addShadoweffect(self.text)
+        
         self.back = QPushButton('back', self)
 
         self.initUI()
@@ -913,15 +935,29 @@ class CreditText(QWidget):
         Server.center(self)
 
         self.back.clicked.connect(self.Back2Menu)
-        self.back.move(350,330)
+        self.back.move(30, self.image.height()-self.back.height() - 30)
 
         pygame.mixer.music.load(playlist["Track 6"])
         pygame.mixer.music.play(-1, 0.0)
 
         self.show()
 
+    # documentation https://wiki.qt.io/Text_Shadows_in_QLabel_Snippets
+    # add outline to font
+    def addShadoweffect(self, item):
+        effect = QGraphicsDropShadowEffect()
+        effect.setBlurRadius(2)
+        effect.setColor(QtGui.QColor("Black"))
+        effect.setOffset(3, 3)
+        item.setGraphicsEffect(effect)
+
+
     def Back2Menu(self):
             start_Menu.Back2Menu(self)
+
+    def ImageChange(self):
+        themes = list(creditBG.keys())
+        return QPixmap(creditBG[random.choice(themes)])
 
 
 
