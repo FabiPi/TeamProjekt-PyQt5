@@ -389,3 +389,70 @@ class Robot(object):
         #create Bullet
         Bullet1 = Bullet.Bullet(bulletpos, speed, target_alpha, life, delayT, bulletType, self.robotid)
         return Bullet1
+
+class RobotControl(QThread):
+
+    def __init__(self, robot):
+        super().__init__()
+        self.robot = robot
+        threading.Thread.__init__(self)
+
+
+#Roboter Steuerung
+# Is in another file
+class RunAwayKeyBoard(RobotControl):
+    def run(self):
+        while True:
+            self.msleep(100)
+            
+            if keyboard.is_pressed('w'):
+                self.robot.a = 0.1
+
+            if keyboard.is_pressed('s'):
+                self.robot.a = -0.1
+
+            if keyboard.is_pressed('a'):
+                self.robot.a_alpha = 0.5
+
+            if keyboard.is_pressed('d'):
+                self.robot.a_alpha = -0.5
+                
+            if keyboard.is_pressed('j'):
+                self.robot.shoot()
+
+            #Special Attack1
+            if keyboard.is_pressed('1'):
+                self.robot.spellcard1()
+
+            #Special Attack2
+            if keyboard.is_pressed('2'):
+                self.robot.spellcard2()
+
+            #Special Attack3
+            if keyboard.is_pressed('3'):
+                self.robot.spellcard3()
+
+            #Special Attack4
+            if keyboard.is_pressed('4'):
+                self.robot.spellcard4()
+
+            #Special Attack5
+            if keyboard.is_pressed('5'):
+                self.robot.spellcard5()
+
+            #Special Attack6
+            if keyboard.is_pressed('6'):
+                self.robot.spellcard6()
+
+            #Special Attack6
+            if keyboard.is_pressed('7'):
+                print('hi')
+                self.robot.spellcard7()
+
+            #temporary Stop key    
+            if keyboard.is_pressed('q'):
+                self.robot.v = 0
+                self.robot.a = 0
+                self.robot.v_alpha = 0
+                self.robot.a_alpha = 0
+

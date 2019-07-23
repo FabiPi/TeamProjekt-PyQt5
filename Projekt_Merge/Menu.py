@@ -50,7 +50,7 @@ backgrounds = {
 
 
 # default settings
-CurFloor = "White Stone"
+CurFloor = "Background Dirt"
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
 CurCol = "Wall Collision   On"
@@ -592,10 +592,8 @@ class wallTexture(QWidget):
 
         # create buttons
         self.texture1 = QRadioButton("Metall wall")
-        self.texture2 = QRadioButton("Metall Bar")
+        self.texture2 = QRadioButton("Red wall")
         self.texture3 = QRadioButton("Mosaik wall")
-        self.texture4 = QRadioButton("Metall Fence")
-        self.texture5 = QRadioButton("Rusty Bar")
 
         self.btn = QPushButton("Select")
         self.btn.setStyleSheet('background-color: white')
@@ -619,17 +617,12 @@ class wallTexture(QWidget):
 
         # adjust icons on buttons
         self.texture1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
-        self.texture2.setIcon(QIcon(Server.wallTextures["Metall Bar"]))
+        self.texture2.setIcon(QIcon(Server.wallTextures["Red wall"]))
         self.texture3.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
-        self.texture4.setIcon(QIcon(Server.wallTextures["Metall Fence"]))
-        self.texture5.setIcon(QIcon(Server.wallTextures["Rusty Bar"]))
 
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
         self.button_layout1.addWidget(self.texture3)
-        self.button_layout1.addWidget(self.texture4)
-        self.button_layout1.addWidget(self.texture5)
-        
         self.button_layout1.addWidget(self.btn)
         self.button_layout1.addWidget(self.label)
 
@@ -643,8 +636,6 @@ class wallTexture(QWidget):
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
         self.texture2.clicked.connect(lambda: self.currBtn_clk(self.texture2))
         self.texture3.clicked.connect(lambda: self.currBtn_clk(self.texture3))
-        self.texture4.clicked.connect(lambda: self.currBtn_clk(self.texture4))
-        self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -656,24 +647,17 @@ class wallTexture(QWidget):
 
         self.texture2.setChecked(False)
         self.texture3.setChecked(False)
-        self.texture4.setChecked(False)
-        self.texture5.setChecked(False)
+        self.texture3.setChecked(False)
 
         if CurWall == "Metall wall":
             self.texture1.setChecked(True)
 
 
-        elif CurWall == "Metall Bar":
+        elif CurWall == "Red wall":
             self.texture2.setChecked(True)
 
         elif CurWall == "Mosaik wall":
             self.texture3.setChecked(True)
-
-        elif CurWall == "Metall Fence":
-            self.texture4.setChecked(True)
-
-        elif CurWall == "Rusty Bar":
-            self.texture5.setChecked(True)
 
         else:
             self.texture1.setChecked(True)
@@ -695,27 +679,17 @@ class wallTexture(QWidget):
             CurWall = "Metall wall"
 
         elif button == self.texture2:
-            Server.wtexture = "Metall Bar"
-            CurWall = "Metall Bar"
+            Server.wtexture = "Red wall"
+            CurWall = "Red wall"
 
         elif button == self.texture3:
             Server.wtexture = "Mosaik wall"
             CurWall = "Mosaik wall"
-
-        elif button == self.texture4:
-            Server.wtexture = "Metall Fence"
-            CurWall = "Metall Fence"
-
-        elif button == self.texture5:
-            Server.wtexture = "Rusty Bar"
-            CurWall = "Rusty Bar"
-            
         else:
             pass
 
         self.label.setText("You selected: \n" + button.text())
         QtGui.QGuiApplication.processEvents()
-
 
 
 ####################################################################################
@@ -734,13 +708,12 @@ class floorTexture(QWidget):
         self.button_layout2 = QVBoxLayout()
 
         # create floor texture buttons
-        self.texture1 = QRadioButton("White Stone")
-        self.texture2 = QRadioButton("Brown Stone")
-        self.texture3 = QRadioButton("Dirt")
-        self.texture4 = QRadioButton("Dirt (Moving)")
-        self.texture5 = QRadioButton("Pattern (Moving)")
-        self.texture6 = QRadioButton("Sakura (Moving)")
-        self.texture7 = QRadioButton("Water (Moving)")
+        self.texture1 = QRadioButton("Dirt (Moving)")
+        self.texture2 = QRadioButton("Pattern (Moving)")
+        self.texture3 = QRadioButton("Sakura (Moving)")
+        self.texture4 = QRadioButton("Water (Moving)")
+        self.texture5 = QRadioButton("Dirt")
+        self.texture6 = QRadioButton("Brownstone floor")
         # create selector
         self.btn = QPushButton("Select")
         self.btn.setStyleSheet('background-color: white')
@@ -770,13 +743,15 @@ class floorTexture(QWidget):
         #self.setStyleSheet("font-weight: bold;")
 
         # add button icons
-        self.texture1.setIcon(QIcon(Server.floorTextures["White Stone"]))
-        self.texture2.setIcon(QIcon(Server.floorTextures["Brown Stone"]))
-        self.texture3.setIcon(QIcon(Server.floorTextures["Dirt"]))
-        self.texture4.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
-        self.texture5.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
-        self.texture6.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
-        self.texture7.setIcon(QIcon(Server.floorTextures["Background Water"]))
+        self.texture1.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
+        self.texture2.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
+        self.texture3.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
+        self.texture4.setIcon(QIcon(Server.floorTextures["Background Water"]))
+        self.texture5.setIcon(QIcon(Server.floorTextures["Dirt"]))
+        self.texture6.setIcon(QIcon(Server.floorTextures["Brownstone floor"]))
+
+        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
+
 
         # clicked buttons
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
@@ -785,8 +760,6 @@ class floorTexture(QWidget):
         self.texture4.clicked.connect(lambda: self.currBtn_clk(self.texture4))
         self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
         self.texture6.clicked.connect(lambda: self.currBtn_clk(self.texture6))
-        self.texture7.clicked.connect(lambda: self.currBtn_clk(self.texture7))
-
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -799,7 +772,6 @@ class floorTexture(QWidget):
         self.button_layout2.addWidget(self.texture4)
         self.button_layout2.addWidget(self.texture5)
         self.button_layout2.addWidget(self.texture6)
-        self.button_layout2.addWidget(self.texture7)
 
         self.button_layout2.addWidget(self.btn)
         self.button_layout2.addWidget(self.label)
@@ -822,26 +794,23 @@ class floorTexture(QWidget):
         self.texture5.setChecked(False)
         self.texture6.setChecked(False)
 
-        if CurFloor == "White Stone":
+        if CurFloor == "Background Dirt":
             self.texture1.setChecked(True)
 
-        elif CurFloor == "Brown Stone":
+        elif CurFloor == "Background Pattern":
             self.texture2.setChecked(True)
 
-        elif CurFloor == "Dirt":
+        elif CurFloor == "Background Sakura":
             self.texture3.setChecked(True)
 
-        elif CurFloor == "Background Dirt":
+        elif CurFloor == "Background Water":
             self.texture4.setChecked(True)
 
-        elif CurFloor == "Background Pattern":
+        elif CurFloor == "Dirt":
             self.texture5.setChecked(True)
 
-        elif CurFloor == "Background Sakura":
+        elif CurFloor == "Brownstone floor":
             self.texture6.setChecked(True)
-
-        elif CurFloor == "Background Water":
-            self.texture7.setChecked(True)
 
         else:
             self.texture1.setChecked(True)
@@ -857,32 +826,28 @@ class floorTexture(QWidget):
         global CurFloor
 
         if button == self.texture1:
-            Server.ftexture = "White Stone"
-            CurFloor = "White Stone"
-
-        elif button == self.texture2:
-            Server.ftexture = "Brown Stone"
-            CurFloor = "Brown Stone"
-
-        elif button == self.texture3:
-            Server.ftexture = "Dirt"
-            CurFloor = "Dirt"
-            
-        if button == self.texture4:
             Server.ftexture = "Background Dirt"
             CurFloor = "Background Dirt"
 
-        elif button == self.texture5:
+        elif button == self.texture2:
             Server.ftexture = "Background Pattern"
             CurFloor = "Background Pattern"
 
-        elif button == self.texture6:
+        elif button == self.texture3:
             Server.ftexture = "Background Sakura"
             CurFloor = "Background Sakura"
 
-        elif button == self.texture7:
+        elif button == self.texture4:
             Server.ftexture = "Background Water"
             CurFloor = "Background Water"
+
+        elif button == self.texture5:
+            Server.ftexture = "Dirt"
+            CurFloor = "Dirt"
+
+        elif button == self.texture6:
+            Server.ftexture = "Brownstone floor"
+            CurFloor = "Brownstone floor"
 
         else:
             pass
@@ -935,46 +900,72 @@ class How2PlayText(QWidget):
     def __init__(self):
         super(How2PlayText, self).__init__()
 
-        self.background = QLabel(self)
-        self.image = QPixmap("textures/Background/Test.jpg")
-        self.background.setPixmap(self.image)
+        self.oImage = QImage("textures/Background/Test.jpg")
+        self.sImage = self.oImage.scaled(QSize(1300, 800))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(10, QBrush(self.sImage))
+        self.setPalette(palette)
+        #self.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
 
-
-        self.title = QLabel("INSTRUCTIONS", self)
-        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
-        self.title.move(self.image.width()/2 - self.title.width(), 20)
+        # test background, must look more into setStylesheet
+        #self.setStyleSheet("background-color: orange")
+        self.layout = QVBoxLayout()
+        self.title = QLabel("INSTRUCTIONS")
+        self.title.setStyleSheet("color: Black; font: bold; font-size: 35px")
 
         self.text1 = QLabel("Hello and welcome to our little project! Today you are part of a world "
-                          "full of new adventures and great experiences. But you know,\nevery new beginning comes with some "
-                          "instructions. So before starting the game, lets rule down some basic understanding of the\ngameplay."
-                            " Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
-                           "spellcards can help\nyou to cast some special abilities. So try some!\n \nDown below you can see the "
-                           "game keys for the selection of only one random spellcard. Just press key L for activating the spell.\nWith the "
-                           "key Q you can halt then velocity of your character and maybe let it take a look around. The"
-                           " others are self-explanatory.", self)
-        self.text1.setStyleSheet("background-color: transparent; color: black; font-size: 15px; font: bold")
-        self.text1.move(150, self.title.height() + 50)
+                          "full of new adventures and great experiences.\nBut you know, every new beginning comes with some "
+                          "instructions. So before starting the game, lets rule down some basic understanding of the gameplay.\n"
+                            "Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
+                           "spellcards can help you to cast some special abilities. So try some!\n \nDown below you can see the "
+                           "game keys for the selection of only one random spellcard. Just press key L for activating the spell. With the "
+                           "key Q you can halt then\nvelocity of your character and maybe let it take a look around. The"
+                           "others are self-explanatory.")
+        self.text1.setStyleSheet("color: black; font-size: 15px; font: bold")
 
-        self.keyboard1 = QLabel(self)
-        self.image1 = QPixmap("textures/Instructions/keyboard1.jpg")
+        self.keyboard1 = QLabel()
+        self.image1 = QPixmap("textures/Instructions/keyboardOne.jpg")
         self.keyboard1.setPixmap(self.image1)
-        self.keyboard1.move(self.image.width()/2 - self.image1.width()/2, self.text1.height() + 200)
+
+        self.text2 = QLabel("But humans are a little greedy and so why not give you the ability to choose all spellcards. Down below"
+                            "you can see the game keys for selecting all spellcards. Press any key\nfrom 1 to 7 to activate one of the "
+                            "special abilities.")
+        self.text2.setStyleSheet("color: black; font: bold; font-size: 15px;")
+
+
+        self.keyboard2 = QLabel()
+        self.image2 = QPixmap("textures/Instructions/keyboardTwo.jpg")
+        self.keyboard2.setPixmap(self.image2)
+
+        self.title.setAlignment(Qt.AlignCenter)
+        self.text1.setAlignment(Qt.AlignCenter)
+        self.keyboard1.setAlignment(Qt.AlignCenter)
+        self.text2.setAlignment(Qt.AlignCenter)
+        self.keyboard2.setAlignment(Qt.AlignCenter)
+
+
+        self.layout.addWidget(self.title)
+        self.layout.addWidget(self.text1)
+        self.layout.addWidget(self.keyboard1)
+        self.layout.addWidget(self.text2)
+        self.layout.addWidget(self.keyboard2)
+        self.setLayout(self.layout)
 
 
         self.initUI()
 
     def initUI(self):
-        self.resize(self.image.width(), self.image.height())
+        self.resize(1300, 800)
         self.setWindowTitle('How to Play')
         Server.center(self)
 
         self.back = QPushButton("Back", self)
         self.back.clicked.connect(self.back2Menu)
-        self.back.move(20, self.image.height() - self.back.height() - 20)
+        self.back.move(20, 700)
 
         self.next = QPushButton("Next", self)
-        self.next.clicked.connect(self.nextPage1)
-        self.next.move(self.image.width() - self.next.width() + 20,  self.image.height() - self.next.height() - 20)
+        self.next.clicked.connect(self.nextPage)
+        self.next.move(1180, 700)
 
         self.show()
 
@@ -982,139 +973,30 @@ class How2PlayText(QWidget):
         start_Menu.Back2Menu(self)
 
 
-    def nextPage1(self):
-        self.nextP = NextPage1()
+    def nextPage(self):
+        self.nextP = NextPage()
         self.close()
 
 
-class NextPage1(QWidget):
 
+class NextPage(QWidget):
     def __init__(self):
-        super(NextPage1, self).__init__()
-
-        self.background = QLabel(self)
-        self.image = QPixmap("textures/Background/Test.jpg")
-        self.background.setPixmap(self.image)
-
-        self.title = QLabel("INSTRUCTIONS", self)
-        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
-        self.title.move(self.image.width() / 2 - self.title.width(), 20)
-
-
-        self.text2 = QLabel(self)
-        self.text2.setText("But humans are a little greedy and so why not give you the ability to choose all spellcards. With this "
-                           "possibility in the \noption settings, you can use all spells. Down below you can see the game keys for "
-                           "selecting all spellcards.\nPress any key from 1 to 7 to activate one of the special abilities.")
-        self.text2.setStyleSheet("background-color: transparent; color: black; font-size: 15px; font: bold")
-        self.text2.move(200, self.title.height() + 100)
-
-        self.keyboard2 = QLabel(self)
-        self.image2 = QPixmap("textures/Instructions/keyboard2.jpg")
-        self.keyboard2.setPixmap(self.image2)
-        self.keyboard2.move(self.image.width() / 2 - self.image2.width() / 2, self.text2.height() + 200)
-
-        self.selection = QLabel(self)
-        self.image3 = QPixmap("textures/Instructions/spellSelection.png")
-        self.selection.setPixmap(self.image3)
-        self.selection.move(20, 20)
-
+        super(NextPage, self).__init__()
         self.initUI()
 
     def initUI(self):
-        self.resize(self.image.width(), self.image.height())
+        self.resize(800, 800)
         self.setWindowTitle('How to Play')
         Server.center(self)
 
-        self.back = QPushButton("Back", self)
+        self.back = QPushButton("back", self)
         self.back.clicked.connect(self.back2H2P)
-        self.back.move(20, self.image.height() - self.back.height() - 20)
-
-        self.next = QPushButton("Next", self)
-        self.next.clicked.connect(self.nextPage2)
-        self.next.move(self.image.width() - self.next.width() + 20,  self.image.height() - self.next.height() - 20)
 
         self.show()
+
 
     def back2H2P(self):
         self.h2P = How2PlayText()
-        self.close()
-
-    def nextPage2(self):
-        self.nextP = NextPage2()
-        self.close()
-
-
-
-class NextPage2(QWidget):
-
-    def __init__(self):
-        super(NextPage2, self).__init__()
-
-        self.background = QLabel(self)
-        self.image = QPixmap("textures/Background/Test.jpg")
-        self.background.setPixmap(self.image)
-
-
-        self.title = QLabel("INSTRUCTIONS", self)
-        self.title.setStyleSheet("color: Black; font: bold; font-size: 30px")
-        self.title.move(self.image.width() / 2 - self.title.width(), 20)
-
-        self.text3 = QLabel("Additionally, we have some specials hidden in the game. As you can see on the left side,\n"
-                            "we have a little helping hand in form of a Bomb.\n \n Be assured, the bomb will not hurt you in "
-                            "any way. Instead it gives you an shield against the attacks of your enemies. ", self)
-        self.text3.setStyleSheet("color: black; font: bold; font-size: 15px;")
-        self.text3.move(200,100)
-
-        self.bomb = QLabel(self)
-        self.bomb.setPixmap(QPixmap("textures/bomb.jpg"))
-        self.bomb.move(150, 100)
-
-        self.robo_alive = QLabel(self)
-        self.robo_alive.setPixmap(QPixmap("textures/Robots/Robot01.png"))
-        self.robo_alive.move(150, 250)
-
-        self.robo_ememy = QLabel(self)
-        self.robo_ememy.setPixmap(QPixmap("textures/Robots/Robot02.png"))
-        self.robo_ememy.move(150, 300)
-
-        self.robo_immun = QLabel(self)
-        self.robo_immun.setPixmap(QPixmap("textures/Robots/Robot_In.png"))
-        self.robo_immun.move(150, 350)
-
-        self.robo_dead = QLabel(self)
-        self.robo_dead.setPixmap(QPixmap("textures/Robots/Robot_Dead.png"))
-        self.robo_dead.move(150, 400)
-
-        self.text4 = QLabel("Now let's introduce the most important characters in this game. On the left side, you can see\n"
-                            "the robot ninjas.\n \nThe green ninja represents our hero, which you can control with the "
-                            "keyboard. The details are mentioned beforehand,\ntake a look if not sure anymore.\n \n"
-                            "The red one, represents the enemy of our hero. So be careful of it. Make sure to shoot it or\n"
-                            "run away. As we mentioned before, you can be saved for a certain amount of time against your\n"
-                            "enemies with the help of the bomb or after you are killed.\n \nThe yellow color represents a golden\n"
-                            "shield around you. Even the best will be shoot, so after being hit by a bullet your color will change\n"
-                            "to grey. But be assured, your hero will be revived after a certain amount of time.", self)
-        self.text4.setStyleSheet("color: black; font: bold; font-size: 15px;")
-        self.text4.move(200, 250)
-
-        self.endMess = QLabel("HAVE FUN AND ENJOY!!", self)
-        self.endMess.setStyleSheet("color: black; font: bold; font-size: 30px;")
-        self.endMess.move(self.image.width() / 2 - self.endMess.width()/2 - self.endMess.width(), 600)
-        self.initUI()
-
-
-    def initUI(self):
-        self.resize(self.image.width(), self.image.height())
-        self.setWindowTitle('How to Play')
-        Server.center(self)
-
-        self.back = QPushButton("Back", self)
-        self.back.clicked.connect(self.back2Page1)
-        self.back.move(20, self.image.height() - self.back.height() - 20)
-
-        self.show()
-
-    def back2Page1(self):
-        self.page1 = NextPage1()
         self.close()
 
 
