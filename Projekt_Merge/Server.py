@@ -25,7 +25,7 @@ pygame.mixer.init()
 SCREENWIDTH = 1000
 SCREENHEIGHT = 1000
 
-FPS = 100/ 30
+FPS = 10
 GameStep = (1/ FPS)
 alpha_eps = 0.5
 vMax = 3
@@ -37,7 +37,7 @@ BOMB_SIZE = 32
 BOMB_TIMER = 5000
 
 # selected floor texture
-ftexture = "Brown floor"
+ftexture = "Background Dirt"
 
 # selected wall texture
 wtexture = "Metall wall"
@@ -50,12 +50,13 @@ BulCollision = True
 
 # wall libraries
 floorTextures = {
-    "Brown floor": 'textures/Board/floor00.png',
-    "Grass floor": 'textures/Board/floor02.png',
-    "Pink floor": 'textures/Board/floor03.png',
-    "Whitestone floor": 'textures/Board/floor04.png',
+    "Background Dirt": 'textures/Board/Background Dirt.png',
+    "Background Pattern": 'textures/Board/Background Pattern.png',
+    "Background Sakura": 'textures/Board/Background Sakura.png',
+    "Background Water": 'textures/Board/Background Water.png',
+    "Dirt": 'textures/Board/Dirt.png',
     "Brownstone floor": 'textures/Board/floor05.png',
-    "Wood floor": 'textures/Board/floor06.png',
+    "Wood floor": 'textures/Board/floor06.png'
 }
 # wall libraries
 wallTextures = {
@@ -107,7 +108,7 @@ class SpielFeld(QWidget):
 
         self.spellcard = self.changeSpellcard(spellcard)
 
-        print(BulCollision)
+        #print(ftexture)
 
         self.SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
 
@@ -235,29 +236,29 @@ class SpielFeld(QWidget):
 
     def changeFloor(self, name):
 
-        if name == "Brown floor":
-            Menu.CurFloor = "Brown floor"
-            return QPixmap(floorTextures["Brown floor"])
+        if name == "Background Dirt":
+            Menu.CurFloor = "Background Dirt"
+            return QPixmap(floorTextures["Background Dirt"])
 
-        elif name == "Grass floor":
-            Menu.CurFloor = "Grass floor"
-            return QPixmap(floorTextures["Grass floor"])
+        elif name == "Background Pattern":
+            Menu.CurFloor = "Background Pattern"
+            return QPixmap(floorTextures["Background Pattern"])
 
-        elif name == "Pink floor":
-            Menu.CurFloor = "Pink floor"
-            return QPixmap(floorTextures["Pink floor"])
+        elif name == "Background Sakura":
+            Menu.CurFloor = "Background Sakura"
+            return QPixmap(floorTextures["Background Sakura"])
 
-        elif name == "Whitestone floor":
-            Menu.CurFloor = "Whitestone floor"
-            return QPixmap(floorTextures["Whitestone floor"])
+        elif name == "Background Water":
+            Menu.CurFloor = "Background Water"
+            return QPixmap(floorTextures["Background Water"])
+
+        elif name == "Dirt":
+            Menu.CurFloor = "Dirt"
+            return QPixmap(floorTextures["Dirt"])
 
         elif name == "Brownstone floor":
             Menu.CurFloor = "Brownstone floor"
             return QPixmap(floorTextures["Brownstone floor"])
-
-        elif name == "Wood floor":
-            Menu.CurFloor = "Wood floor"
-            return QPixmap(floorTextures["Wood floor"])
 
         else:
             pass
@@ -506,16 +507,18 @@ class SpielFeld(QWidget):
 
     def drawField(self, qp):
         qp.setPen(Qt.NoPen)
-        # Draw the PlayField
+        texture = self.floorTexture
+        if ftexture == "Background Dirt" or  ftexture == "Background Pattern" or ftexture == "Background Sakura" or  ftexture == "Background Water":
+            qp.drawPixmap(- ((self.tickCount/2) % 1000), - ((self.tickCount/2) % 1000), texture)
+        else:
+            qp.drawPixmap(0,0, texture)
+        #Draw the PlayField
         for i in range(0, 100, 1):
             for j in range(0, 100, 1):
-                if SpielFeld.PlayFieldAR[i][j] == 1:
-                    texture = self.wallTexture
-                    self.BarrierList.append(texture)
-                else:
-                    texture = self.floorTexture
-                qp.drawPixmap(i * 10, j * 10, texture)
-
+                    if SpielFeld.PlayFieldAR[i][j]==1:
+                        texture = self.wallTexture
+                        self.BarrierList.append(texture)
+                        qp.drawPixmap(i*10, j*10, texture)
 ## BOMB ##
             
 

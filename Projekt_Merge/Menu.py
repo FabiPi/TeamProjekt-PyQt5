@@ -50,7 +50,7 @@ backgrounds = {
 
 
 # default settings
-CurFloor = "Brown floor"
+CurFloor = "Background Dirt"
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
 CurCol = "Wall Collision   On"
@@ -708,11 +708,11 @@ class floorTexture(QWidget):
         self.button_layout2 = QVBoxLayout()
 
         # create floor texture buttons
-        self.texture1 = QRadioButton("Brown floor")
-        self.texture2 = QRadioButton("Wood floor")
-        self.texture3 = QRadioButton("Grass floor")
-        self.texture4 = QRadioButton("Pink floor")
-        self.texture5 = QRadioButton("Whitestone floor")
+        self.texture1 = QRadioButton("Dirt (Moving)")
+        self.texture2 = QRadioButton("Pattern (Moving)")
+        self.texture3 = QRadioButton("Sakura (Moving)")
+        self.texture4 = QRadioButton("Water (Moving)")
+        self.texture5 = QRadioButton("Dirt")
         self.texture6 = QRadioButton("Brownstone floor")
         # create selector
         self.btn = QPushButton("Select")
@@ -743,11 +743,11 @@ class floorTexture(QWidget):
         #self.setStyleSheet("font-weight: bold;")
 
         # add button icons
-        self.texture1.setIcon(QIcon(Server.floorTextures["Brown floor"]))
-        self.texture2.setIcon(QIcon(Server.floorTextures["Wood floor"]))
-        self.texture3.setIcon(QIcon(Server.floorTextures["Grass floor"]))
-        self.texture4.setIcon(QIcon(Server.floorTextures["Pink floor"]))
-        self.texture5.setIcon(QIcon(Server.floorTextures["Whitestone floor"]))
+        self.texture1.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
+        self.texture2.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
+        self.texture3.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
+        self.texture4.setIcon(QIcon(Server.floorTextures["Background Water"]))
+        self.texture5.setIcon(QIcon(Server.floorTextures["Dirt"]))
         self.texture6.setIcon(QIcon(Server.floorTextures["Brownstone floor"]))
 
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
@@ -794,20 +794,19 @@ class floorTexture(QWidget):
         self.texture5.setChecked(False)
         self.texture6.setChecked(False)
 
-
-        if CurFloor == "Wood floor":
-            self.texture2.setChecked(True)
-
-        elif CurFloor == "Brown floor":
+        if CurFloor == "Background Dirt":
             self.texture1.setChecked(True)
 
-        elif CurFloor == "Grass floor":
+        elif CurFloor == "Background Pattern":
+            self.texture2.setChecked(True)
+
+        elif CurFloor == "Background Sakura":
             self.texture3.setChecked(True)
 
-        elif CurFloor == "Pink floor":
+        elif CurFloor == "Background Water":
             self.texture4.setChecked(True)
 
-        elif CurFloor == "Whitestone floor":
+        elif CurFloor == "Dirt":
             self.texture5.setChecked(True)
 
         elif CurFloor == "Brownstone floor":
@@ -827,24 +826,24 @@ class floorTexture(QWidget):
         global CurFloor
 
         if button == self.texture1:
-            Server.ftexture = "Brown floor"
-            CurFloor = "Brown floor"
+            Server.ftexture = "Background Dirt"
+            CurFloor = "Background Dirt"
 
         elif button == self.texture2:
-            Server.ftexture = "Wood floor"
-            CurFloor = "Wood floor"
+            Server.ftexture = "Background Pattern"
+            CurFloor = "Background Pattern"
 
         elif button == self.texture3:
-            Server.ftexture = "Grass floor"
-            CurFloor = "Grass floor"
+            Server.ftexture = "Background Sakura"
+            CurFloor = "Background Sakura"
 
         elif button == self.texture4:
-            Server.ftexture = "Pink floor"
-            CurFloor = "Pink floor"
-
+            Server.ftexture = "Background Water"
+            CurFloor = "Background Water"
+        
         elif button == self.texture5:
-            Server.ftexture = "Whitestone floor"
-            CurFloor = "Whitestone floor"
+            Server.ftexture = "Dirt"
+            CurFloor = "Dirt"
 
         elif button == self.texture6:
             Server.ftexture = "Brownstone floor"
