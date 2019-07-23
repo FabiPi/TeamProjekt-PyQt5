@@ -4,8 +4,8 @@ von B-Dome, JangJang3, FabiPi
 """
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter, QPalette
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter, QPalette, QImage, QBrush, qRgba
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox
 
@@ -45,7 +45,7 @@ backgrounds = {
     "NightRoad": "textures/Background/NightRoad.jpg",
     "RedForest": "textures/Background/RedForest.jpg",
     "Shrine": "textures/Background/Shrine.jpg",
-    "Tempel": "textures/Background/Tempel.jpg"
+    "Tempel": "textures/Background/Tempel.jpg",
 }
 
 
@@ -900,10 +900,19 @@ class How2PlayText(QWidget):
     def __init__(self):
         super(How2PlayText, self).__init__()
 
-        # test background, must look more into setStylesheet 
-        self.setStyleSheet("background-color: orange")
+        self.oImage = QImage("textures/Background/Test.jpg")
+        self.sImage = self.oImage.scaled(QSize(1300, 800))  # resize Image to widgets size
+        palette = QPalette()
+        palette.setBrush(10, QBrush(self.sImage))
+        self.setPalette(palette)
+        #self.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
+
+        # test background, must look more into setStylesheet
+        #self.setStyleSheet("background-color: orange")
         self.layout = QVBoxLayout()
         self.title = QLabel("INSTRUCTIONS")
+        self.title.setStyleSheet("color: Black; font: bold; font-size: 35px")
+
         self.text1 = QLabel("Hello and welcome to our little project! Today you are part of a world "
                           "full of new adventures and great experiences.\nBut you know, every new beginning comes with some "
                           "instructions. So before starting the game, lets rule down some basic understanding of the gameplay.\n"
@@ -912,6 +921,7 @@ class How2PlayText(QWidget):
                            "game keys for the selection of only one random spellcard. Just press key L for activating the spell. With the "
                            "key Q you can halt then\nvelocity of your character and maybe let it take a look around. The"
                            "others are self-explanatory.")
+        self.text1.setStyleSheet("color: black; font-size: 15px; font: bold")
 
         self.keyboard1 = QLabel()
         self.image1 = QPixmap("textures/Instructions/keyboardOne.jpg")
@@ -920,13 +930,17 @@ class How2PlayText(QWidget):
         self.text2 = QLabel("But humans are a little greedy and so why not give you the ability to choose all spellcards. Down below"
                             "you can see the game keys for selecting all spellcards. Press any key\nfrom 1 to 7 to activate one of the "
                             "special abilities.")
+        self.text2.setStyleSheet("color: black; font: bold; font-size: 15px;")
+
 
         self.keyboard2 = QLabel()
         self.image2 = QPixmap("textures/Instructions/keyboardTwo.jpg")
         self.keyboard2.setPixmap(self.image2)
 
         self.title.setAlignment(Qt.AlignCenter)
+        self.text1.setAlignment(Qt.AlignCenter)
         self.keyboard1.setAlignment(Qt.AlignCenter)
+        self.text2.setAlignment(Qt.AlignCenter)
         self.keyboard2.setAlignment(Qt.AlignCenter)
 
 
@@ -941,7 +955,7 @@ class How2PlayText(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.resize(1000, 800)
+        self.resize(1300, 800)
         self.setWindowTitle('How to Play')
         Server.center(self)
 
@@ -951,7 +965,7 @@ class How2PlayText(QWidget):
 
         self.next = QPushButton("Next", self)
         self.next.clicked.connect(self.nextPage)
-        self.next.move(950, 700)
+        self.next.move(1180, 700)
 
         self.show()
 
@@ -984,8 +998,6 @@ class NextPage(QWidget):
     def back2H2P(self):
         self.h2P = How2PlayText()
         self.close()
-
-
 
 
 if __name__ == '__main__':
