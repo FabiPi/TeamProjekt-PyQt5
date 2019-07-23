@@ -3,59 +3,6 @@ Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
 
-"""
-Change-List
-    add Attributes
-    -Direction
-    -Velocity (non vector)
-    -type
-    -textures
-    -delay
-
-    add CD to Robot class
-
-    update shoot() method
-    create special() method
-    update moveBullet() method
-
-    update tick-event for bullet
-    add Cooldown to reduceDelay
-
-    *** first upload***
-
-    adjusted speed in spellcards / shoot
-
-    change moveBullet
-    add spellcard2
-    import random
-
-    add Spellcard3
-    refactor other Spellcards, shoot, create Bullet
-
-    *** second Upload***
-
-    update Draw Method to include Rotation
-    update Robot Visual
-    update RoboBullet Colission so Robot cant hit himself
-        -added owner Attribute to Bullet
-
-    *** third Upload ***
-
-    Change Textures
-    Add Spellcard 4
-    adjust CDs for other Spellcards
-    update Texture Paths
-    export Spellcards from MoveBullet to Spellcard Methods
-    
-    *** fourth Upload ***
-    add Spellcard 5
-    update Spawnpositions
-    add Spellcard 6
-    add Spellcard 7 (dosnt really work with collision since its to large
-
-"""
-
-
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
 from PyQt5.QtCore import QRectF
 import random

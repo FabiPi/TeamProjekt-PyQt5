@@ -50,7 +50,7 @@ backgrounds = {
 
 
 # default settings
-CurFloor = "Background Dirt"
+CurFloor = "White Stone"
 CurWall = "Metall wall"
 CurSpell = "Spellcard1"
 CurCol = "Wall Collision   On"
@@ -592,8 +592,10 @@ class wallTexture(QWidget):
 
         # create buttons
         self.texture1 = QRadioButton("Metall wall")
-        self.texture2 = QRadioButton("Red wall")
+        self.texture2 = QRadioButton("Metall Bar")
         self.texture3 = QRadioButton("Mosaik wall")
+        self.texture4 = QRadioButton("Metall Fence")
+        self.texture5 = QRadioButton("Rusty Bar")
 
         self.btn = QPushButton("Select")
         self.btn.setStyleSheet('background-color: white')
@@ -617,12 +619,17 @@ class wallTexture(QWidget):
 
         # adjust icons on buttons
         self.texture1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
-        self.texture2.setIcon(QIcon(Server.wallTextures["Red wall"]))
+        self.texture2.setIcon(QIcon(Server.wallTextures["Metall Bar"]))
         self.texture3.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
+        self.texture4.setIcon(QIcon(Server.wallTextures["Metall Fence"]))
+        self.texture5.setIcon(QIcon(Server.wallTextures["Rusty Bar"]))
 
         self.button_layout1.addWidget(self.texture1)
         self.button_layout1.addWidget(self.texture2)
         self.button_layout1.addWidget(self.texture3)
+        self.button_layout1.addWidget(self.texture4)
+        self.button_layout1.addWidget(self.texture5)
+        
         self.button_layout1.addWidget(self.btn)
         self.button_layout1.addWidget(self.label)
 
@@ -636,6 +643,8 @@ class wallTexture(QWidget):
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
         self.texture2.clicked.connect(lambda: self.currBtn_clk(self.texture2))
         self.texture3.clicked.connect(lambda: self.currBtn_clk(self.texture3))
+        self.texture4.clicked.connect(lambda: self.currBtn_clk(self.texture4))
+        self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -647,17 +656,24 @@ class wallTexture(QWidget):
 
         self.texture2.setChecked(False)
         self.texture3.setChecked(False)
-        self.texture3.setChecked(False)
+        self.texture4.setChecked(False)
+        self.texture5.setChecked(False)
 
         if CurWall == "Metall wall":
             self.texture1.setChecked(True)
 
 
-        elif CurWall == "Red wall":
+        elif CurWall == "Metall Bar":
             self.texture2.setChecked(True)
 
         elif CurWall == "Mosaik wall":
             self.texture3.setChecked(True)
+
+        elif CurWall == "Metall Fence":
+            self.texture4.setChecked(True)
+
+        elif CurWall == "Rusty Bar":
+            self.texture5.setChecked(True)
 
         else:
             self.texture1.setChecked(True)
@@ -679,17 +695,27 @@ class wallTexture(QWidget):
             CurWall = "Metall wall"
 
         elif button == self.texture2:
-            Server.wtexture = "Red wall"
-            CurWall = "Red wall"
+            Server.wtexture = "Metall Bar"
+            CurWall = "Metall Bar"
 
         elif button == self.texture3:
             Server.wtexture = "Mosaik wall"
             CurWall = "Mosaik wall"
+
+        elif button == self.texture4:
+            Server.wtexture = "Metall Fence"
+            CurWall = "Metall Fence"
+
+        elif button == self.texture5:
+            Server.wtexture = "Rusty Bar"
+            CurWall = "Rusty Bar"
+            
         else:
             pass
 
         self.label.setText("You selected: \n" + button.text())
         QtGui.QGuiApplication.processEvents()
+
 
 
 ####################################################################################
@@ -708,12 +734,13 @@ class floorTexture(QWidget):
         self.button_layout2 = QVBoxLayout()
 
         # create floor texture buttons
-        self.texture1 = QRadioButton("Dirt (Moving)")
-        self.texture2 = QRadioButton("Pattern (Moving)")
-        self.texture3 = QRadioButton("Sakura (Moving)")
-        self.texture4 = QRadioButton("Water (Moving)")
-        self.texture5 = QRadioButton("Dirt")
-        self.texture6 = QRadioButton("Brownstone floor")
+        self.texture1 = QRadioButton("White Stone")
+        self.texture2 = QRadioButton("Brown Stone")
+        self.texture3 = QRadioButton("Dirt")
+        self.texture4 = QRadioButton("Dirt (Moving)")
+        self.texture5 = QRadioButton("Pattern (Moving)")
+        self.texture6 = QRadioButton("Sakura (Moving)")
+        self.texture7 = QRadioButton("Water (Moving)")
         # create selector
         self.btn = QPushButton("Select")
         self.btn.setStyleSheet('background-color: white')
@@ -743,15 +770,13 @@ class floorTexture(QWidget):
         #self.setStyleSheet("font-weight: bold;")
 
         # add button icons
-        self.texture1.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
-        self.texture2.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
-        self.texture3.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
-        self.texture4.setIcon(QIcon(Server.floorTextures["Background Water"]))
-        self.texture5.setIcon(QIcon(Server.floorTextures["Dirt"]))
-        self.texture6.setIcon(QIcon(Server.floorTextures["Brownstone floor"]))
-
-        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
-
+        self.texture1.setIcon(QIcon(Server.floorTextures["White Stone"]))
+        self.texture2.setIcon(QIcon(Server.floorTextures["Brown Stone"]))
+        self.texture3.setIcon(QIcon(Server.floorTextures["Dirt"]))
+        self.texture4.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
+        self.texture5.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
+        self.texture6.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
+        self.texture7.setIcon(QIcon(Server.floorTextures["Background Water"]))
 
         # clicked buttons
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
@@ -760,6 +785,8 @@ class floorTexture(QWidget):
         self.texture4.clicked.connect(lambda: self.currBtn_clk(self.texture4))
         self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
         self.texture6.clicked.connect(lambda: self.currBtn_clk(self.texture6))
+        self.texture7.clicked.connect(lambda: self.currBtn_clk(self.texture7))
+
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -772,6 +799,7 @@ class floorTexture(QWidget):
         self.button_layout2.addWidget(self.texture4)
         self.button_layout2.addWidget(self.texture5)
         self.button_layout2.addWidget(self.texture6)
+        self.button_layout2.addWidget(self.texture7)
 
         self.button_layout2.addWidget(self.btn)
         self.button_layout2.addWidget(self.label)
@@ -794,23 +822,26 @@ class floorTexture(QWidget):
         self.texture5.setChecked(False)
         self.texture6.setChecked(False)
 
-        if CurFloor == "Background Dirt":
+        if CurFloor == "White Stone":
             self.texture1.setChecked(True)
 
-        elif CurFloor == "Background Pattern":
+        elif CurFloor == "Brown Stone":
             self.texture2.setChecked(True)
 
-        elif CurFloor == "Background Sakura":
+        elif CurFloor == "Dirt":
             self.texture3.setChecked(True)
 
-        elif CurFloor == "Background Water":
+        elif CurFloor == "Background Dirt":
             self.texture4.setChecked(True)
 
-        elif CurFloor == "Dirt":
+        elif CurFloor == "Background Pattern":
             self.texture5.setChecked(True)
 
-        elif CurFloor == "Brownstone floor":
+        elif CurFloor == "Background Sakura":
             self.texture6.setChecked(True)
+
+        elif CurFloor == "Background Water":
+            self.texture7.setChecked(True)
 
         else:
             self.texture1.setChecked(True)
@@ -826,28 +857,32 @@ class floorTexture(QWidget):
         global CurFloor
 
         if button == self.texture1:
+            Server.ftexture = "White Stone"
+            CurFloor = "White Stone"
+
+        elif button == self.texture2:
+            Server.ftexture = "Brown Stone"
+            CurFloor = "Brown Stone"
+
+        elif button == self.texture3:
+            Server.ftexture = "Dirt"
+            CurFloor = "Dirt"
+            
+        if button == self.texture4:
             Server.ftexture = "Background Dirt"
             CurFloor = "Background Dirt"
 
-        elif button == self.texture2:
+        elif button == self.texture5:
             Server.ftexture = "Background Pattern"
             CurFloor = "Background Pattern"
 
-        elif button == self.texture3:
+        elif button == self.texture6:
             Server.ftexture = "Background Sakura"
             CurFloor = "Background Sakura"
 
-        elif button == self.texture4:
+        elif button == self.texture7:
             Server.ftexture = "Background Water"
             CurFloor = "Background Water"
-
-        elif button == self.texture5:
-            Server.ftexture = "Dirt"
-            CurFloor = "Dirt"
-
-        elif button == self.texture6:
-            Server.ftexture = "Brownstone floor"
-            CurFloor = "Brownstone floor"
 
         else:
             pass
