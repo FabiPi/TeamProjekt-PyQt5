@@ -87,7 +87,7 @@ class Robot(object):
     def roboShape(self):
         return self.roundshape(self.position, self.radius)
 
-
+    #Method to turn Robot in targets direction
     def moveChase(self, tarAlpha):
         target_alpha = tarAlpha
 
@@ -109,6 +109,7 @@ class Robot(object):
                 self.a_alpha = -0.5
         
 
+    #Method to calculate alpha-Direction to target and use moveChase to aim there
     def aimTarget(self, target):
         target_x = target.x()
         target_y = target.y()
@@ -124,10 +125,7 @@ class Robot(object):
 
         self.moveChase(target_alpha)
 
-        #self.alpha = target_alpha
-
-        #print(target_alpha)
-
+    #Check if target is closer than "eps"
     def inVicinity(self, target):
         eps = 20
         #print(self.position)
@@ -369,6 +367,7 @@ class Robot(object):
         OffsetVector = QVector2D(OffsetX,OffsetY)
         bulletpos.__iadd__(OffsetVector)
 
+        # if target is given calculate new Direction, otherwise use alpha as Direction
         if target != 0:
             #Calculate Target Alpha
             target_x = target.x()
