@@ -193,98 +193,18 @@ class SpielFeld(QWidget):
         self.show()
 
     def changeSpellcard(self, name):
-
-        if name == "Spellcard1":
-            Menu.CurSpell = "Spellcard1"
-            return "Spellcard1"
-
-        elif name == "Spellcard2":
-            Menu.CurSpell = "Spellcard2"
-            return "Spellcard2"
-
-        elif name == "Spellcard3":
-            Menu.CurSpell = "Spellcard3"
-            return "Spellcard3"
-
-        elif name == "Spellcard4":
-            Menu.CurSpell = "Spellcard4"
-            return "Spellcard4"
-
-        elif name == "Spellcard5":
-            Menu.CurSpell = "Spellcard5"
-            return "Spellcard5"
-
-        elif name == "Spellcard6":
-            Menu.CurSpell = "Spellcard6"
-            return "Spellcard6"
-
-        elif name == "Spellcard7":
-            Menu.CurSpell = "Spellcard7"
-            return "Spellcard7"
-
-        elif name == "AllSpellcards":
-            Menu.CurSpell = "AllSpellcards"
-            return "AllSpellcards"
-
-        else:
-            pass
+        Menu.CurSpell = name
+        return name
 
     def changeWall(self, name):
+        Menu.CurWall = name
+        return QPixmap(wallTextures[name])
 
-        if name == "Metall wall":
-            Menu.CurWall = "Metall wall"
-            return QPixmap(wallTextures["Metall wall"])
-
-        elif name == "Metall Bar":
-            Menu.CurWall = "Metall Bar"
-            return QPixmap(wallTextures["Metall Bar"])
-
-        elif name == "Mosaik wall":
-            Menu.CurWall = "Mosaik wall"
-            return QPixmap(wallTextures["Mosaik wall"])
-        
-        elif name == "Metall Fence":
-            Menu.CurWall = "Metall Fence"
-            return QPixmap(wallTextures["Metall Fence"])
-        
-        elif name == "Rusty Bar":
-            Menu.CurWall = "Rusty Bar"
-            return QPixmap(wallTextures["Rusty Bar"])
-        else:
-            pass
 
     def changeFloor(self, name):
-
-        if name == "Background Dirt":
-            Menu.CurFloor = "Background Dirt"
-            return QPixmap(floorTextures["Background Dirt"])
-
-        elif name == "Background Pattern":
-            Menu.CurFloor = "Background Pattern"
-            return QPixmap(floorTextures["Background Pattern"])
-
-        elif name == "Background Sakura":
-            Menu.CurFloor = "Background Sakura"
-            return QPixmap(floorTextures["Background Sakura"])
-
-        elif name == "Background Water":
-            Menu.CurFloor = "Background Water"
-            return QPixmap(floorTextures["Background Water"])
-
-        elif name == "Dirt":
-            Menu.CurFloor = "Dirt"
-            return QPixmap(floorTextures["Dirt"])
-
-        elif name == "Brown Stone":
-            Menu.CurFloor = "Brown Stone"
-            return QPixmap(floorTextures["Brown Stone"])
-
-        elif name == "White Stone":
-            Menu.CurFloor = "White Stone"
-            return QPixmap(floorTextures["White Stone"])
-
-        else:
-            pass
+        Menu.CurFloor = name
+        return QPixmap(floorTextures[name])
+    
 
     def start(self):
 
