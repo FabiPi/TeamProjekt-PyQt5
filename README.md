@@ -1,5 +1,508 @@
 ## Week 9 - Zusatzfeatures und Finalisierung des Programms
 **Menu**<br/>
+Um unser Spielfeld ein bisschen aufzufrischen, haben wir uns entschieden ein Menu zu konstruieren. Dabei haben wir vor allem mit QWidget gearbeitet, um neue Fenster bzw. windows zu kreiieren. Unser Konzept basiert auf der Idee ein start screen, ein start menu einzuführen. In dem start menu kann man dann mithilfe von verschiedenen Buttons verschiedene Aktionen durchführen. Wir haben einmal einen Button start Game, options, instruction bzw. how to play, credits und einen quite Button. 
+Zunächst wurde den die Konstuktionen von oben unabhängig vom GameBoard erstellt.
+
+Für den start screen haben wir uns zunächst einfach ein neues QWidget geschaffen:
+```python
+class Game (QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.resize(800, 336)
+        Server.center(self)
+        self.setWindowTitle("Welcome")
+
+        self.enter = QPushButton("enter", self)
+        self.enter.move(360,280)
+        self.enter.resize(80, 25)
+        self.enter.clicked.connect(self.gameMenu)
+        self.enter.setStyleSheet("background-color: rgb(240,255,255); font: bold 15px; color: black;")
+
+        self.show()
+
+    def gameMenu(self):
+        self.startM = start_Menu()
+        self.close()
+        
+```
+Dieses window besitzt einen Button mit dem man das start menu betreten kann. Nach betreten des start menu soll sich dann das window schließe, welches wir mithilfe von self.close() erzielt haben.
+
+Als nächstes haben wir uns dem start menu gewidmet. Auch hier haben wir ein neues window geschaffen, dass die nötigen Buttons zur Weiterleitung besitzt.
+
+```python
+class start_Menu(QWidget):
+
+    WIDTH = 500
+    HEIGHT = 666
+
+    XPosStart = 70
+    YPosStart = 60
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+
+        self.resize(self.WIDTH, self.HEIGHT)
+        self.setWindowTitle('Start Menu')
+        Server.center(self)
+
+        # switch to gameboard
+        self.button1 = QPushButton('Start Game', self)
+        self.button1.move(self.XPosStart, self.YPosStart)
+        self.button1.clicked.connect(self.startGame)
+
+        # switch to options
+        self.button2 = QPushButton('Options', self)
+        self.button2.clicked.connect(self.Options)
+        self.button2.move(self.XPosStart, 2 * self.YPosStart)
+
+        # switch to howtoplay
+        self.button3 = QPushButton('How to Play', self)
+        self.button3.clicked.connect(self.How2Play)
+        self.button3.move(self.XPosStart, 3 * self.YPosStart)
+
+        # switch to credits
+        self.button4 = QPushButton('Credits', self)
+        self.button4.clicked.connect(self.Credits)
+        self.button4.move(self.XPosStart, 4 * self.YPosStart)
+
+        # quite game
+        self.button5 = QPushButton('Quit', self)
+        self.button5.clicked.connect(self.close)
+        self.button5.move(self.XPosStart, 5 * self.YPosStart)
+        
+        self.show()
+        
+    def Instance(self):
+        self.gBoard = Server.SpielFeld()
+        return self.gBoard
+
+    def startGame(self):
+        self.Instance().start()
+        self.close()
+
+    def Options(self):
+        self.opt = OptionField()
+        self.close()
+
+    def How2Play(self):
+        self.instructions = How2PlayText()
+        self.close()
+
+    def Credits(self):
+        self.authors = CreditText()
+        self.close()
+
+    def closeEvent(self, event):
+        self.close()
+
+    def Back2Menu(self):
+        self.sMenu = start_Menu()
+        self.close()
+
+```
+
+Hier ist das erste Mal gewesen, dass wir eine Verbindung zum GameBoard erstellt haben, indem wir es mithilfe der Methode startGame eine Instanze aufrufen.
+
+Im weiteren Schritt wurden, dann ganz ähnlich auch die windows für option, how to play, credits geschaffen. Die alle mit einem back Button ausgestattet sind. 
+
+```python
+
+class OptionField(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.InitUI()
+
+    def InitUI(self):
+        self.resize(800, 500)
+        self.setWindowTitle('Options')
+        Server.center(self)
+
+        self.back = QPushButton('Back', self)
+        self.back.clicked.connect(self.Back2Menu)
+        self.back.move(200, 450)
+
+        self.show()
+        
+    def Back2Menu(self):
+            start_Menu.Back2Menu(self)
+```
+```python 
+class CreditText(QWidget):
+
+    def __init__(self):
+        super(CreditText, self).__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.resize(self.image.width(), self.image.height())
+        self.setWindowTitle('Credits')
+        Server.center(self)
+
+        self.back = QPushButton('back', self)
+        self.back.clicked.connect(self.Back2Menu)
+        self.back.move(350,330)
+
+        self.show()
+
+    def Back2Menu(self):
+            start_Menu.Back2Menu(self)
+```           
+
+```python 
+class How2PlayText(QWidget):
+
+    def __init__(self):
+        super(How2PlayText, self).__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.resize(self.image.width(), self.image.height())
+        self.setWindowTitle('How to Play')
+        Server.center(self)
+
+        self.back = QPushButton('back', self)
+        self.back.clicked.connect(self.Back2Menu)
+        self.back.move(350,330)
+
+        self.show()
+
+    def Back2Menu(self):
+            start_Menu.Back2Menu(self)
+``` 
+
+Nachdem sozusagen das Grundgerüst fertig war, haben wir uns an die Detail Aufgaben gekümmert. Zunächst war es die Idee, ein pause menu im Spiel zu schaffen, mit dem man dann bestimmte Interaktion durchführen konnte. Nach vielen Versuchen, haben wir die Idee dann aufgeben muss, da es uns ansonsten zeitlich nicht gereicht hätte. 
+
+Als Ersatz haben wir dann im Spiel das pause menu durch ein pause message box geändert. In anderen Worten, mit der Taste P kann man während des Spiel pausieren. Man wird dann gefragt, ob man das Spiel beenden oder fortsetzen möchte.
+
+```python
+
+    def keyPressEvent(self, event):
+        if not self.isStarted:
+            super(SpielFeld, self).keyPressEvent(event)
+            return
+
+        if event.type() == QEvent.KeyPress:
+            key = event.key()
+
+            if key == Qt.Key_P:
+                self.pause()
+                return
+
+        else:
+            super(SpielFeld, self).keyPressEvent(event)
+
+    def Message(self):
+        msgBox = QMessageBox()
+
+        msgBox.setWindowTitle("Pause Screen")
+        msgBox.setIconPixmap(QPixmap('textures/Board/pauseEmoji.png'))
+        msgBox.setText("Your in the pause screen. \n Do you want to continue? \n")
+
+        # set Buttons
+        msgBox.addButton(QMessageBox.Yes)
+        msgBox.addButton(QMessageBox.No)
+
+        # change backgroundstyle
+        p = self.palette()
+        p.setColor(self.backgroundRole(), colors["white smoke"])
+        msgBox.setPalette(p)
+        msgBox.exec_()
+
+        return msgBox
+
+    def pause(self):
+
+        if not self.isStarted:
+            return
+
+        self.isPaused = not self.isPaused
+        print(self.isPaused)
+
+        if self.isPaused:
+            self.timer.stop()
+
+            # switch to pause screen
+            self.msgBox = self.Message().result()
+            if self.msgBox == QMessageBox.No:
+                self.startMenu = Menu.start_Menu()
+                self.close()
+            else:
+                self.isPaused = False
+                self.timer.start(FPS, self)
+        else:
+            self.timer.start(FPS, self)
+
+        self.update()
+```
+Das Prinzip vom pausieren haben wir uns vom Tutorial Tetris abgeschaut, falls da Detailfragen bestehen, siehe http://zetcode.com/tutorials/javagamestutorial/tetris/. 
+
+Als nächsten großen Schritt wollten wir in den Optionen die Texturen im Spiel verändern. Dazu mussten wir erstmal uns überlegen wie genau wir das machen wollen. Für die Präsentation an den Spieler haben wir uns für eine tab-Darstellung entschieden, um eine weites Spektrum an Option da zu bieten. Letzten Endes haben wir uns für eine Grafik und Game Tab entschieden. Dazu haben wir eine neue Klasse TableWidget geschaffen. 
+
+```python
+
+class TableWidget(QWidget):
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+
+        # Initialize tab screen
+        self.tabs = QTabWidget()
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+
+        # Add tabs
+        self.tabs.addTab(self.tab1, "Game")
+        self.tabs.addTab(self.tab2, "Graphic")
+
+        # Create game tab
+        self.tab1.layout = QHBoxLayout()
+
+        self.gameG = Spellcards()
+        self.bulG = BulletCol()
+
+        # add new content to tab1
+        self.tab1.layout.addWidget(self.bulG)
+        self.tab1.layout.addWidget(self.gameG)
+
+        self.tab1.setLayout(self.tab1.layout)
+
+
+        # create content grafic tab
+        self.tab2.layout = QHBoxLayout()
+
+        # add wallG to tab3
+        self.wallG = wallTexture()
+        self.tab2.layout.addWidget(self.wallG)
+
+
+        # add floorG to tab3
+        self.floorG = floorTexture()
+        self.tab2.layout.addWidget(self.floorG)
+
+        # add all layouts to tab3
+        self.tab2.setLayout(self.tab2.layout)
+
+        # Add tabs to widget
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
+
+```
+Für jeden Tab wurde ein Layout geschaffen und in diesem Layout wurde dann mithilfe von QGroupBox die Auswahlbuttons erzeugt. 
+Man kann sagen, dass es eine sehr vielschichtige Arbeit war.
+
+Anhand eines Beispiel können wir das Prinzip von der Texturenänderung demonstrieren. Als Beispiel fangen wir mit dem wall textures an.
+
+```python
+
+class wallTexture(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # set wall texture layout
+        self.wallG = QGroupBox(self)
+
+        # set button layout
+        self.button_layout1 = QVBoxLayout()
+
+        # create buttons
+        self.texture1 = QRadioButton("Metall wall")
+        self.texture2 = QRadioButton("Red wall")
+        self.texture3 = QRadioButton("Mosaik wall")
+
+        self.btn = QPushButton("Select")
+        self.btn.setStyleSheet('background-color: white')
+
+        self.currentRBtn = self.texture1
+
+        self.label = QLabel(self)
+
+        # change style of lettering
+        self.style = QFont()
+        self.style.setBold(True)
+        self.label.setFont(self.style)
+
+        self.chk_RBtn()
+
+        self.iniUt()
+
+    def iniUt(self):
+
+        self.wallG.setTitle("Texture Wall")
+
+        # adjust icons on buttons
+        self.texture1.setIcon(QIcon(Server.wallTextures["Metall wall"]))
+        self.texture2.setIcon(QIcon(Server.wallTextures["Red wall"]))
+        self.texture3.setIcon(QIcon(Server.wallTextures["Mosaik wall"]))
+
+        self.button_layout1.addWidget(self.texture1)
+        self.button_layout1.addWidget(self.texture2)
+        self.button_layout1.addWidget(self.texture3)
+        self.button_layout1.addWidget(self.btn)
+        self.button_layout1.addWidget(self.label)
+
+        # add button layout in wall layout
+        self.wallG.setLayout(self.button_layout1)
+
+        # set wall texture box semi-transparent
+        self.wallG.setStyleSheet('background-color: rgba(255, 255, 255, 0.5);')
+
+        # click buttons
+        self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
+        self.texture2.clicked.connect(lambda: self.currBtn_clk(self.texture2))
+        self.texture3.clicked.connect(lambda: self.currBtn_clk(self.texture3))
+
+
+        self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
+
+
+    # show new setting, after returing to options
+    def chk_RBtn(self):
+        global CurWall
+
+        self.texture2.setChecked(False)
+        self.texture3.setChecked(False)
+        self.texture3.setChecked(False)
+
+        if CurWall == "Metall wall":
+            self.texture1.setChecked(True)
+
+
+        elif CurWall == "Red wall":
+            self.texture2.setChecked(True)
+
+        elif CurWall == "Mosaik wall":
+            self.texture3.setChecked(True)
+
+        else:
+            self.texture1.setChecked(True)
+
+        self.label.setText('currently used\n' + CurWall)
+        self.label.update()
+
+
+    def currBtn_clk(self, button):
+        self.currentRBtn = button
+
+
+    def btn_clk(self, button):
+        global CurWall
+        print(button.text() + ' clicked')
+
+        if button == self.texture1:
+            Server.wtexture = "Metall wall"
+            CurWall = "Metall wall"
+
+        elif button == self.texture2:
+            Server.wtexture = "Red wall"
+            CurWall = "Red wall"
+
+        elif button == self.texture3:
+            Server.wtexture = "Mosaik wall"
+            CurWall = "Mosaik wall"
+        else:
+            pass
+
+        self.label.setText("You selected: \n" + button.text())
+        QtGui.QGuiApplication.processEvents()
+```
+Da QGroupbox keine Widgets aufnimmt, musste zunächst ein neues Layout für die Buttons geschaffen werden. Danach haben wir den Buttons zugeordnet, dass bei einem Klick wir ein Signal bekommen, um zu erfassen, welcher Button unser aktueller Button ist. 
+Dafür haben wir die Methode currBtn_clk implementiert. Als nächstes wollen wir mit dem Signal schauen, welche texture ausgewählt worden ist, dazu haben wir dann btn_clk implementiert. Diese Methode gibt dann ein Signal in Form einer Variable an das GameBoard weiter. 
+```python
+
+# selected wall texture
+wtexture = "Metall wall"
+```
+
+Im GameBoard haben wir dann eine library erzeugt und eine Methode geschrieben, die die Textur ändert.
+
+```python
+    def changeWall(self, name):
+
+        if name == "Metall wall":
+            Menu.CurWall = "Metall wall"
+            return QPixmap(wallTextures["Metall wall"])
+
+        elif name == "Red wall":
+            Menu.CurWall = "Red wall"
+            return QPixmap(wallTextures["Red wall"])
+
+        elif name == "Mosaik wall":
+            Menu.CurWall = "Mosaik wall"
+            return QPixmap(wallTextures["Mosaik wall"])
+        else:
+            pass
+```
+Diese gibt verändert eine andere Variabel aus der Menu Klasse, um die gewählt Einstellung zu speichern und bei erneutem Betreten in die Optionenn anzuzeigen.
+
+Nach diesem Prinzip haben wir es für die floor texturen, bullet-wall collision und spellcards gemacht.
+
+Im nächsten Schritt haben wir an der Optik gearbeitet. Für den start screen und start menu haben wir dann ein animierte gif eingesetzt, die sich gut ergänzt haben. 
+
+Dafür haben wir mit QMovie gearbeitet:
+
+```python
+
+class Game (QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.resize(800, 336)
+        Server.center(self)
+        self.setWindowTitle("Welcome")
+
+        self.enter = QPushButton("enter", self)
+        self.enter.move(360,280)
+        self.enter.resize(80, 25)
+        self.enter.clicked.connect(self.gameMenu)
+        self.enter.setStyleSheet("background-color: rgb(240,255,255); font: bold 15px; color: black;")
+
+        # create background animated gif
+        self.movie = QMovie("textures/Background/Red.gif")
+        self.movie.frameChanged.connect(self.repaint)
+        self.movie.start()
+
+        # select the music track
+        pygame.mixer.music.load(playlist["Track 5"])
+        # loops the music
+        pygame.mixer.music.play(-1, 0.0)
+
+        self.show()
+
+
+    def gameMenu(self):
+        self.startM = start_Menu()
+        self.movie.stop()
+        self.close()
+
+    def paintEvent(self, event):
+        # after every changed image, refresh the background with the currentPixmap
+        painter = QPainter(self)
+        pixmap = self.movie.currentPixmap()
+        self.setMask(pixmap.mask())
+        painter.drawPixmap(0, 0, pixmap)
+```
+
+Im weiteren haben wir dann noch einen Sound eingebaut mithilfe von pygame, welches installiert werden muss. Aber damit kann man dann schöne Schleifen machen.
+
+Zum Schluss haben wir dann noch die anderen windows mit Details gefüllt.
+
 
 **Spellcards**<br/>
 Um die "Spellcards" oder "Spezialfähigkeiten" der Roboter zu implementieren haben wir uns zuerst überlegt, wie man die Bullet-Class die erweitern muss um andere Typen von Schüssen zu realisieren. <br/>
