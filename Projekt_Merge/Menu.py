@@ -5,7 +5,7 @@ von B-Dome, JangJang3, FabiPi
 
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QMovie, QPainter, QPalette
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, \
     QVBoxLayout, QTabWidget, QRadioButton, QHBoxLayout, QGroupBox
 
@@ -253,7 +253,7 @@ class OptionField(QWidget):
         themes = list(backgrounds.keys())
         return QPixmap(backgrounds[random.choice(themes)])
 
-    
+
 ####################################################################################
 # creating contents for tabs
 ####################################################################################
@@ -840,7 +840,7 @@ class floorTexture(QWidget):
         elif button == self.texture4:
             Server.ftexture = "Background Water"
             CurFloor = "Background Water"
-        
+
         elif button == self.texture5:
             Server.ftexture = "Dirt"
             CurFloor = "Dirt"
@@ -894,33 +894,98 @@ class CreditText(QWidget):
 # creating instruction window
 ####################################################################################
 
+
 class How2PlayText(QWidget):
 
     def __init__(self):
         super(How2PlayText, self).__init__()
 
+        # test background, must look more into setStylesheet 
+        self.setStyleSheet("background-color: orange")
         self.layout = QVBoxLayout()
-        self.label = QLabel("")
-        self.label.setText("INSTRUCTIONS \n \n blabla "
-                           "\n \n \n \n ")
-        self.label.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label)
+        self.title = QLabel("INSTRUCTIONS")
+        self.text1 = QLabel("Hello and welcome to our little project! Today you are part of a world "
+                          "full of new adventures and great experiences.\nBut you know, every new beginning comes with some "
+                          "instructions. So before starting the game, lets rule down some basic understanding of the gameplay.\n"
+                            "Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
+                           "spellcards can help you to cast some special abilities. So try some!\n \nDown below you can see the "
+                           "game keys for the selection of only one random spellcard. Just press key L for activating the spell. With the "
+                           "key Q you can halt then\nvelocity of your character and maybe let it take a look around. The"
+                           "others are self-explanatory.")
+
+        self.keyboard1 = QLabel()
+        self.image1 = QPixmap("textures/Instructions/keyboardOne.jpg")
+        self.keyboard1.setPixmap(self.image1)
+
+        self.text2 = QLabel("But humans are a little greedy and so why not give you the ability to choose all spellcards. Down below"
+                            "you can see the game keys for selecting all spellcards. Press any key\nfrom 1 to 7 to activate one of the "
+                            "special abilities.")
+
+        self.keyboard2 = QLabel()
+        self.image2 = QPixmap("textures/Instructions/keyboardTwo.jpg")
+        self.keyboard2.setPixmap(self.image2)
+
+        self.title.setAlignment(Qt.AlignCenter)
+        self.keyboard1.setAlignment(Qt.AlignCenter)
+        self.keyboard2.setAlignment(Qt.AlignCenter)
+
+
+        self.layout.addWidget(self.title)
+        self.layout.addWidget(self.text1)
+        self.layout.addWidget(self.keyboard1)
+        self.layout.addWidget(self.text2)
+        self.layout.addWidget(self.keyboard2)
         self.setLayout(self.layout)
+
+
         self.initUI()
 
     def initUI(self):
-        self.resize(500, 500)
+        self.resize(1000, 800)
         self.setWindowTitle('How to Play')
         Server.center(self)
 
-        self.back = QPushButton('Back', self)
-        self.back.clicked.connect(self.Back2Menu)
-        self.back.move(200,400)
+        self.back = QPushButton("Back", self)
+        self.back.clicked.connect(self.back2Menu)
+        self.back.move(20, 700)
+
+        self.next = QPushButton("Next", self)
+        self.next.clicked.connect(self.nextPage)
+        self.next.move(950, 700)
 
         self.show()
 
-    def Back2Menu(self):
-            start_Menu.Back2Menu(self)
+    def back2Menu(self):
+        start_Menu.Back2Menu(self)
+
+
+    def nextPage(self):
+        self.nextP = NextPage()
+        self.close()
+
+
+
+class NextPage(QWidget):
+    def __init__(self):
+        super(NextPage, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.resize(800, 800)
+        self.setWindowTitle('How to Play')
+        Server.center(self)
+
+        self.back = QPushButton("back", self)
+        self.back.clicked.connect(self.back2H2P)
+
+        self.show()
+
+
+    def back2H2P(self):
+        self.h2P = How2PlayText()
+        self.close()
+
+
 
 
 if __name__ == '__main__':
