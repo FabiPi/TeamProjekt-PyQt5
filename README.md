@@ -1,3 +1,362 @@
+## Week 9 - Zusatzfeatures und Finalisierung des Programms
+**Menu**<br/>
+
+**Spellcards**<br/>
+Um die "Spellcards" oder "Spezialfähigkeiten" der Roboter zu implementieren haben wir uns zuerst überlegt, wie man die Bullet-Class die erweitern muss um andere Typen von Schüssen zu realisieren. <br/>
+```python
+class Bullet(object):
+    #add Attributes
+    #-Direction (alhpa)
+    #-Velocity (non vector)
+    #-type
+    #-time
+    #-owner
+    def __init__(self, position, speed, alpha, time, delay, bulType, owner):
+        self.position = position
+        self.speed = speed
+        self.alpha = alpha
+        self.bulType = bulType
+        self.time = time
+        self.delay = delay
+        self.owner = owner
+        self.BulletTextures = {0:QPixmap('textures/Bullets/Standart.png'), #Standart
+                               #Spellcard1
+                               1:QPixmap('textures/Bullets/GreenOrb.png'), #Green 1
+                               2:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 1
+                               3:QPixmap('textures/Bullets/RedOrb.png'), #Red
+                               4:QPixmap('textures/Bullets/GreenOrb.png'), #Green 2
+                               5:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 2
+                               #Spellcard2
+                               6:QPixmap('textures/Bullets/GreenOrb.png'), #GreenOrb
+                               7:QPixmap('textures/Bullets/BlueOrb.png'), #BlueOrb
+                               8:QPixmap('textures/Bullets/Star01.png'), #Star1
+                               9:QPixmap('textures/Bullets/Star02.png'), #Star2
+                               10:QPixmap('textures/Bullets/Star03.png'), #Star3
+                               11:QPixmap('textures/Bullets/Star04.png'), #Star4
+                               ...
+                               }
+
+```
+Wir haben die Class so erweitert, dass sie nun auch Attribute für: eine Richtung, die Geschwindigkeit (nicht als Vektor), eine Lebensdauer, einen Besitzer und einen Typ hat (Später wurde auch noch ein Delay eingefügt welcher hilft Bullets verzögert zu starten). <br/>
+Auch die Robot-Class wurde um ein Attribut, ein "Cool Down", erweitert, welcher ähnlich wie die "reload-time" von shoot funktioniert, nur auf die Spellcards bezogen.
+<br/>
+Die eigentliche Implementation der Spellcards findet in 2 Schritten statt, einmal die initiale Erstellung der Bullets in der Robot-Class, und einmal in der Move-Bullet-Methode der Bullet-Class um die Bullets entsprechend zu bewegen.
+<br/>
+Zuerst aber haben wir einmal die Shoot Methode der Roboter in eine Create-Bullet und Shoot Methode unterteilt, um auch außerhalb von Shoot auf die Erstellung einer Bullet zugreifen zu können.
+<br/>
+```python
+#in Robot-Class
+
+def shoot(self):
+        #Values
+        LifeTime = 100
+        
+        if self.reload == 0 and self.deathTime == 0:
+            Bullet1 = self.createBullet(0,LifeTime, 0, self.alpha, self.v,0,0)
+
+            self.BulList.append(Bullet1)
+            self.reload = RELOAD_TIME
+...
+def createBullet(self, bulletType, life, delayT, alpha, addSpeed, offset, target):
+        
+        #Position
+        bulletpos = QVector2D(self.position.x(),self.position.y())
+        #velocity
+        speed = Bullet.Bullet_Speed + addSpeed
+        #velocity based on angle
+        GesX = math.cos(math.radians(alpha)) * speed
+        GesY = - math.sin(math.radians(alpha)) * speed
+        #set Bullet to middle of Robot
+        OffsetVector = QVector2D((self.radius-2)/2,(self.radius-2)/2)
+        bulletpos.__iadd__(OffsetVector)
+        #set bullet to edge in firing direction
+        OffsetX = math.cos(math.radians(alpha)) * (self.radius + offset)
+        OffsetY = - math.sin(math.radians(alpha)) * (self.radius + offset)
+        OffsetVector = QVector2D(OffsetX,OffsetY)
+        bulletpos.__iadd__(OffsetVector)
+
+        if target != 0:
+            #Calculate Target Alpha
+            target_x = target.x()
+            target_y = target.y()
+
+            pos_x = bulletpos.x()
+            pos_y = bulletpos.y()
+
+
+            #Berechnung Blickrichtung
+            delta_x = target_x - pos_x
+            delta_y = target_y - pos_y
+            target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
+
+        else:
+            target_alpha = alpha
+
+        #create Bullet
+        Bullet1 = Bullet.Bullet(bulletpos, speed, target_alpha, life, delayT, bulletType, self.robotid)
+        return Bullet1
+```
+<br/>
+Die Shoot-Methode ruft nun einfach die createBullet-Methode auf um eine Standart Bullet zu erschaffen.
+<br/>
+Die createBulletMethode hat nun auch ein paar neue Parameter erhalten, um die neuen Attribute der Bullets korrekt zu setzen.
+bulletType, life, delayT sind dabei recht selbsterklärend und geben den Typ, die Lebensdauer und den Delay der Bullet an. Bei alpha handelt es sich um die Position im Bezug zum Roboter, also in welcher Richtung des Roboters die Bullet erstellt werden soll (0° wäre hier nach Links). AddSpeed gibt der Bullet eine zusätzliche Geschwindigkeit (dies wird nur in Shoot verwendet um die RoboterGeschwindigkeit zu berücksichtigen). Offset gibt die Distanz zum Roboter an mit welcher die Bullet gespawnt werden soll (6 wäre hierbei der Standart-Wert um direkt neben dem Roboter zu erscheinen). Target gibt ein optionales Ziel für die Bullets an (siehe Spellcard 3) steht hier eine 0 so wird der alhpa-Wert von vorher benutzt.
+<br/>
+Die einzelnen "Spellcards" rufen nun die create Bullet-Methode mit verschiedenen Parametern auf um verschiedene Muster zu schaffen.
+
+```python
+#in Robot-Class
+def spellcard1(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            Repetitions = 10
+            LifeTime = 90
+            alpha1 = self.alpha
+            alphaStep = 45
+                  
+            #Create Bullets
+            for delay in range(0, Repetitions, 1):
+                for n in range(0, 8, 1):
+                    self.BulList.append(self.createBullet(1,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
+                    self.BulList.append(self.createBullet(4,LifeTime, delay*4, (alpha1 + n*alphaStep),0,6,0))
+
+            self.coolDown = 150
+```
+Viele der Spellcards sind vom Prinzip ähnlich aufgebaut. 
+<br/>
+Zuerst wird, wie bei Shoot auch, sichergestell dass der Roboter am Leben ist und auch bereit ist die Spellcard zu benutzen.
+<br/>
+Anschließend werden einige Werte definiert welche Später an createBullet gegeben werden.
+Repetitions gibt an wie oft eine einzelne Bullet wiederholt wird, Lifetime wie oben, alpha1 ist die Blickrichtung des Roboters und alphaStep gibt an wie groß der Winkel zwischen den einzelnen Bullets ist (da wir hier in 8 Richtungen Schießen möchten ist alphaStep = 45°).
+<br/>
+Die einzelnen Bullets werden dann in einer For-Schleife erstellt, die erste Schleife ist hierbei für die Wiederholungen und die 2te Schleife für die verschiedenen Richtungen.
+<br/>
+
+Um die Bullets jetzt auf eine gewünschte weiße bewegen zu können wurde die MoveBullet-Methode der Bullet-Class angepasst.
+```python
+#in Bullet-Class
+def moveBullet(self): #export Spellcards later in extra Method
+        
+        #Spellcard 1    (Star Pattern)
+        if  1<= self.bulType <= 5:
+            self.Spellcard01()
+
+            
+        #Spellcard 2    (Circles into Random stars)
+        elif  6<= self.bulType <= 7: #8 to 13 have standart movement
+            self.Spellcard02()
+
+        #Spellcard 3    (Circle into Target Aim)
+        elif self.bulType == 14:
+            self.Spellcard03()
+
+
+        #Spellcard 4    (Random Delay Split)
+        elif 15 <= self.bulType <= 16:
+            self.Spellcard04()
+
+        #Spellcard 5    (Circle Star)
+        elif 17 <= self.bulType <= 19: # 20,21 have standart movement
+            self.Spellcard05()
+
+        #Spellcard 6    (Spiral)
+        elif 22 <= self.bulType <= 26:
+            self.Spellcard06()
+
+        #Spellcard 7    (Star - sweep - Star)
+        elif 27 <= self.bulType <= 29:
+            self.Spellcard07()
+
+        #Standart Behavior does not change speed/angle
+        #=> if shot not defined, or Standart dont change anything
+        GesX = math.cos(math.radians(self.alpha)) * self.speed
+        GesY = - math.sin(math.radians(self.alpha)) * self.speed  
+        SpeedVector = QVector2D(GesX,GesY)
+        self.position.__iadd__(SpeedVector)
+```
+Hier wird nun anhand des Bullet-Types festgelegt ob die Bullet einige ihrer Werte ändern soll. (Ist ein Bullet-Type nicht definiert, oder Type0 (standart Bullet) so wird einfach die Geschwindigkeit auf den Positionsvektor addiert)
+<br/>
+```python
+#in Bullet-Class
+    def Spellcard01(self):
+        if self.bulType == 1:
+            if self.time == 60:
+                self.alpha =  (self.alpha - 90) % 360
+                self.bulType = 2            
+            
+        elif self.bulType == 2:
+            if self.time == 30:
+                self.alpha =  (self.alpha + 90) % 360
+                self.bulType = 3
+
+        elif self.bulType == 4:
+            if self.time == 60:
+                self.alpha =  (self.alpha + 90) % 360
+                self.bulType = 5            
+            
+        elif self.bulType == 5:
+            if self.time == 30:
+                self.alpha =  (self.alpha - 90) % 360
+                self.bulType = 3
+        
+```
+Um eine Bullet nach einer bestimmten Zeit zu ändern wird immer ihre LifeTime betrachtet (welche in jedem Tick um 1 reduziert wird).
+Hier wird z.B. die Richtung der Bullet um 90° geändert und ihr Type verändert.
+<br/>
+Nach diesen Änderungen wird die normale Move-Methode weiter ausgeführt und die neue Position der Bullet bestimmt.
+<br/>
+Hier noch eine 2te "Spellcard" mit anderem Verhalten:
+</br>
+```python
+#in Robot-Class
+    def spellcard3(self):
+        if self.coolDown == 0 and self.deathTime == 0:
+            #Values
+            BulletAmmount = 30
+            Repetitions = int(round(BulletAmmount/2))
+            LifeTime = 400 + 4*Repetitions
+            
+            #Calculate Angles
+            alpha1 = self.alpha
+            alphaStep = 360 / BulletAmmount
+            
+            #Calculate Target
+            DistTo2 = QVector2D(self.position.x() - self.RobotList[2].x(), self.position.y() - self.RobotList[2].y())
+            DistTo3 = QVector2D(self.position.x() - self.RobotList[3].x(), self.position.y() - self.RobotList[3].y())
+            DistTo4 = QVector2D(self.position.x() - self.RobotList[4].x(), self.position.y() - self.RobotList[4].y())
+            Distance2 = DistTo2.x()*DistTo2.x() + DistTo2.y() * DistTo2.y()
+            Distance3 = DistTo3.x()*DistTo3.x() + DistTo3.y() * DistTo3.y()
+            Distance4 = DistTo4.x()*DistTo4.x() + DistTo4.y() * DistTo4.y()
+            
+            closest = min(Distance2, Distance3, Distance4)
+
+            if closest == Distance2:
+                #print("darkBlue")
+                target = 2
+            elif closest == Distance3:
+                #print("lightBlue")
+                target = 3
+            elif closest == Distance4:
+                #print("orange")
+                target = 4
+                
+            #Create Bullets
+            for i in range(0,Repetitions,1):
+                self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+                self.BulList.append(self.createBullet(14,LifeTime - 4*i, 4*i, (alpha1 + 180 + i*alphaStep) % 360 ,0 ,50,self.RobotList[target]))
+            
+            self.coolDown = 250
+```
+Diese Spellcard soll auf den Roboter zielen der am wenigsten entfernt ist.
+<br/>
+Dazu definieren wir erstmal wieder ein paar Werte die wir später benötigen. Wir verwenden hier zusätzlich noch ein BulletAmmount welcher genau angibt wie viele Bullets wir haben möchten.
+<br/>
+Anschließend berechnen wir aus der PositionsListe des Roboters den Gegner der am nächsten zu unserem Roboter liegt und merken uns dessen Koordinaten.
+<br/>
+Da wir hier nun ein Ziel haben wird unser Target-Parameter der createBullet-Methode auf ein genaues Ziel gesetzt, nähmlich die Koordinaten des Gegners.
+Die createBullet-Methode berechnet nun das alpha das die Bullet benötigt um auf den Gegner zu zielen.
+```python
+#in createBullet
+        if target != 0:
+            #Calculate Target Alpha
+            target_x = target.x()
+            target_y = target.y()
+
+            pos_x = bulletpos.x()
+            pos_y = bulletpos.y()
+
+
+            #Berechnung Blickrichtung
+            delta_x = target_x - pos_x
+            delta_y = target_y - pos_y
+            target_alpha = -math.degrees(math.atan2(delta_y, delta_x)) % 360
+
+        else:
+            target_alpha = alpha
+```
+Die MoveBullet-Methode zu dieser Spellcard sieht folgendermaßen aus:
+```python
+#in Bullet-Class
+    def Spellcard03(self):
+        if self.bulType == 14:
+            if self.time > 400:
+                self.speed = 0
+            elif self.time == 400:
+                self.speed = 5
+```
+Hier wird einfach erste eine kurze Zeit gewartet, bis sich die Bullets bewegen.
+<br/>
+
+Um die Bullets mit den richtigen Visuals auszustatten haben wir ein BulletTextures-Dictionary welches den Typ einer Bullet auf eine Grafik abbildet.
+```python
+BulletTextures = {0:QPixmap('textures/Bullets/Standart.png'), #Standart
+                               #Spellcard1
+                               1:QPixmap('textures/Bullets/GreenOrb.png'), #Green 1
+                               2:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 1
+                               3:QPixmap('textures/Bullets/RedOrb.png'), #Red
+                               4:QPixmap('textures/Bullets/GreenOrb.png'), #Green 2
+                               5:QPixmap('textures/Bullets/BlueOrb.png'), #Blue 2
+                               #Spellcard2
+                               6:QPixmap('textures/Bullets/GreenOrb.png'), #GreenOrb
+                               7:QPixmap('textures/Bullets/BlueOrb.png'), #BlueOrb
+                               8:QPixmap('textures/Bullets/Star01.png'), #Star1
+                               9:QPixmap('textures/Bullets/Star02.png'), #Star2
+                               10:QPixmap('textures/Bullets/Star03.png'), #Star3
+                               11:QPixmap('textures/Bullets/Star04.png'), #Star4
+                               12:QPixmap('textures/Bullets/Star05.png'), #Star5
+                               13:QPixmap('textures/Bullets/Star06.png'), #Star6                               
+                               #Spellcard3
+                               14:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               #Spellcard4
+                               15:QPixmap('textures/Bullets/BlackCircle.png'), #BlackMain
+                               16:QPixmap('textures/Bullets/PurpleBullet.png'), #Purple Splits
+                               #Spellcard5
+                               17:QPixmap('textures/Bullets/RedSeal.png'), #RedSeal
+                               18:QPixmap('textures/Bullets/RedSeal.png'), #RedSeal
+                               19:QPixmap('textures/Bullets/RedSeal.png'), #RedSeal
+                               20:QPixmap('textures/Bullets/BlueSeal.png'), #BlueSeal
+                               21:QPixmap('textures/Bullets/GreenSeal.png'), #GreenSeal
+                               #Spellcard6
+                               22:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
+                               23:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
+                               24:QPixmap('textures/Bullets/Butterfly.png'), #Butterfly
+                               25:QPixmap('textures/Bullets/BlueOrb.png'), #BlueOrb
+                               26:QPixmap('textures/Bullets/RedOrb.png'), #RedOrb
+                               #Spellcard7
+                               27:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               28:QPixmap('textures/Bullets/Kunai.png'), #Kunai
+                               29:QPixmap('textures/Bullets/Star05.png'), #purpleStar
+                               }
+```
+In der Draw-Methode wird nun einfach die Textur auf den entsprechenden Typ gesetzt. Des weiteren haben wir auch noch dafür gesorgt dass sich die Bullets auch entsprechend ihrem alpha drehen.
+```python
+#in Bullet-Class
+    def drawBullet(self, br):
+    
+        #Set Rotation, place etc
+        texture = self.BulletTextures[self.bulType]
+        br.save()
+        br.translate(self.position.x() + 0.5 * Bullet_Size, self.position.y() + 0.5 * Bullet_Size)
+        br.rotate(-self.alpha)
+        source = QRectF(0, 0, Bullet_Size, Bullet_Size)
+        target = QRectF(-Bullet_Size/2, -Bullet_Size/2,
+                Bullet_Size, Bullet_Size)
+        #Draw
+        br.drawPixmap(target, texture, source)
+        br.restore()
+
+```
+Da viele der Speelcards große Bereiche abdecken war es notwendig dafür zu sorgen dass man sich nicht selbst abschießt, die wurde über das owner Attribut der Bullets gelöst (If Abfrage: RobotId == Owner).
+Bulletst kollidieren jetzt nur mit einem Roboter wenn dieser nicht der Owner ist.
+
+Um die Spellcards besser sehen zu können haben wir in den Optionen des Menüs noch eine Einstellung um die Bullet-Wall-Collision zu deaktivieren.
+
+<br/>
+
+**Bomb / Sounds**<br/>
+
+
+
 ## Week 8 - Robo-Keystrokes & Death-Timer
 **Keystrokes**
 ```python
