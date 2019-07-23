@@ -856,8 +856,46 @@ Um die Spellcards besser sehen zu können haben wir in den Optionen des Menüs n
 
 <br/>
 
-**Bomb / Sounds**<br/>
+**Bomb Pick-Up System**<br/>
+Inspirert von einem Power-Up System, wirkt bei jeder Kollision mit der Bomb ein Effekt auf den Roboter. Auf dem Spielfeld tauchen nacheinander eine grüne oder rote Bomb, die mit 50/50 Chance gewählt werden. Beide haben separate Draw Methoden:
+```python
+def drawBomb(self, qp):        
+    texture = QPixmap('textures/bomb.jpg')
 
+    qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
+
+def drawRedBomb(self,qp):
+    texture = QPixmap('textures/redbomb.jpg')
+
+    qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
+```
+Die möglichen Position auf dem Spielfeld werden in einem Dictionary gespiechert. <br/>
+Damit dieses Auftauchen der Bombs auch funktioniert, wird ein separater Timer benötigt, der ab Anfang anfängt runterzuzählen (bzw. neu startet, wenn die Bombe aufgehoben wird)
+```python
+def reduceBombTime(self):
+    if self.bombTime != 0:
+        self.bombTime -= 1
+        
+        if self.bombTime == 0:
+            self.bombTime = BOMB_TIMER
+            self.randomizeBombIcon()
+            self.setNextBombPos()
+```
+Beim Pick-Up wird die Position der Bombe auf die nächste Position im Dictionarz gesetzt (mit *setNextBombPos*). <br/>
+Um zu entscheiden, ob eine rote oder grüne Bombe erscheint, gibt es eine *randomizeBombIcon()*-Funktion, die die globale Variable *bombStatus* zufällig auf 'green' oder 'red' setzt. Dieser Status wird dann an den PaintEvent weiter gegeben, wo mit if-Abfragen geprüft wird, ob drawBomb oder drawRedBomb ausgeführt werden soll.
+```python
+def randomizeBombIcon(self):
+    number = random.randint(1, 2)
+
+    if number == 1:
+        self.bombStatus = 'green' 
+    elif number == 2:
+        self.bombStatus = 'red'
+```
+Um die Kollision des Robos mit der Bomb zu prüfen, wird die gleiche Funktionsstruktur benutzt wie bei Bullet-Kollision. <br/>
+**Sound**
+Zur Speicherung und Abspielen von Sounds verwenden wir den *pygame.mixer*. Dieser erlaubt uns mehrere Sounds gleichzeitig abzuspielen, ohne die Anderen abzubrechen. Hiermit werden verschieden Sounds für die Spellcards, Shoot, Death-Sound und Hintergrundmusik erzeugt.
+Je nach Bedarf werden die per *pygame.mixer.Sound('PATH')* geladen und mit pygame.mixer.Sound.play('NAME') abgespielt.
 
 
 ## Week 8 - Robo-Keystrokes & Death-Timer
