@@ -229,6 +229,7 @@ class OptionField(QWidget):
         # randomly change background after every enter
         self.image = self.ImageChange()
         self.background.setPixmap(self.image)
+        QtGui.QGuiApplication.processEvents()
 
         self.InitUI()
 
