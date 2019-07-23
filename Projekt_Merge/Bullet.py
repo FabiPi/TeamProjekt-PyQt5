@@ -2,6 +2,7 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
+#Bullet-Class with Bullet attributes and Spellcard types
 
 from PyQt5.QtGui import QPainter, QColor, QBrush, QVector2D, QPixmap, QPainterPath
 from PyQt5.QtCore import QRectF

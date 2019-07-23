@@ -1,3 +1,7 @@
+"""
+Robotersteuerungsfunktionen per Keystrokes
+"""
+
 from PyQt5.QtGui import QVector2D
 from PyQt5.QtCore import Qt, QThread
 import keyboard
