@@ -114,6 +114,7 @@ class SpielFeld(QWidget):
 
         self.SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
         self.SoundRedBomb = pygame.mixer.Sound('sounds/getredbomb.wav')
+        self.DeathSound = pygame.mixer.Sound('sounds/death.wav')
 
         self.RoboTextures = {0: QPixmap('textures/Robots/Robot01.png'),  # MainRobot
                              1: QPixmap('textures/Robots/Robot_Dead.png'),  # Dead
@@ -408,6 +409,7 @@ class SpielFeld(QWidget):
                             if robot.robotid == 1 and robot.immuneTime == 0 and robot.deathTime == 0:
                                 robot.deathTime = DEATH_TIME
                                 robot.texture = 1
+                                pygame.mixer.Sound.play(self.DeathSound)
                             elif robot.robotid != 1 and robot.immuneTime == 0:
                                 self.teleport_bullet(robot)
                                 robot.immuneTime = IMMUNE_TIME

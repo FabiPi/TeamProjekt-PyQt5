@@ -69,6 +69,9 @@ class Robot(object):
         self.SoundSpecial5 = pygame.mixer.Sound('sounds/special5.wav')                    
         self.SoundSpecial6 = pygame.mixer.Sound('sounds/special6.wav')
         self.SoundSpecial7 = pygame.mixer.Sound('sounds/special7.wav')
+        
+
+        
 
     #Methods for Robot Controll
     def setProgram(self, program):
@@ -186,6 +189,7 @@ class Robot(object):
 
             self.BulList.append(Bullet1)
             self.reload = RELOAD_TIME
+
 
     def spellcard1(self):
         if self.coolDown == 0 and self.deathTime == 0:
