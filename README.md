@@ -449,7 +449,7 @@ Diese gibt verändert eine andere Variabel aus der Menu Klasse, um die gewählt 
 
 Nach diesem Prinzip haben wir es für die floor texturen, bullet-wall collision und spellcards gemacht.
 
-Im nächsten Schritt haben wir an der Optik gearbeitet. Für den start screen und start menu haben wir dann ein animierte gif eingesetzt, die sich gut ergänzt haben. 
+Im nächsten Schritt haben wir an der Optik gearbeitet. Für den start screen und start menu haben wir dann ein animierte gif eingesetzt, die sich gut ergänzt haben.  Für die gifs haben wir mithilfe von https://wiki.python.org/moin/PyQt/Movie%20splash%20screen eine painter Methode geschaffen.
 
 Dafür haben wir mit QMovie gearbeitet:
 
