@@ -50,13 +50,13 @@ backgrounds = {
 
 # creditBackground liberary
 creditBG = {
-    "Shrine": "textures/Background/peacefulTempel.jpg",
-    "Door": "textures/Background/door.jpg",
-    "Mountain": "textures/Background/Mountain.jpg",
-    "Red Shrine": "textures/Background/Red Shrine.jpg",
-    "Sun": "textures/Background/sun.jpg",
-    "Yuland": "textures/Background/Yuland.jpg",
-    "ShrineDoor": "textures/Background/shrineDoor.png"
+    "Shrine": "textures/Credits/peacefulTempel.jpg",
+    "Door": "textures/Credits/door.jpg",
+    "Mountain": "textures/Credits/Mountain.jpg",
+    "Red Shrine": "textures/Credits/Red Shrine.jpg",
+    "Sun": "textures/Credits/sun.jpg",
+    "Yuland": "textures/Credits/Yuland.jpg",
+    "ShrineDoor": "textures/Credits/shrineDoor.png"
 }
 
 # default settings
