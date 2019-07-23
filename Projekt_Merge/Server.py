@@ -111,6 +111,7 @@ class SpielFeld(QWidget):
         #print(ftexture)
 
         self.SoundBomb = pygame.mixer.Sound('sounds/getbomb.wav')
+        self.SoundRedBomb = pygame.mixer.Sound('sounds/getredbomb.wav')
 
         self.RoboTextures = {0: QPixmap('textures/Robots/Robot01.png'),  # MainRobot
                              1: QPixmap('textures/Robots/Robot_Dead.png'),  # Dead
@@ -123,6 +124,12 @@ class SpielFeld(QWidget):
                              2: [900,900],
                              3: [50,900],
                              }
+        #randomize inital bomb-status  (50/50 Chance)
+        number = random.randint(1, 2)
+        if number == 1:
+            self.bombStatus = 'green'
+        elif number == 2:
+            self.bombStatus = 'red' 
 
         self.bombTime = BOMB_TIMER
         self.currentBombPos = 0
@@ -307,6 +314,14 @@ class SpielFeld(QWidget):
             SpielFeld.PlayFieldAR[10][i + 50] = 1
             SpielFeld.PlayFieldAR[11][i + 50] = 1
 
+    def randomizeBombStatus(self):
+        number = random.randint(1, 2)
+        if number == 1:
+            self.bombStatus = 'green'
+        elif number == 2:
+            self.bombStatus = 'red' 
+        
+
     def timerEvent(self, event):
 
         if event.timerId() == self.timer.timerId():
@@ -334,9 +349,11 @@ class SpielFeld(QWidget):
                 self.reduceBombTime()
                 #print(self.currentBombPos)
 
-
-                if self.bomb_hit(robot):
+            # Green-Bomb : Grants immunity to the robot
+                if self.bomb_hit(robot) and self.bombStatus == 'green':
                     if robot.robotid == 1:
+                        self.randomizeBombStatus()
+                        
                         #Hier: Hit-Effekte
                         self.setNextBombPos()
                         
@@ -346,6 +363,19 @@ class SpielFeld(QWidget):
                                                         
                                 
                         pygame.mixer.Sound.play(self.SoundBomb)
+            # Red-Bomb : Eliminates all other robots
+                if self.bomb_hit(robot) and self.bombStatus == 'red' and robot.robotid == 1:
+                    self.setNextBombPos()
+
+                    self.randomizeBombStatus()                                      
+
+                    for robot in self.robots:
+                        if robot.robotid != 1:
+                            robot.deathTime = 150
+                            robot.texture = 1
+                    
+
+                    pygame.mixer.Sound.play(self.SoundRedBomb)
                         
             for bul in SpielFeld.Bullets:
                 if bul.delay == 0:
@@ -439,7 +469,11 @@ class SpielFeld(QWidget):
         for bul in SpielFeld.Bullets:
             if bul.delay == 0:
                 bul.drawBullet(qp)
-        self.drawBomb(qp)
+
+        if self.bombStatus == 'green':
+            self.drawBomb(qp)
+        if self.bombStatus == 'red':
+            self.drawRedBomb(qp)
 
     def drawRobo(self, Robo, br):
 
@@ -519,8 +553,7 @@ class SpielFeld(QWidget):
                         texture = self.wallTexture
                         self.BarrierList.append(texture)
                         qp.drawPixmap(i*10, j*10, texture)
-## BOMB ##
-            
+## BOMB ##           
 
     def bombShape(self, bombPos):
         shape = QPainterPath()
@@ -532,16 +565,31 @@ class SpielFeld(QWidget):
             return True
         else: pass
 
+    def randomizeBombIcon(self):
+        number = random.randint(1, 2)
+
+        if number == 1:
+            self.bombStatus = 'green' 
+        elif number == 2:
+            self.bombStatus = 'red'
+
     def drawBomb(self, qp):        
         texture = QPixmap('textures/bomb.jpg')
 
         qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
+
+    def drawRedBomb(self,qp):
+        texture = QPixmap('textures/redbomb.jpg')
+
+        qp.drawPixmap(self.bombPosition[self.currentBombPos][0], self.bombPosition[self.currentBombPos][1], texture)
+  
 
     def reduceBombTime(self):
         if self.bombTime != 0:
             self.bombTime -= 1
             if self.bombTime == 0:
                 self.bombTime = BOMB_TIMER
+                self.randomizeBombIcon()
                 self.setNextBombPos()
                 #self.setCurrBombPos()
 

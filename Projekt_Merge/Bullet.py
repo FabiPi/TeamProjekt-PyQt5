@@ -2,6 +2,7 @@
 Roboter Feld
 von B-Dome, JangJang3, FabiPi
 """
+#Bullet-Class with Bullet attributes and Spellcard types
 
 """
 Change-List
