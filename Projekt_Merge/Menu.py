@@ -313,16 +313,16 @@ class TableWidget(QWidget):
         # create content grafic tab
         self.tab2.layout = QHBoxLayout()
 
-        # add wallG to tab3
+        # add wallG to tab2
         self.wallG = wallTexture()
         self.tab2.layout.addWidget(self.wallG)
 
 
-        # add floorG to tab3
+        # add floorG to tab2
         self.floorG = floorTexture()
         self.tab2.layout.addWidget(self.floorG)
 
-        # add all layouts to tab3
+        # add all layouts to tab2
         self.tab2.setLayout(self.tab2.layout)
 
         # Add tabs to widget
@@ -455,7 +455,6 @@ class Spellcards(QWidget):
 
     def btn_clk(self, button):
         global CurSpell
-        print(button.text() + ' clicked')
 
         if button == self.Spell1:
             Server.spellcard = "Spellcard1"
@@ -558,7 +557,6 @@ class BulletCol(QWidget):
     def chk_RBtn(self):
         global CurCol
 
-        print('Here: ' + CurCol)
         self.BulFalse.setChecked(False)
         self.BulTrue.setChecked(False)
 
@@ -567,7 +565,6 @@ class BulletCol(QWidget):
 
         elif CurCol == "Wall Collision   Off":
             self.BulFalse.setChecked(True)
-            print('now why?')
 
         else:
             self.BulTrue.setChecked(True)
@@ -582,7 +579,6 @@ class BulletCol(QWidget):
 
     def btn_clk(self, button):
         global CurCol
-        print(button.text() + ' clicked')
 
         if button == self.BulTrue:
             Server.BulCollision = True
@@ -712,7 +708,6 @@ class wallTexture(QWidget):
 
     def btn_clk(self, button):
         global CurWall
-        print(button.text() + ' clicked')
 
         if button == self.texture1:
             Server.wtexture = "Metall wall"
