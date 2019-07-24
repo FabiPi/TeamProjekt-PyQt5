@@ -36,6 +36,7 @@ playlist = {
 # +-+Kitsune+Woods.mp3)
 
 
+
 # background library
 backgrounds = {
     "BlueForest": "textures/Background/Forest.jpg",
@@ -57,6 +58,19 @@ creditBG = {
     "Yuland": "textures/Credits/Yuland.jpg",
     "ShrineDoor": "textures/Credits/shrineDoor.png"
 }
+
+# floor Button Icon library
+floorIcon = {
+    "White Stone small": "textures/Board/Icon_White Stone.png",
+    "Brown Stone small": "textures/Board/Icon_Brown Stone.png",
+    "Dirt small": "textures/Board/Icon_Dirt.png",
+    "Background Dirt small": "textures/Board/Icon_Stony.png",
+    "Background Pattern small": "textures/Board/Icon_Pattern.png",
+    "Background Sakura small": "textures/Board/Icon_Sakura.png",
+    "Background Water small": "textures/Board/Icon_Water.png"
+
+}
+
 
 # default settings
 CurFloor = "White Stone"
@@ -228,6 +242,7 @@ class OptionField(QWidget):
         # randomly change background after every enter
         self.image = self.ImageChange()
         self.background.setPixmap(self.image)
+        QtGui.QGuiApplication.processEvents()
 
         self.InitUI()
 
@@ -256,7 +271,7 @@ class OptionField(QWidget):
         self.show()
 
     def Back2Menu(self):
-        start_Menu.Back2Menu(self)
+            start_Menu.Back2Menu(self)
 
     def ImageChange(self):
         themes = list(backgrounds.keys())
@@ -543,6 +558,7 @@ class BulletCol(QWidget):
     def chk_RBtn(self):
         global CurCol
 
+        print('Here: ' + CurCol)
         self.BulFalse.setChecked(False)
         self.BulTrue.setChecked(False)
 
@@ -551,6 +567,7 @@ class BulletCol(QWidget):
 
         elif CurCol == "Wall Collision   Off":
             self.BulFalse.setChecked(True)
+            print('now why?')
 
         else:
             self.BulTrue.setChecked(True)
@@ -565,7 +582,8 @@ class BulletCol(QWidget):
 
     def btn_clk(self, button):
         global CurCol
-        
+        print(button.text() + ' clicked')
+
         if button == self.BulTrue:
             Server.BulCollision = True
             CurCol = "Wall Collision   On"
@@ -693,7 +711,8 @@ class wallTexture(QWidget):
 
 
     def btn_clk(self, button):
-        global CurWall      
+        global CurWall
+        print(button.text() + ' clicked')
 
         if button == self.texture1:
             Server.wtexture = "Metall wall"
@@ -775,14 +794,13 @@ class floorTexture(QWidget):
         #self.setStyleSheet("font-weight: bold;")
 
         # add button icons
-        self.texture1.setIcon(QIcon(Server.floorTextures["White Stone"]))
-        self.texture2.setIcon(QIcon(Server.floorTextures["Brown Stone"]))
-        self.texture3.setIcon(QIcon("textures/Board/Icon_Dirt.png"))
-        self.texture4.setIcon(QIcon("textures/Board/Icon_Stony.png"))
-        self.texture5.setIcon(QIcon("textures/Board/Icon_Pattern.png"))
-        self.texture6.setIcon(QIcon("textures/Board/Icon_Sakura.png"))
-        self.texture7.setIcon(QIcon("textures/Board/Icon_Water.png"))
-
+        self.texture1.setIcon(QIcon(floorIcon["White Stone small"]))
+        self.texture2.setIcon(QIcon(floorIcon["Brown Stone small"]))
+        self.texture3.setIcon(QIcon(floorIcon["Dirt small"]))
+        self.texture4.setIcon(QIcon(floorIcon["Background Dirt small"]))
+        self.texture5.setIcon(QIcon(floorIcon["Background Pattern small"]))
+        self.texture6.setIcon(QIcon(floorIcon["Background Sakura small"]))
+        self.texture7.setIcon(QIcon(floorIcon["Background Water small"]))
 
         # clicked buttons
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
@@ -792,6 +810,7 @@ class floorTexture(QWidget):
         self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
         self.texture6.clicked.connect(lambda: self.currBtn_clk(self.texture6))
         self.texture7.clicked.connect(lambda: self.currBtn_clk(self.texture7))
+
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -948,7 +967,7 @@ class CreditText(QWidget):
 
 
     def Back2Menu(self):
-        start_Menu.Back2Menu(self)
+            start_Menu.Back2Menu(self)
 
     def ImageChange(self):
         themes = list(creditBG.keys())
@@ -959,6 +978,7 @@ class CreditText(QWidget):
 ####################################################################################
 # creating instruction window
 ####################################################################################
+
 
 class How2PlayText(QWidget):
 
