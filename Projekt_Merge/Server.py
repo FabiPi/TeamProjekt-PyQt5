@@ -497,9 +497,7 @@ class SpielFeld(QWidget):
         return shape
 
     def bomb_hit(self, robo):
-        if self.bombShape(self.bombPosition[self.currentBombPos]).intersects(robo.roboShape()):
-            return True
-        else: pass
+        return self.bombShape(self.bombPosition[self.currentBombPos]).intersects(robo.roboShape())
 
     def randomizeBombIcon(self):
         number = random.randint(1, 2)
