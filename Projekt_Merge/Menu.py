@@ -258,7 +258,7 @@ class OptionField(QWidget):
         self.show()
 
     def Back2Menu(self):
-            start_Menu.Back2Menu(self)
+        start_Menu.Back2Menu(self)
 
     def ImageChange(self):
         themes = list(backgrounds.keys())
@@ -949,7 +949,7 @@ class CreditText(QWidget):
 
 
     def Back2Menu(self):
-            start_Menu.Back2Menu(self)
+        start_Menu.Back2Menu(self)
 
     def ImageChange(self):
         themes = list(creditBG.keys())
