@@ -545,7 +545,6 @@ class BulletCol(QWidget):
     def chk_RBtn(self):
         global CurCol
 
-        print('Here: ' + CurCol)
         self.BulFalse.setChecked(False)
         self.BulTrue.setChecked(False)
 
@@ -554,7 +553,6 @@ class BulletCol(QWidget):
 
         elif CurCol == "Wall Collision   Off":
             self.BulFalse.setChecked(True)
-            print('now why?')
 
         else:
             self.BulTrue.setChecked(True)
@@ -569,8 +567,7 @@ class BulletCol(QWidget):
 
     def btn_clk(self, button):
         global CurCol
-        print(button.text() + ' clicked')
-
+        
         if button == self.BulTrue:
             Server.BulCollision = True
             CurCol = "Wall Collision   On"
@@ -698,8 +695,7 @@ class wallTexture(QWidget):
 
 
     def btn_clk(self, button):
-        global CurWall
-        print(button.text() + ' clicked')
+        global CurWall      
 
         if button == self.texture1:
             Server.wtexture = "Metall wall"
@@ -797,7 +793,6 @@ class floorTexture(QWidget):
         self.texture5.clicked.connect(lambda: self.currBtn_clk(self.texture5))
         self.texture6.clicked.connect(lambda: self.currBtn_clk(self.texture6))
         self.texture7.clicked.connect(lambda: self.currBtn_clk(self.texture7))
-
 
 
         self.btn.clicked.connect(lambda: self.btn_clk(self.currentRBtn))
@@ -965,7 +960,6 @@ class CreditText(QWidget):
 ####################################################################################
 # creating instruction window
 ####################################################################################
-
 
 class How2PlayText(QWidget):
 
