@@ -1,0 +1,17 @@
+Requirements:
+	- Keyboard
+	- pygame
+	- playsound
+install via -pip install ___     (in cmd.exe)
+
+Start the game by executing the Menu.py file and press the "Enter"-Button on the screen.
+
+For a guide on how to play the game look inside the "How to play" section in the Menu.
+
+Menu_Screen
+
+	-Start Game:	Start the game
+	-Options:	Let you customize the games visuals aswell as some other features
+	-How to Play	Gives you a short introduction to the Game
+	-Credits	Credits
+	-Quit		Exit the game
