@@ -894,7 +894,7 @@ def randomizeBombIcon(self):
 ```
 Um die Kollision des Robos mit der Bomb zu prüfen, wird die gleiche Funktionsstruktur benutzt wie bei Bullet-Kollision. <br/>
 **Sound**
-Zur Speicherung und Abspielen von Sounds verwenden wir den *pygame.mixer*. Dieser erlaubt uns mehrere Sounds gleichzeitig abzuspielen, ohne die Anderen abzubrechen. Hiermit werden verschieden Sounds für die Spellcards, Shoot, Death-Sound und Hintergrundmusik erzeugt.
+Zur Speicherung und Abspielen von Sounds verwenden wir den *pygame.mixer*. Dieser erlaubt uns mehrere Sounds gleichzeitig abzuspielen, ohne die Anderen abzubrechen. Hiermit werden verschieden Sounds für die Spellcards, Death-Sound und Hintergrundmusik erzeugt.
 Je nach Bedarf werden die per *pygame.mixer.Sound('PATH')* geladen und mit pygame.mixer.Sound.play('NAME') abgespielt.
 
 
