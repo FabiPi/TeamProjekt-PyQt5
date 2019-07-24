@@ -583,8 +583,7 @@ class SpielFeld(QWidget):
         if not self.isStarted:
             return
 
-        self.isPaused = not self.isPaused
-        print(self.isPaused)
+        self.isPaused = not self.isPaused        
 
         if self.isPaused:
             self.timer.stop()
