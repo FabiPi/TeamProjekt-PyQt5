@@ -10,8 +10,8 @@ For a guide on how to play the game look inside the "How to play" section in the
 
 Menu_Screen
 
-	-Start Game:	Starts the game
-	-Options:	Lets you customize the games Visuals aswell as some other features
+	-Start Game:	Start the game
+	-Options:	Let you customize the games visuals aswell as some other features
 	-How to Play	Gives you a short introduction to the Game
 	-Credits	Credits
 	-Quit		Exit the game
