@@ -995,8 +995,8 @@ class How2PlayText(QWidget):
                             " Maybe you already took a turn into the settings, there you can select some spellcards and so on. These "
                            "spellcards can help\nyou to cast some special abilities. So try some!\n \nDown below you can see the "
                            "game keys for the selection of only one random spellcard. Just press key L for activating the spell.\nWith the "
-                           "key Q you can halt then velocity of your character and maybe let it take a look around. The"
-                           " others are self-explanatory.", self)
+                           "key Q you can halt the velocity of your character and maybe let it take a look around. The"
+                           " other keys are self-explanatory.", self)
         self.text1.setStyleSheet("background-color: transparent; color: black; font-size: 15px; font: bold")
         self.text1.move(150, self.title.height() + 50)
 
