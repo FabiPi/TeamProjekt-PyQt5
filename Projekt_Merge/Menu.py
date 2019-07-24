@@ -36,7 +36,6 @@ playlist = {
 # +-+Kitsune+Woods.mp3)
 
 
-
 # background library
 backgrounds = {
     "BlueForest": "textures/Background/Forest.jpg",
@@ -229,7 +228,6 @@ class OptionField(QWidget):
         # randomly change background after every enter
         self.image = self.ImageChange()
         self.background.setPixmap(self.image)
-        QtGui.QGuiApplication.processEvents()
 
         self.InitUI()
 
@@ -779,11 +777,12 @@ class floorTexture(QWidget):
         # add button icons
         self.texture1.setIcon(QIcon(Server.floorTextures["White Stone"]))
         self.texture2.setIcon(QIcon(Server.floorTextures["Brown Stone"]))
-        self.texture3.setIcon(QIcon(Server.floorTextures["Dirt"]))
-        self.texture4.setIcon(QIcon(Server.floorTextures["Background Dirt"]))
-        self.texture5.setIcon(QIcon(Server.floorTextures["Background Pattern"]))
-        self.texture6.setIcon(QIcon(Server.floorTextures["Background Sakura"]))
-        self.texture7.setIcon(QIcon(Server.floorTextures["Background Water"]))
+        self.texture3.setIcon(QIcon("textures/Board/Icon_Dirt.png"))
+        self.texture4.setIcon(QIcon("textures/Board/Icon_Stony.png"))
+        self.texture5.setIcon(QIcon("textures/Board/Icon_Pattern.png"))
+        self.texture6.setIcon(QIcon("textures/Board/Icon_Sakura.png"))
+        self.texture7.setIcon(QIcon("textures/Board/Icon_Water.png"))
+
 
         # clicked buttons
         self.texture1.clicked.connect(lambda: self.currBtn_clk(self.texture1))
