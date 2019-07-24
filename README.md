@@ -893,10 +893,52 @@ def randomizeBombIcon(self):
         self.bombStatus = 'red'
 ```
 Um die Kollision des Robos mit der Bomb zu prüfen, wird die gleiche Funktionsstruktur benutzt wie bei Bullet-Kollision. <br/>
-**Sound**
+**Sound**<br/>
 Zur Speicherung und Abspielen von Sounds verwenden wir den *pygame.mixer*. Dieser erlaubt uns mehrere Sounds gleichzeitig abzuspielen, ohne die Anderen abzubrechen. Hiermit werden verschieden Sounds für die Spellcards, Death-Sound und Hintergrundmusik erzeugt.
 Je nach Bedarf werden die per *pygame.mixer.Sound('PATH')* geladen und mit pygame.mixer.Sound.play('NAME') abgespielt.
+<br/>
 
+**Updated Visuals**
+Wir haben nun auch Texturen für die Roboter eingefügt, welche sich mit dem alpha der Roboter drehen.
+```python
+#in Spielfeld-Class
+def drawRobo(self, Robo, br):
+
+        # Set Rotation, place etc
+        texture = self.RoboTextures[Robo.texture]
+        br.save()
+        br.translate(Robo.position.x() + Robo.radius, Robo.position.y() + Robo.radius)
+        br.rotate(-Robo.alpha)
+        source = QRectF(0, 0, 2 * Robo.radius, 2 * Robo.radius)
+        target = QRectF(-Robo.radius, -Robo.radius,
+                        2 * Robo.radius, 2 * Robo.radius)
+        # Draw
+        br.drawPixmap(target, texture, source)
+        br.restore()
+```
+Dazu haben wir die drawRobo-Methode etwas verändert.
+<br/>
+Außerdem haben wir ein weiteres kleines Extra für die Backgrounds eingebaut.
+Wir zeichnen den Ground nun als 1 Textur und die walls anschließend darauf.
+Dies ermöglicht uns mehr Freiheit mit dem Ground und lässt uns diesen z.B bewegen.
+```python
+#in Spielfeld-Class
+def drawField(self, qp):
+        qp.setPen(Qt.NoPen)
+        texture = self.floorTexture
+        if ftexture == "Background Dirt" or  ftexture == "Background Pattern" or ftexture == "Background Sakura" or  ftexture == "Background Water":
+            qp.drawPixmap(- ((self.tickCount/2) % 1000), - ((self.tickCount/2) % 1000), texture)
+        else:
+            qp.drawPixmap(0,0, texture)
+        #Draw the PlayField
+        for i in range(0, 100, 1):
+            for j in range(0, 100, 1):
+                    if SpielFeld.PlayFieldAR[i][j]==1:
+                        texture = self.wallTexture
+                        self.BarrierList.append(texture)
+                        qp.drawPixmap(i*10, j*10, texture)
+```
+Das erreichen wir indem wir eine größere Textur in regelmäßigen Abständen an verschobenen Koordinaten Zeichnen.
 
 ## Week 8 - Robo-Keystrokes & Death-Timer
 **Keystrokes**
